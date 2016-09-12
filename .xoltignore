@@ -2,3 +2,4 @@
 !src
 !test
 !*.rb
+.travis.yml

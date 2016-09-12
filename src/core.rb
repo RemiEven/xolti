@@ -26,7 +26,7 @@ def complete_template(path, info, template)
 end
 
 def create_header_for(path, config)
-	bare_header = complete_template(path, config[:project_info], IO.binread(config[:template]))
+	bare_header = complete_template(path, config[:project_info], config[:template])
 	Comment.comment(bare_header, config[:comment])
 end
 
@@ -89,13 +89,13 @@ module Core
 	end
 
 	def Core.delete_header(path, config)
-		template = IO.binread(config[:template])
+		template = config[:template]
 		start = detect_header_position(path, template, config[:comment])
 		delete_lines_from_file(path, start, Comment.comment(template, config[:comment]).lines.length) if start >= 0
 	end
 
 	def Core.has_header(path, config)
-		template = IO.binread(config[:template])
+		template = config[:template]
 		detect_header_position(path, template, config[:comment]) >= 0
 	end
 end
