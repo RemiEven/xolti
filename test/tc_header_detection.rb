@@ -17,7 +17,7 @@
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 require "test/unit"
 
-require_relative "../src/header_detection"
+require_relative "../lib/header_detection"
 
 class TestHeaderDetection < Test::Unit::TestCase
 

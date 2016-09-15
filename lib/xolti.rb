@@ -31,7 +31,7 @@ Signal.trap("INT") do
 	exit 1
 end
 
-class MyCLI < Thor
+class XoltiCLI < Thor
 
 	desc "add [FILE|FOLDER]", "Add a header to FILE or to all files in FOLDER"
 	def add(file)
@@ -99,5 +99,3 @@ class MyCLI < Thor
 		File.write("xolti.yml", config.to_yaml)
 	end
 end
-
-MyCLI.start(ARGV)
