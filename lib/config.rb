@@ -28,9 +28,10 @@ end
 
 module XoltiConfig
 	def XoltiConfig.find_config_file(path = Pathname.getwd)
-		return nil if path.root?
 		potential_config_file = (path + "xolti.yml")
-		potential_config_file.file? ? potential_config_file.to_s : find_config_file(path.parent)
+		return potential_config_file.to_s if potential_config_file.file?
+		raise "No xolti.yml found" if path.root?
+		find_config_file(path.parent)
 	end
 
 	def XoltiConfig.load_config()

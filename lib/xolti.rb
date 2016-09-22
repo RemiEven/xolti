@@ -37,7 +37,7 @@ class XoltiCLI < Thor
 	def add(file)
 		if File.file?(file)
 			puts "Adding header to #{file}"
-			config = XoltiConfig.load_config
+			config = self.load_config { puts e.message; exit 1 }
 			Core.licensify(file, config) if !Core.has_header(file, config)
 		else
 			config = XoltiConfig.load_config
@@ -52,14 +52,14 @@ class XoltiCLI < Thor
 
 	desc "check FILE", "Check the header of FILE"
 	def check(file)
-		config = XoltiConfig.load_config
+		config = self.load_config { puts e.message; exit 1 }
 		puts Core.has_header(file, config) ? "\"#{file}\" : OK" : "\"#{file}\": not OK"
 	end
 
 	desc "list-missing", "Print a list of files missing (proper) header"
 	def list_missing()
 		dir = Dir.pwd
-		config = XoltiConfig.load_config
+		config = self.load_config { puts e.message; exit 1 }
 		missing_headers = FileFinder.explore_folder(dir)
 			.reject{|file| Core.has_header(file, config)}
 		return puts "All files OK" if missing_headers.empty?
@@ -70,7 +70,7 @@ class XoltiCLI < Thor
 	desc "delete FILE", "Delete the header in FILE"
 	def delete(file)
 		puts "Deleting header in #{file}"
-		config = XoltiConfig.load_config
+		config = self.load_config { puts e.message; exit 1 }
 		Core.delete_header(file, config)
 	end
 
@@ -87,11 +87,20 @@ class XoltiCLI < Thor
 			typed_author = STDIN.gets.chomp
 			config["project_info"]["author"] = typed_author
 		end
+
+		def load_config()
+			begin
+				return XoltiConfig.load_config
+			rescue Exception => e
+				yield if block_given?
+			end
+		end
 	}
 
 	desc "init", "Create xolti.yml"
 	def init()
-		return puts "Xolti is already initialiazed" if XoltiConfig.find_config_file != nil
+		config = self.load_config
+		return puts "Xolti is already initialiazed" if config != nil
 		puts "Initiating xolti project"
 		config = {"project_info" => {}}
 		self.ask_for_name(config)
