@@ -21,7 +21,7 @@ require_relative "header_detection"
 require_relative "comment"
 
 def complete_template(path, info, template)
-	template %= info.merge({:file_name => File.basename(path)})
+	template %= info.merge({file_name: File.basename(path)})
 	template
 end
 
