@@ -2,7 +2,6 @@
 project_info:
   project_name: Xolti
   author: "Rémi Even"
-comment: "# "
 template: |
     %{file_name}
     Copyright (C) %{author} %{year}

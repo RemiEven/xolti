@@ -1,4 +1,4 @@
-# ts_xolti.rb
+# tc_config.rb
 # Copyright (C) Rémi Even 2016
 #
 # This file is part of Xolti.
@@ -17,6 +17,23 @@
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 require "test/unit"
 
-require_relative "tc_header_detection"
-require_relative "tc_comment"
-require_relative "tc_config"
+require_relative "../lib/config"
+
+class TestConfig < Test::Unit::TestCase
+
+	def test_default_comment
+		sut = XoltiConfig.new({
+			"project_info" => {
+				"project_name" => "Xolti",
+				"author" => "Rémi Even"
+			},
+			"template" => "Header",
+			"comment" => {
+				"tex" => "% "
+			}
+		})
+		assert_equal(sut.comment["someUnknownExtension"], ["/*", " * ", " */"])
+		assert_equal(sut.comment["rb"], "# ")
+		assert_equal(sut.comment["tex"], "% ")
+	end
+end

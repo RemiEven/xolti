@@ -26,8 +26,8 @@ def complete_template(path, info, template)
 end
 
 def create_header_for(path, config)
-	bare_header = complete_template(path, config[:project_info], config[:template])
-	Comment.comment(bare_header, config[:comment])
+	bare_header = complete_template(path, config.project_info, config.template)
+	Comment.comment(bare_header, config.comment[get_ext(path)])
 end
 
 def insert_with_offset(path, text, offset)
@@ -82,20 +82,25 @@ def detect_header_position(path, template, comment_tokens)
 	-1
 end
 
+def get_ext(path)
+	File.extname(path)[1..-1]
+end
+
 module Core
 	def Core.licensify(path, config)
 		header = create_header_for(path, config)
-		insert_with_offset(path, header, config[:offset])
+		insert_with_offset(path, header, config.offset)
 	end
 
 	def Core.delete_header(path, config)
-		template = config[:template]
-		start = detect_header_position(path, template, config[:comment])
-		delete_lines_from_file(path, start, Comment.comment(template, config[:comment]).lines.length) if start >= 0
+		template = config.template
+		ext = get_ext(path)
+		start = detect_header_position(path, template, config.comment[ext])
+		delete_lines_from_file(path, start, Comment.comment(template, config.comment[ext]).lines.length) if start >= 0
 	end
 
 	def Core.has_header(path, config)
-		template = config[:template]
-		detect_header_position(path, template, config[:comment]) >= 0
+		template = config.template
+		detect_header_position(path, template, config.comment[get_ext(path)]) >= 0
 	end
 end

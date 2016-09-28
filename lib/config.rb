@@ -26,21 +26,79 @@ def extract_project_info(raw_project_info)
 	}
 end
 
-module XoltiConfig
-	def XoltiConfig.find_config_file(path = Pathname.getwd)
+class XoltiConfig
+
+	attr_reader :comment, :project_info, :template, :offset
+
+	def self.find_config_file(path = Pathname.getwd)
 		potential_config_file = (path + "xolti.yml")
 		return potential_config_file.to_s if potential_config_file.file?
 		raise "No xolti.yml found" if path.root?
 		find_config_file(path.parent)
 	end
 
-	def XoltiConfig.load_config()
+	def self.load_config()
 		raw_config = YAML.load(IO.binread(find_config_file()))
-		{
-			project_info: extract_project_info(raw_config["project_info"]),
-			comment: raw_config["comment"] || ["/*", " * ", " */"],
-			template: raw_config["template"] || "header.txt",
-			offset: raw_config["offset"] || 0
-		}
+		XoltiConfig.new(raw_config)
 	end
+
+	def initialize(raw_config)
+		@project_info = extract_project_info(raw_config["project_info"])
+		@comment = DEFAULT_COMMENTS.merge!(raw_config["comment"] || {})
+		@template = raw_config["template"]
+		@offset = raw_config["offset"] || 0
+	end
+
+	DEFAULT_COMMENTS = Hash.new(["/*", " * ", " */"]).merge!({
+		"adb" => ["--", "-- ", "--"],
+		"ads" => ["--", "-- ", "--"],
+		"apt" => "~~ ",
+		"asm" => [";", "; ", ";"],
+		"asp" => ["<%", "' ", "%>"],
+		"bas" => ["'", "' ", "'"],
+		"bat" => "@REM",
+		"cfc" => ["<!---", " ", "--->"],
+		"cfm" => ["<!---", " ", "--->"],
+		"cls" => "% ",
+		"cmd" => "@REM",
+		"dtd" => ["<!--", " ", "-->"],
+		"e" => ["--", "-- ", "--"],
+		"el" => ["!!!", "!!! ", "!!!"],
+		"erl" => ["%%%", "%%% ", "%%%"],
+		"f" => ["!", "! ", "!"],
+		"fml" => ["<!--", " ", "-->"],
+		"ftl" => ["<#--", " ", "-->"],
+		"ftl" => ["<#--", " ", "-->"],
+		"gsp" => ["<!--", " ", "-->"],
+		"haml" => "-# ",
+		"hrl" => ["%%%", "%%% ", "%%%"],
+		"htm" => ["<!--", " ", "-->"],
+		"html" => ["<!--", " ", "-->"],
+		"jsp" => ["<%--", " ", "--%>"],
+		"jspx" => ["<!--", " ", "-->"],
+		"kml" => ["<!--", " ", "-->"],
+		"lol" => ["OBTW", "", "TLDR"],
+		"lua" => ["--[[", "", "]]"],
+		"mxml" => ["<!--", " ", "-->"],
+		"pas" => ["{*", " * ", " *}"],
+		"pl" => "# ",
+		"pm" => "# ",
+		"pom" => ["<!--", " ", "-->"],
+		"properties" => "# ",
+		"py" => "# ",
+		"rb" => "# ",
+		"sh" => "# ",
+		"sql" => ["--", "-- ", "--"],
+		"sty" => "% ",
+		"tex" => "% ",
+		"tld" => ["<!--", " ", "-->"],
+		"txt" => ["====", "\t", "===="],
+		"vm" => ["#*", " ", "*#"],
+		"xhtml" => ["<!--", " ", "-->"],
+		"xml" => ["<!--", " ", "-->"],
+		"xsd" => ["<!--", " ", "-->"],
+		"xsl" => ["<!--", " ", "-->"],
+		"yaml" => "# ",
+		"yml" => "# "
+	});
 end
