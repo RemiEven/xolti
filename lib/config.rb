@@ -19,6 +19,7 @@ require "yaml"
 require "pathname"
 
 require_relative "default_comment"
+require_relative "default_template"
 
 def extract_project_info(raw_project_info)
 	{
@@ -30,7 +31,7 @@ end
 
 class XoltiConfig
 
-	attr_reader :comment, :project_info, :template, :offset
+	attr_reader :comment, :project_info, :template, :offset, :license
 
 	def self.find_config_file(path = Pathname.getwd)
 		potential_config_file = (path + "xolti.yml")
@@ -47,7 +48,8 @@ class XoltiConfig
 	def initialize(raw_config)
 		@project_info = extract_project_info(raw_config["project_info"])
 		@comment = DefaultComment::HASH.merge!(raw_config["comment"] || {})
-		@template = raw_config["template"]
+		@license = raw_config["license"]
+		@template = raw_config.include?("template") ? raw_config["template"] : DefaultTemplate.read(self.license)
 		@offset = raw_config["offset"] || 0
 	end
 end
