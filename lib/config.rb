@@ -18,6 +18,8 @@
 require "yaml"
 require "pathname"
 
+require_relative "default_comment"
+
 def extract_project_info(raw_project_info)
 	{
 		author: raw_project_info["author"],
@@ -44,61 +46,8 @@ class XoltiConfig
 
 	def initialize(raw_config)
 		@project_info = extract_project_info(raw_config["project_info"])
-		@comment = DEFAULT_COMMENTS.merge!(raw_config["comment"] || {})
+		@comment = DefaultComment::HASH.merge!(raw_config["comment"] || {})
 		@template = raw_config["template"]
 		@offset = raw_config["offset"] || 0
 	end
-
-	DEFAULT_COMMENTS = Hash.new(["/*", " * ", " */"]).merge!({
-		"adb" => ["--", "-- ", "--"],
-		"ads" => ["--", "-- ", "--"],
-		"apt" => "~~ ",
-		"asm" => [";", "; ", ";"],
-		"asp" => ["<%", "' ", "%>"],
-		"bas" => ["'", "' ", "'"],
-		"bat" => "@REM",
-		"cfc" => ["<!---", " ", "--->"],
-		"cfm" => ["<!---", " ", "--->"],
-		"cls" => "% ",
-		"cmd" => "@REM",
-		"dtd" => ["<!--", " ", "-->"],
-		"e" => ["--", "-- ", "--"],
-		"el" => ["!!!", "!!! ", "!!!"],
-		"erl" => ["%%%", "%%% ", "%%%"],
-		"f" => ["!", "! ", "!"],
-		"fml" => ["<!--", " ", "-->"],
-		"ftl" => ["<#--", " ", "-->"],
-		"ftl" => ["<#--", " ", "-->"],
-		"gsp" => ["<!--", " ", "-->"],
-		"haml" => "-# ",
-		"hrl" => ["%%%", "%%% ", "%%%"],
-		"htm" => ["<!--", " ", "-->"],
-		"html" => ["<!--", " ", "-->"],
-		"jsp" => ["<%--", " ", "--%>"],
-		"jspx" => ["<!--", " ", "-->"],
-		"kml" => ["<!--", " ", "-->"],
-		"lol" => ["OBTW", "", "TLDR"],
-		"lua" => ["--[[", "", "]]"],
-		"mxml" => ["<!--", " ", "-->"],
-		"pas" => ["{*", " * ", " *}"],
-		"pl" => "# ",
-		"pm" => "# ",
-		"pom" => ["<!--", " ", "-->"],
-		"properties" => "# ",
-		"py" => "# ",
-		"rb" => "# ",
-		"sh" => "# ",
-		"sql" => ["--", "-- ", "--"],
-		"sty" => "% ",
-		"tex" => "% ",
-		"tld" => ["<!--", " ", "-->"],
-		"txt" => ["====", "\t", "===="],
-		"vm" => ["#*", " ", "*#"],
-		"xhtml" => ["<!--", " ", "-->"],
-		"xml" => ["<!--", " ", "-->"],
-		"xsd" => ["<!--", " ", "-->"],
-		"xsl" => ["<!--", " ", "-->"],
-		"yaml" => "# ",
-		"yml" => "# "
-	});
 end
