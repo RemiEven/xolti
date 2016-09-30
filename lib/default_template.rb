@@ -17,7 +17,11 @@
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 module DefaultTemplate
 
-	Template_dir = File.join(Gem::Specification.find_by_name("xolti").gem_dir, "templates")
+	# If xolti is not installed as a gem, assume that pwd is the root of the project
+	# Needed to fix travis integration.
+	Template_dir = Gem::Specification.all_names.select { |name| name.match(/xolti/) }.length >= 1 ?
+		File.join(Gem::Specification.find_by_name("xolti").gem_dir, "templates") :
+		File.join(Dir.pwd, "templates")
 
 	def DefaultTemplate.read(license)
 		IO.binread(File.join(Template_dir, license))
