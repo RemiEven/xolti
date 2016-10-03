@@ -25,6 +25,7 @@ require "yaml"
 require_relative "core"
 require_relative "config"
 require_relative "file_finder"
+require_relative "resources"
 
 Signal.trap("INT") do
 	puts "\nCancelling..."
@@ -72,6 +73,18 @@ class XoltiCLI < Thor
 		puts "Deleting header in #{file}"
 		config = self.load_config {|e| puts e.message; exit 1 }
 		Core.delete_header(file, config)
+	end
+
+	desc "generate-license", "Generate a LICENSE file containing a full license"
+	def generate_license()
+		config = self.load_config {|e| puts e.message; exit 1 }
+		filename = "LICENSE"
+		if File.exists?(File.join(Dir.pwd, filename)) then
+			puts "There is already a LICENSE file. Abort generation."
+		else
+			FileUtils.cp(Resources.get_full_license_path(config.license), filename)
+			puts "Created the LICENSE file (#{config.license})"
+		end
 	end
 
 	no_commands {

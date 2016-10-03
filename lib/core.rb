@@ -19,6 +19,7 @@ require "tempfile"
 
 require_relative "header_detection"
 require_relative "comment"
+require_relative "resources"
 
 def complete_template(path, info, template)
 	template %= info.merge({file_name: File.basename(path)})

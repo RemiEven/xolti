@@ -19,7 +19,7 @@ require "yaml"
 require "pathname"
 
 require_relative "default_comment"
-require_relative "default_template"
+require_relative "resources"
 
 def extract_project_info(raw_project_info)
 	{
@@ -49,7 +49,7 @@ class XoltiConfig
 		@project_info = extract_project_info(raw_config["project_info"])
 		@comment = DefaultComment::HASH.merge!(raw_config["comment"] || {})
 		@license = raw_config["license"]
-		@template = raw_config.include?("template") ? raw_config["template"] : DefaultTemplate.read(self.license)
+		@template = raw_config.include?("template") ? raw_config["template"] : IO.binread(Resources.get_template_path(self.license))
 		@offset = raw_config["offset"] || 0
 	end
 end
