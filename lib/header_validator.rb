@@ -1,4 +1,4 @@
-# ts_xolti.rb
+# header_validator.rb
 # Copyright (C) Rémi Even 2016
 #
 # This file is part of Xolti.
@@ -15,9 +15,20 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
-require "test/unit"
-
-require_relative "tc_template_utils"
-require_relative "tc_comment"
-require_relative "tc_config"
-require_relative "tc_header_validator"
+module HeaderValidator
+	def HeaderValidator.diff(detected, info)
+		diff = []
+		detected[:matches].each_with_index do |match, i|
+			line = detected[:start] + i + 1
+			match.names.each do |name|
+				name_sym = name.to_sym
+				diff << {
+					line: line,
+					expected: info[name_sym],
+					actual: match[name_sym]
+				} if info[name_sym] != match[name_sym]
+			end
+		end
+		diff
+	end
+end

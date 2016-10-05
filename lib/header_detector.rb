@@ -30,7 +30,7 @@ module HeaderDetector
 			match = template_regexp_lines[matches.length].match(line)
 			if match
 				matches << match
-				if matches.length === template_regexp_lines.length
+				if matches.length == template_regexp_lines.length
 					return {
 						start: potential_header_start,
 						matches: matches
