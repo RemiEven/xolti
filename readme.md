@@ -3,6 +3,7 @@
 > Tool assisting developers to manage license headers in source files, powered by Ruby.
 
 [![Build Status](https://secure.travis-ci.org/RemiEven/xolti.svg?branch=master)](http://travis-ci.org/RemiEven/xolti)
+[![Gem Version](https://badge.fury.io/rb/xolti.svg)](https://badge.fury.io/rb/xolti)
 [![License](https://img.shields.io/badge/license-GPL3-19c6ff.svg)](http://www.gnu.org/licenses/gpl-3.0.en.html)
 
 ## Purpose

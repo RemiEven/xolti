@@ -1,8 +1,8 @@
 Gem::Specification.new do |spec|
 	spec.name = "xolti"
-	spec.version = "0.0.0"
+	spec.version = "0.1.0"
 	spec.summary = "A gem to manage license headers"
-	spec.description = "A gem to manage license headers"
+	spec.description = "A gem to manage license headers, providing a simple CLI."
 	spec.authors = ["Rémi Even"]
 	spec.homepage = "https://github.com/RemiEven/xolti"
 	spec.license = "GPL-3.0"
