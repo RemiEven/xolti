@@ -1,4 +1,4 @@
-# tc_config.rb
+# header_detector.rb
 # Copyright (C) Rémi Even 2016
 #
 # This file is part of Xolti.
@@ -15,26 +15,26 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
-require "test/unit"
+require_relative "comment"
+require_relative "template_utils"
 
-require_relative "../lib/config"
-
-class TestConfig < Test::Unit::TestCase
-
-	def test_default_comment
-		sut = XoltiConfig.new({
-			"project_info" => {
-				"project_name" => "Xolti",
-				"author" => "Rémi Even"
-			},
-			"template" => "Header",
-			"comment" => {
-				"tex" => "% "
-			}
-		})
-		assert_equal(sut.get_comment("someUnknownExtension"), ["/*", " * ", " */"])
-		assert_equal(sut.get_comment("rb"), "# ")
-		assert_equal(sut.get_comment("tex"), "% ")
-		assert_equal(sut.get_comment(".tex"), "% ")
+module HeaderDetector
+	def HeaderDetector.detect_position(path, template, comment_tokens)
+		template_lines = Comment.comment(template, comment_tokens).lines("\n")
+		template_regexp_lines = template_lines.map do |line|
+			TemplateUtils.create_detection_regexp_for_line(line)
+		end
+		potential_header_start = 0
+		i = 0
+		File.open(path, "r").each do |line|
+			if template_regexp_lines[i].match(line)
+				i += 1
+				return potential_header_start if i == template_regexp_lines.length
+			else
+				potential_header_start += i + 1
+				i = 0
+			end
+		end
+		-1
 	end
 end

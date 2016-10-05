@@ -18,20 +18,10 @@
 require "yaml"
 require "pathname"
 
-require_relative "default_comment"
+require_relative "default_comment_tokens"
 require_relative "resources"
 
-def extract_project_info(raw_project_info)
-	{
-		author: raw_project_info["author"],
-		project_name: raw_project_info["project_name"],
-		year: raw_project_info["year"] || Date.today().year
-	}
-end
-
 class XoltiConfig
-
-	attr_reader :comment, :project_info, :template, :offset, :license
 
 	def self.find_config_file(path = Pathname.getwd)
 		potential_config_file = (path + "xolti.yml")
@@ -45,11 +35,25 @@ class XoltiConfig
 		XoltiConfig.new(raw_config)
 	end
 
+	attr_reader :project_info, :template, :offset, :license
+
 	def initialize(raw_config)
 		@project_info = extract_project_info(raw_config["project_info"])
 		@comment = DefaultComment::HASH.merge!(raw_config["comment"] || {})
 		@license = raw_config["license"]
-		@template = raw_config.include?("template") ? raw_config["template"] : IO.binread(Resources.get_template_path(self.license))
+		@template = raw_config.include?("template") ? raw_config["template"] : IO.binread(Resources.get_template_path(@license))
 		@offset = raw_config["offset"] || 0
+	end
+
+	def get_comment(ext)
+		@comment[ext.delete('.')]
+	end
+
+	private def extract_project_info(raw_project_info)
+		{
+			author: raw_project_info["author"],
+			project_name: raw_project_info["project_name"],
+			year: raw_project_info["year"] || Date.today().year
+		}
 	end
 end

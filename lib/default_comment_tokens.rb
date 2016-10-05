@@ -1,4 +1,4 @@
-# default_comment.rb
+# default_comment_tokens.rb
 # Copyright (C) Rémi Even 2016
 #
 # This file is part of Xolti.

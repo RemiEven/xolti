@@ -17,91 +17,26 @@
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 require "tempfile"
 
-require_relative "template_utils"
+require_relative "file_modification"
 require_relative "comment"
-require_relative "resources"
-
-def complete_template(path, info, template)
-	template %= info.merge({file_name: File.basename(path)})
-	template
-end
-
-def create_header_for(path, config)
-	bare_header = complete_template(path, config.project_info, config.template)
-	Comment.comment(bare_header, config.comment[get_ext(path)])
-end
-
-def insert_with_offset(path, text, offset)
-	file = Tempfile.new("xolti")
-	begin
-		File.open(path, "r") do |source_file|
-			i = 0
-			source_file.each_line do |line|
-				file.write(text) if i == offset
-				i += 1
-				file.write(line)
-			end
-		end
-		file.close()
-		FileUtils.cp(file, path)
-	ensure
-		file.close()
-		file.unlink()
-	end
-end
-
-def delete_lines_from_file(path, start, length)
-	file = Tempfile.new("xolti")
-	begin
-		File.open(path, "r").each_with_index do |line, index|
-			file.write(line) if index < start || index >= start + length
-		end
-		file.close()
-		FileUtils.cp(file, path)
-	ensure
-		file.close()
-		file.unlink()
-	end
-end
-
-def detect_header_position(path, template, comment_tokens)
-	template_lines = Comment.comment(template, comment_tokens).lines("\n")
-	template_regexp_lines = template_lines.map do |line|
-		TemplateUtils.create_detection_regexp_for_line(line)
-	end
-	potential_header_start = 0
-	i = 0
-	File.open(path, "r").each do |line|
-		if template_regexp_lines[i].match(line)
-			i += 1
-			return potential_header_start if i == template_regexp_lines.length
-		else
-			potential_header_start += i + 1
-			i = 0
-		end
-	end
-	-1
-end
-
-def get_ext(path)
-	File.extname(path)[1..-1]
-end
+require_relative "header_detector"
+require_relative "header_generator"
 
 module Core
 	def Core.licensify(path, config)
-		header = create_header_for(path, config)
-		insert_with_offset(path, header, config.offset)
+		header = HeaderGenerator.create_for(path, config)
+		FileModification.insert_lines_with_offset(path, header, config.offset)
 	end
 
 	def Core.delete_header(path, config)
 		template = config.template
-		ext = get_ext(path)
-		start = detect_header_position(path, template, config.comment[ext])
-		delete_lines_from_file(path, start, Comment.comment(template, config.comment[ext]).lines.length) if start >= 0
+		ext = File.extname(path)
+		start = HeaderDetector.detect_position(path, template, config.get_comment(ext))
+		FileModification.delete_lines(path, start, Comment.comment(template, config.get_comment(ext)).lines.length) if start >= 0
 	end
 
 	def Core.has_header(path, config)
 		template = config.template
-		detect_header_position(path, template, config.comment[get_ext(path)]) >= 0
+		HeaderDetector.detect_position(path, template, config.get_comment(File.extname(path))) >= 0
 	end
 end

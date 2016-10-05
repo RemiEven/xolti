@@ -1,4 +1,4 @@
-# tc_config.rb
+# header_generator.rb
 # Copyright (C) Rémi Even 2016
 #
 # This file is part of Xolti.
@@ -15,26 +15,16 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
-require "test/unit"
+require_relative "comment"
 
-require_relative "../lib/config"
+def complete_template(path, info, template)
+	template %= info.merge({file_name: File.basename(path)})
+	template
+end
 
-class TestConfig < Test::Unit::TestCase
-
-	def test_default_comment
-		sut = XoltiConfig.new({
-			"project_info" => {
-				"project_name" => "Xolti",
-				"author" => "Rémi Even"
-			},
-			"template" => "Header",
-			"comment" => {
-				"tex" => "% "
-			}
-		})
-		assert_equal(sut.get_comment("someUnknownExtension"), ["/*", " * ", " */"])
-		assert_equal(sut.get_comment("rb"), "# ")
-		assert_equal(sut.get_comment("tex"), "% ")
-		assert_equal(sut.get_comment(".tex"), "% ")
+module HeaderGenerator
+	def HeaderGenerator.create_for(path, config)
+		bare_header = complete_template(path, config.project_info, config.template)
+		Comment.comment(bare_header, config.get_comment(File.extname(path)))
 	end
 end
