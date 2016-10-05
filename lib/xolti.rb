@@ -1,5 +1,3 @@
-#!/usr/bin/ruby
-
 # xolti.rb
 # Copyright (C) Rémi Even 2016
 #
@@ -54,7 +52,18 @@ class XoltiCLI < Thor
 	desc "check FILE", "Check the header of FILE"
 	def check(file)
 		config = self.load_config {|e| puts e; exit 1 }
-		puts Core.has_header(file, config) ? "\"#{file}\" : OK" : "\"#{file}\": not OK"
+		diffs = Core.validate_header(file, config)
+		if diffs.length > 0
+			diffs.each do |diff|
+				if diff[:type] && diff[:type] == "no_header_found"
+					puts "No header found."
+				else
+					puts "Line #{diff[:line]}: expected \"#{diff[:expected]}\" but got \"#{diff[:actual]}\"."
+				end
+			end
+		else
+			puts "Correct header."
+		end
 	end
 
 	desc "list-missing", "Print a list of files missing (proper) header"

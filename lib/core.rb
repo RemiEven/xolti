@@ -18,9 +18,9 @@
 require "tempfile"
 
 require_relative "file_modification"
-require_relative "comment"
 require_relative "header_detector"
 require_relative "header_generator"
+require_relative "header_validator"
 
 module Core
 	def Core.licensify(path, config)
@@ -39,5 +39,13 @@ module Core
 		template = config.template
 		ext = File.extname(path)
 		HeaderDetector.detect(path, template, config.get_comment(ext))
+	end
+
+	def Core.validate_header(path, config)
+		template = config.template
+		ext = File.extname(path)
+		detected = HeaderDetector.detect(path, template, config.get_comment(ext))
+		return [{type: "no_header_found"}] if !detected
+		HeaderValidator.diff(detected, config.project_info.merge({file_name: File.basename(path)}))
 	end
 end

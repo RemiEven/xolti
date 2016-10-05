@@ -17,6 +17,7 @@
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 require "yaml"
 require "pathname"
+require "date"
 
 require_relative "default_comment_tokens"
 require_relative "resources"
@@ -53,7 +54,7 @@ class XoltiConfig
 		{
 			author: raw_project_info["author"],
 			project_name: raw_project_info["project_name"],
-			year: raw_project_info["year"] || Date.today().year
+			year: raw_project_info["year"] || Date.today().year.to_s
 		}
 	end
 end
