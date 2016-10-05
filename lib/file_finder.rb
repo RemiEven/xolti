@@ -23,7 +23,7 @@ def parse_xoltignore(path)
 end
 
 module FileFinder
-	def FileFinder.explore_folder(folder, ignoreRules=[])
+	def FileFinder.explore_folder(folder=Dir.pwd, ignoreRules=[])
 		fileAcc = []
 		ignoredPaths = [".", "..", ".git", ".xoltignore", "xolti.yml", "header.txt"]
 		ignoreRules += parse_xoltignore(folder)

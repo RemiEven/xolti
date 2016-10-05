@@ -1,4 +1,4 @@
-# template-utils.rb
+# template_utils.rb
 # Copyright (C) Rémi Even 2016
 #
 # This file is part of Xolti.

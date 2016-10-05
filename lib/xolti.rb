@@ -39,7 +39,7 @@ class XoltiCLI < Thor
 			config = self.load_config {|e| puts e.message; exit 1 }
 			Core.licensify(file, config) if !Core.has_header(file, config)
 		else
-			config = XoltiConfig.load_config
+			config = self.load_config {|e| puts e.message; exit 1 }
 			FileFinder.explore_folder(file)
 				.reject{|source_file| Core.has_header(source_file, config)}
 				.each do |source_file|
@@ -94,6 +94,27 @@ class XoltiCLI < Thor
 			FileUtils.cp(Resources.get_full_license_path(config.license), filename)
 			puts "Created the LICENSE file (#{config.license})"
 		end
+	end
+
+	desc "status", "Check all files in current folder"
+	def status()
+		config = self.load_config {|e| puts e.message; exit 1 }
+		FileFinder.explore_folder()
+			.each do |source_file|
+				puts "-- .#{source_file[Dir.pwd.length..-1]}"
+				diffs = Core.validate_header(source_file, config)
+				if diffs.length > 0
+					diffs.each do |diff|
+						if diff[:type] && diff[:type] == "no_header_found"
+							puts "No header found."
+						else
+							puts "Line #{diff[:line]}: expected \"#{diff[:expected]}\" but got \"#{diff[:actual]}\"."
+						end
+					end
+				else
+					puts "Correct header."
+				end
+			end
 	end
 
 	no_commands {
