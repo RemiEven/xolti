@@ -17,6 +17,6 @@
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 require "test/unit"
 
-require_relative "tc_header_detection"
+require_relative "tc_template_utils"
 require_relative "tc_comment"
 require_relative "tc_config"

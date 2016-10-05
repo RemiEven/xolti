@@ -17,7 +17,7 @@
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 require "tempfile"
 
-require_relative "header_detection"
+require_relative "template_utils"
 require_relative "comment"
 require_relative "resources"
 
@@ -67,7 +67,7 @@ end
 def detect_header_position(path, template, comment_tokens)
 	template_lines = Comment.comment(template, comment_tokens).lines("\n")
 	template_regexp_lines = template_lines.map do |line|
-		HeaderDetection.create_detection_regexp_for_line(line)
+		TemplateUtils.create_detection_regexp_for_line(line)
 	end
 	potential_header_start = 0
 	i = 0
