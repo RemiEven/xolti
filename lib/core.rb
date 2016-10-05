@@ -31,12 +31,13 @@ module Core
 	def Core.delete_header(path, config)
 		template = config.template
 		ext = File.extname(path)
-		start = HeaderDetector.detect_position(path, template, config.get_comment(ext))
-		FileModification.delete_lines(path, start, Comment.comment(template, config.get_comment(ext)).lines.length) if start >= 0
+		detected = HeaderDetector.detect(path, template, config.get_comment(ext))
+		FileModification.delete_lines(path, detected[:start], detected[:matches].length) if detected
 	end
 
 	def Core.has_header(path, config)
 		template = config.template
-		HeaderDetector.detect_position(path, template, config.get_comment(File.extname(path))) >= 0
+		ext = File.extname(path)
+		HeaderDetector.detect(path, template, config.get_comment(ext))
 	end
 end

@@ -19,22 +19,28 @@ require_relative "comment"
 require_relative "template_utils"
 
 module HeaderDetector
-	def HeaderDetector.detect_position(path, template, comment_tokens)
+	def HeaderDetector.detect(path, template, comment_tokens)
 		template_lines = Comment.comment(template, comment_tokens).lines("\n")
 		template_regexp_lines = template_lines.map do |line|
 			TemplateUtils.create_detection_regexp_for_line(line)
 		end
 		potential_header_start = 0
-		i = 0
+		matches = []
 		File.open(path, "r").each do |line|
-			if template_regexp_lines[i].match(line)
-				i += 1
-				return potential_header_start if i == template_regexp_lines.length
+			match = template_regexp_lines[matches.length].match(line)
+			if match
+				matches << match
+				if matches.length === template_regexp_lines.length
+					return {
+						start: potential_header_start,
+						matches: matches
+					}
+				end
 			else
-				potential_header_start += i + 1
-				i = 0
+				potential_header_start += matches.length + 1
+				matches = []
 			end
 		end
-		-1
+		nil
 	end
 end
