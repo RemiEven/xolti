@@ -131,6 +131,13 @@ class XoltiCLI < Thor
 			config["project_info"]["author"] = typed_author
 		end
 
+		def ask_for_license(config)
+			default_license = "GPL3.0"
+			print "license (#{default_license}): "
+			typed_license = STDIN.gets.chomp
+			config["license"] = (typed_license == "") ? default_license : typed_license
+		end
+
 		def load_config()
 			begin
 				return XoltiConfig.load_config
@@ -148,6 +155,7 @@ class XoltiCLI < Thor
 		config = {"project_info" => {}}
 		self.ask_for_name(config)
 		self.ask_for_author(config)
+		self.ask_for_license(config)
 		File.write("xolti.yml", config.to_yaml)
 	end
 end
