@@ -1,6 +1,8 @@
+require_relative "lib/version"
+
 Gem::Specification.new do |spec|
 	spec.name = "xolti"
-	spec.version = "0.1.0"
+	spec.version = XoltiVersion.get
 	spec.summary = "A gem to manage license headers"
 	spec.description = "A gem to manage license headers, providing a simple CLI."
 	spec.authors = ["Rémi Even"]
