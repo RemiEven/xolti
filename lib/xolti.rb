@@ -24,6 +24,7 @@ require_relative "core"
 require_relative "config"
 require_relative "file_finder"
 require_relative "resources"
+require_relative "version"
 
 Signal.trap("INT") do
 	puts "\nCancelling..."
@@ -115,6 +116,13 @@ class XoltiCLI < Thor
 					puts "Correct header."
 				end
 			end
+	end
+
+	map ["--version", "-v"] => :__print_version
+
+	desc "--version, -v", "Print version of xolti"
+	def __print_version()
+		puts XoltiVersion.get
 	end
 
 	no_commands {
