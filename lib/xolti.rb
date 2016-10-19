@@ -125,6 +125,18 @@ class XoltiCLI < Thor
 		puts XoltiVersion.get
 	end
 
+	map ["--license", "-l"] => :__print_license
+
+	desc "--license, -l", "Print licensing information of xolti"
+	def __print_license()
+		puts "Xolti version #{XoltiVersion.get}, Copyright (C) 2016 Rémi Even"
+		puts "Xolti comes with ABSOLUTELY NO WARRANTY."
+		puts "This is free software, and you are welcome to redistribute it"
+		puts "under the terms of the GPLv3."
+		puts "The complete license can be found at \"https://www.gnu.org/licenses/gpl.txt\"."
+		puts "The source code of xolti can be found at \"https://github.com/RemiEven/xolti\"."
+	end
+
 	no_commands {
 		def ask_for_name(config)
 			default_name = Pathname.getwd.basename.to_s
