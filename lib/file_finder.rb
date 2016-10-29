@@ -25,7 +25,7 @@ end
 module FileFinder
 	def FileFinder.explore_folder(folder=Dir.pwd, ignoreRules=[])
 		fileAcc = []
-		ignoredPaths = [".", "..", ".git", ".xoltignore", "xolti.yml", "header.txt"]
+		ignoredPaths = [".", "..", ".git", ".xoltignore", "xolti.yml", "LICENSE"]
 		ignoreRules += parse_xoltignore(folder)
 
 		Dir.glob("#{folder}/{*,.*}")
