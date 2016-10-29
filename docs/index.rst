@@ -8,3 +8,4 @@ Contents:
 
     intro
     installation
+    getting_started
