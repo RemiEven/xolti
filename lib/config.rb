@@ -42,7 +42,7 @@ class XoltiConfig
 		@project_info = extract_project_info(raw_config["project_info"])
 		@comment = DefaultComment::HASH.merge!(raw_config["comment"] || {})
 		@license = raw_config["license"]
-		@template = raw_config.include?("template") ? raw_config["template"] : IO.binread(Resources.get_template_path(@license))
+		@template = extract_template_if_present(raw_config)
 		@offset = raw_config["offset"] || 0
 	end
 
@@ -56,5 +56,12 @@ class XoltiConfig
 			project_name: raw_project_info["project_name"],
 			year: raw_project_info["year"] || Date.today().year.to_s
 		}
+	end
+
+	private def extract_template_if_present(raw_config)
+		return raw_config["template"] if raw_config.include?("template")
+		default_template_path = Resources.get_template_path(@license)
+		return IO.binread(default_template_path) if File.exists?(default_template_path)
+		nil
 	end
 end

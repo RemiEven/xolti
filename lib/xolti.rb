@@ -90,10 +90,11 @@ class XoltiCLI < Thor
 		config = self.load_config {|e| puts e.message; exit 1 }
 		filename = "LICENSE"
 		if File.exists?(File.join(Dir.pwd, filename)) then
-			puts "There is already a LICENSE file. Abort generation."
+			puts "There is already a #{filename} file. Abort generation."
 		else
-			FileUtils.cp(Resources.get_full_license_path(config.license), filename)
-			puts "Created the LICENSE file (#{config.license})"
+			full_license = IO.binread(Resources.get_full_license_path(config.license))
+			File.write(filename, full_license % config.project_info)
+			puts "Created the #{filename} file (#{config.license})"
 		end
 	end
 

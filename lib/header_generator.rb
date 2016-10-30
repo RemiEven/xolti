@@ -17,14 +17,10 @@
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 require_relative "comment"
 
-def complete_template(path, info, template)
-	template %= info.merge({file_name: File.basename(path)})
-	template
-end
-
 module HeaderGenerator
 	def HeaderGenerator.create_for(path, config)
-		bare_header = complete_template(path, config.project_info, config.template)
+		info = config.project_info.merge({file_name: File.basename(path)})
+		bare_header = config.template % info
 		Comment.comment(bare_header, config.get_comment(File.extname(path)))
 	end
 end
