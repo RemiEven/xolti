@@ -83,4 +83,31 @@ module TemplateUtils
 			".*"
 		end
 	end
+
+	def TemplateUtils.find_intervals(numbers)
+		sorted = numbers.sort
+		intervals = []
+		i = 0
+		while (i < sorted.size)
+			j = 1;
+			while (i + j < sorted.size && sorted[i + j] == sorted[i] + j)
+				j += 1
+			end
+			intervals << [sorted[i], sorted[i + j - 1]]
+			i += j
+		end
+		intervals
+	end
+
+	def TemplateUtils.format_year_interval(interval)
+		return interval[0].to_s if interval[1] == interval[0]
+		return "#{interval[0]}, #{interval[1]}" if interval[1] == interval[0] + 1
+		"#{interval[0]}-#{interval[1]}"
+	end
+
+	def TemplateUtils.year_list(years)
+		find_intervals(years)
+			.map { |interval| format_year_interval(interval) }
+			.join(", ")
+	end
 end

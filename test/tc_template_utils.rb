@@ -55,4 +55,26 @@ class TestTemplateUtils < Test::Unit::TestCase
 		assert(TemplateUtils.tag?("%{coucou}"))
 		refute(TemplateUtils.tag?("blabla"))
 	end
+
+	def test_find_intervals
+		assert_equal(TemplateUtils.find_intervals([1, 2, 3]), [[1, 3]])
+		assert_equal(TemplateUtils.find_intervals([1, 2, 3, 5, 6]), [[1, 3], [5, 6]])
+		assert_equal(TemplateUtils.find_intervals([3, 1, 6, 2, 5]), [[1, 3], [5, 6]])
+		assert_equal(TemplateUtils.find_intervals([1]), [[1, 1]])
+		assert_equal(TemplateUtils.find_intervals([]), [])
+		assert_equal(TemplateUtils.find_intervals([1, 7, 8]), [[1, 1], [7, 8]])
+	end
+
+	def test_format_year_interval
+		assert_equal(TemplateUtils.format_year_interval([2016, 2016]), "2016")
+		assert_equal(TemplateUtils.format_year_interval([2015, 2016]), "2015, 2016")
+		assert_equal(TemplateUtils.format_year_interval([2014, 2016]), "2014-2016")
+	end
+
+	def test_create_year_list
+		assert_equal("2016", TemplateUtils.year_list([2016]))
+		assert_equal("2014, 2016", TemplateUtils.year_list([2016, 2014]))
+		assert_equal("2014, 2015", TemplateUtils.year_list([2014, 2015]))
+		assert_equal("2012, 2014-2016", TemplateUtils.year_list([2015, 2014, 2016, 2012]))
+	end
 end
