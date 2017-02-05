@@ -45,7 +45,7 @@ module Core
 		template = config.template
 		ext = File.extname(path)
 		detected = HeaderDetector.detect(path, template, config.get_comment(ext))
-		return [{type: "no_header_found"}] if !detected
+		return [{type: :no_header_found}] if !detected
 		HeaderValidator.diff(detected, config.project_info.merge({file_name: File.basename(path)}))
 	end
 end

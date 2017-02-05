@@ -56,7 +56,7 @@ class XoltiCLI < Thor
 		diffs = Core.validate_header(file, config)
 		if diffs.length > 0
 			diffs.each do |diff|
-				if diff[:type] && diff[:type] == "no_header_found"
+				if diff[:type] && diff[:type] == :no_header_found
 					puts "No header found."
 				else
 					puts "Line #{diff[:line]}: expected \"#{diff[:expected]}\" but got \"#{diff[:actual]}\"."
@@ -107,7 +107,7 @@ class XoltiCLI < Thor
 				diffs = Core.validate_header(source_file, config)
 				if diffs.length > 0
 					diffs.each do |diff|
-						if diff[:type] && diff[:type] == "no_header_found"
+						if diff[:type] && diff[:type] == :no_header_found
 							puts "No header found."
 						else
 							puts "Line #{diff[:line]}: expected \"#{diff[:expected]}\" but got \"#{diff[:actual]}\"."
