@@ -36,12 +36,11 @@ class XoltiCLI < Thor
 
 	desc "add [FILE|FOLDER]", "Add a header to FILE or to all files in FOLDER"
 	def add(file)
+		config = self.load_config {|e| puts e.message; exit 1 }
 		if File.file?(file)
-			config = self.load_config {|e| puts e.message; exit 1 }
 			PrintUtils.puts_single "Adding header to #{file}"
 			Core.licensify(file, config) if !Core.has_header(file, config)
 		else
-			config = self.load_config {|e| puts e.message; exit 1 }
 			FileFinder.explore_folder(file)
 				.reject{|source_file| Core.has_header(source_file, config)}
 				.each do |source_file|
@@ -51,20 +50,21 @@ class XoltiCLI < Thor
 		end
 	end
 
-	desc "check FILE", "Check the header of FILE"
-	def check(file)
+	desc "status [FILE|FOLDER]", "Check the header of FILE or to all files in FOLDER; FOLDER default to current one"
+	def status(file = ".")
 		config = self.load_config {|e| puts e; exit 1 }
-		diffs = Core.validate_header(file, config)
-		if diffs.length > 0
-			diffs.each do |diff|
-				if diff[:type] && diff[:type] == :no_header_found
-					PrintUtils.single_puts "No header found"
-				else
-					PrintUtils.puts_single "Line #{diff[:line]}: expected \"#{diff[:expected]}\" but got \"#{diff[:actual]}\"."
-				end
-			end
+		if File.file?(file)
+			PrintUtils.puts self.check_file(file, config) || "Correct header"
 		else
-			PrintUtils.single_puts "Correct header."
+			FileFinder.explore_folder(file)
+				.each do |source_file|
+					message = self.check_file(source_file, config)
+					if (message)
+						PrintUtils.puts_single "#{source_file}"
+						PrintUtils.puts(message, 1)
+						PrintUtils.puts_single ""
+					end
+				end
 		end
 	end
 
@@ -97,27 +97,6 @@ class XoltiCLI < Thor
 			File.write(filename, full_license % config.project_info)
 			PrintUtils.puts_single "Created the #{filename} file (#{config.license})"
 		end
-	end
-
-	desc "status", "Check all files in current folder"
-	def status()
-		config = self.load_config {|e| puts e.message; exit 1 }
-		FileFinder.explore_folder()
-			.each do |source_file|
-				PrintUtils.single_puts "-- .#{source_file[Dir.pwd.length..-1]}"
-				diffs = Core.validate_header(source_file, config)
-				if diffs.length > 0
-					diffs.each do |diff|
-						if diff[:type] && diff[:type] == :no_header_found
-							PrintUtils.single_puts "No Header found"
-						else
-							PrintUtils.single_puts "Line #{diff[:line]}: expected \"#{diff[:expected]}\" but got \"#{diff[:actual]}\"."
-						end
-					end
-				else
-					PrintUtils.single_puts "Correct header."
-				end
-			end
 	end
 
 	map ["--version", "-v"] => :__print_version
@@ -167,7 +146,22 @@ class XoltiCLI < Thor
 				yield e if block_given?
 			end
 		end
-	}
+
+		def check_file(file, config)
+			diffs = Core.validate_header(file, config)
+			if diffs.length > 0
+				result = []
+				diffs.each do |diff|
+					if diff[:type] && diff[:type] == :no_header_found
+						return ["No header found."]
+					else
+						result << "Line #{diff[:line]}: expected \"#{diff[:expected]}\" but got \"#{diff[:actual]}\"."
+					end
+				end
+				return result.join("\n")
+			end
+		end
+}
 
 	desc "init", "Create xolti.yml"
 	def init()
