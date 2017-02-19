@@ -1,5 +1,5 @@
 # default_comment_tokens.rb
-# Copyright (C) Rémi Even 2016
+# Copyright (C) Rémi Even 2016-2017
 #
 # This file is part of Xolti.
 #
@@ -33,6 +33,7 @@ class DefaultComment
 		"e" => ["--", "-- ", "--"],
 		"el" => ["!!!", "!!! ", "!!!"],
 		"erl" => ["%%%", "%%% ", "%%%"],
+		"elm" => ["{-", "  ", "-}"],
 		"f" => ["!", "! ", "!"],
 		"fml" => ["<!--", " ", "-->"],
 		"ftl" => ["<#--", " ", "-->"],
