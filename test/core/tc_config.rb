@@ -17,7 +17,7 @@
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 require "test/unit"
 
-require_relative "../lib/config"
+require_relative "../../lib/core/config"
 
 class TestConfig < Test::Unit::TestCase
 

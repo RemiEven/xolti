@@ -17,7 +17,7 @@
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 require "test/unit"
 
-require_relative "../lib/comment"
+require_relative "../../lib/header/comment"
 
 class TestComment < Test::Unit::TestCase
 

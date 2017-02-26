@@ -18,9 +18,9 @@
 require "tempfile"
 
 require_relative "file_modification"
-require_relative "header_detector"
-require_relative "header_generator"
-require_relative "header_validator"
+require_relative "../header/header_detector"
+require_relative "../header/header_generator"
+require_relative "../header/header_validator"
 
 module Core
 	def Core.licensify(path, config)

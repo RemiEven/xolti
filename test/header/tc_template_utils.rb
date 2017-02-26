@@ -17,7 +17,7 @@
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 require "test/unit"
 
-require_relative "../lib/template_utils"
+require_relative "../../lib/header/template_utils"
 
 class TestTemplateUtils < Test::Unit::TestCase
 
