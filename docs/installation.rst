@@ -1,7 +1,7 @@
 Installation
 ============
 
-Xolti being available on `RubyGems.org`_ makes it fairly easy to be installed :
+Xolti is available on `RubyGems.org`, the Ruby community's gem hosting service. Assuming you have already installed Ruby, this makes Xolti fairly easy to install :
 
 .. code-block:: bash
 

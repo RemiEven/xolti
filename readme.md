@@ -42,7 +42,7 @@ xolti add awesome.txt
 ###### I want to check that `awesome.txt` has a correct header :
 
 ```
-xolti check awesome.txt
+xolti status awesome.txt
 ```
 
 ###### I want to delete the header of `awesome.txt` :
