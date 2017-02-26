@@ -10,7 +10,7 @@
 #
 # Xolti is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
@@ -45,7 +45,7 @@ module Core
 		template = config.template
 		ext = File.extname(path)
 		detected = HeaderDetector.detect(path, template, config.get_comment(ext))
-		return [{type: "no_header_found"}] if !detected
+		return [{type: :no_header_found}] if !detected
 		HeaderValidator.diff(detected, config.project_info.merge({file_name: File.basename(path)}))
 	end
 end

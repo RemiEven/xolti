@@ -94,7 +94,7 @@ We can either use the dedicated command:
 	Files missing (proper) header:
 	app.js
 
-... or use ``xolti status``, which will tell you the state of each of your files.
+... or use ``xolti status``, which will report the files without correct headers.
 
 .. code-block:: bash
 
@@ -105,7 +105,7 @@ We can either use the dedicated command:
 Adding the header to your files
 -------------------------------
 
-Looks like ``app.js`` is missing a header. Xolti can create and insert one for you, with the
+Looks like ``app.js`` is missing a header... Xolti can create and insert one for you, with the
 ``add`` command:
 
 .. code-block:: bash
@@ -127,11 +127,11 @@ Verifying the result
 --------------------
 
 Of course, you can verify that Xolti have actually added the header by simply opening the
-file, but you can also use the ``check`` command:
+file, but you can also use once again the ``status`` command:
 
 .. code-block:: bash
 
-	remi ~/myAwesomeProject]$ xolti check app.js
+	remi ~/myAwesomeProject]$ xolti status app.js
 	Correct header.
 
 That's it ! Your project is correctly licensed :).
@@ -143,17 +143,17 @@ Now that we think of it, ``myAwesomeProject`` is not such a good name. ``myFanta
 is way better ! To let xolti know of our change of mind, we can edit the ``xolti.yml`` file,
 and replace the value of the key ``project_name`` by ``myFantasticProject``.
 
-If we ``check`` again the ``app.js`` file, xolti warns us about its now incorrect header:
+When we ask xolti once again about the status of the ``app.js`` file, it warns us about the now incorrect header:
 
 .. code-block:: bash
 
-	xolti check app.js
+	remi ~/myAwesomeProject]$ xolti status app.js
 	Line 5: expected "myFantasticProject" but got "myAwesomeProject".
 	Line 7: expected "myFantasticProject" but got "myAwesomeProject".
 	Line 12: expected "myFantasticProject" but got "myAwesomeProject".
 	Line 18: expected "myFantasticProject" but got "myAwesomeProject".
 
-You can then correct this outdated header.
+You can then manually correct this outdated header.
 
 Deleting the header in a file
 -----------------------------

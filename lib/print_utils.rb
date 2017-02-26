@@ -1,5 +1,5 @@
-# header_generator.rb
-# Copyright (C) Rémi Even 2016
+# print_utils.rb
+# Copyright (C) Rémi Even 2017
 #
 # This file is part of Xolti.
 #
@@ -15,12 +15,17 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
-require_relative "comment"
 
-module HeaderGenerator
-	def HeaderGenerator.create_for(path, config)
-		info = config.project_info.merge({file_name: File.basename(path)})
-		bare_header = config.template % info
-		Comment.comment(bare_header, config.get_comment(File.extname(path)))
+module PrintUtils
+	def PrintUtils.puts(message, indentation = 0)
+		if (message.is_a? String)
+			return PrintUtils.puts_single(message, indentation)
+		end
+		offset = "\t" * indentation
+		message.each { |line| Kernel.puts offset + line}
+	end
+
+	def PrintUtils.puts_single(message, indentation = 0)
+		Kernel.puts ("\t" * indentation) + message
 	end
 end
