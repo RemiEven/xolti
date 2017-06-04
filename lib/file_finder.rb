@@ -17,39 +17,38 @@
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 # TODO : handle "folder/file" patterns
 def parse_xoltignore(path)
-	xoltignorePath = "#{path}/.xoltignore"
-	return [] if !File.file?(xoltignorePath)
-	File.readlines(xoltignorePath).reject {|line| line == "" || line[0] == "#"}.map {|line| line.chomp}
+	xoltignore_path = "#{path}/.xoltignore"
+	return [] if !File.file?(xoltignore_path)
+	File.readlines(xoltignore_path).reject {|line| line == "" || line[0] == "#"}.map {|line| line.chomp}
 end
 
 module FileFinder
-	def FileFinder.explore_folder(folder=Dir.pwd, ignoreRules=[])
-		fileAcc = []
-		ignoredPaths = [".", "..", ".git", ".xoltignore", "xolti.yml", "LICENSE"]
-		ignoreRules += parse_xoltignore(folder)
+	def FileFinder.explore_folder(folder=Dir.pwd, ignore_rules=[])
+		files = []
+		ignored_paths = [".", "..", ".git", ".xoltignore", "xolti.yml", "LICENSE"]
+		ignore_rules += parse_xoltignore(folder)
 
 		Dir.glob("#{folder}/{*,.*}")
-			.delete_if {|x| ignoredPaths.include?(File.basename(x))}
+			.delete_if {|x| ignored_paths.include?(File.basename(x))}
 			.delete_if do |x|
 				basename = File.basename(x)
-				toIgnore = false
-				ignoreRules.each do |rule|
+				to_ignore = false
+				ignore_rules.each do |rule|
 					if (rule[0] == "!" && File.fnmatch(rule[1..-1], basename))
-						toIgnore = false
+						to_ignore = false
 					elsif (File.fnmatch(rule, basename))
-						toIgnore = true
+						to_ignore = true
 					end
 				end
-				toIgnore
+				to_ignore
 			end
 			.each do |path|
 				if File.directory?(path)
-					fileAcc += explore_folder(path, ignoreRules)
+					files += explore_folder(path, ignore_rules)
 				else
-					fileAcc << path
+					files << path
 				end
 			end
-
-		fileAcc
+		files
 	end
 end
