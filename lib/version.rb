@@ -1,5 +1,5 @@
 # version.rb
-# Copyright (C) Rémi Even 2016
+# Copyright (C) Rémi Even 2016-2017
 #
 # This file is part of Xolti.
 #
@@ -17,6 +17,6 @@
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 module XoltiVersion
 	def XoltiVersion.get()
-		"0.1.1"
+		"0.2.0"
 	end
 end
