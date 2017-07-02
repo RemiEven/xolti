@@ -48,7 +48,7 @@ class TestConfig < Test::Unit::TestCase
 			},
 			"template" => "Header"
 		})
-		assert_true(sut.use_git)
+		assert(sut.use_git)
 	end
 
 	def test_complete_config_no_git
@@ -60,7 +60,7 @@ class TestConfig < Test::Unit::TestCase
 			"template" => "Header",
 			"use_git" => false
 		}).complete_config_for_file("/some/path/to/the/file.txt")
-		assert_false(sut.use_git)
+		refute(sut.use_git)
 		assert_equal("file.txt", sut.project_info[:file_name])
 	end
 
