@@ -14,5 +14,5 @@ Gem::Specification.new do |spec|
 
 	spec.add_runtime_dependency("thor", ["~>0.19.1", ">=0.19.1"])
 
-	spec.add_development_dependency('example', ['~> 1.2.1', '>= 1.2.1'])
+	spec.add_development_dependency("mocha", ['~> 1.2.1', '>= 1.2.1'])
 end
