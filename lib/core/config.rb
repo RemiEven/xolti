@@ -22,6 +22,8 @@ require "date"
 require_relative "default_comment_tokens"
 require_relative "resources"
 
+require_relative "../git/git_api"
+
 class XoltiConfig
 
 	def self.find_config_file(path = Pathname.getwd)
@@ -36,7 +38,7 @@ class XoltiConfig
 		XoltiConfig.new(raw_config)
 	end
 
-	attr_reader :project_info, :template, :offset, :license
+	attr_reader :project_info, :template, :offset, :license, :use_git
 
 	def initialize(raw_config)
 		@project_info = extract_project_info(raw_config["project_info"])
@@ -44,10 +46,21 @@ class XoltiConfig
 		@license = raw_config["license"]
 		@template = extract_template_if_present(raw_config)
 		@offset = raw_config["offset"] || 0
+		@use_git = if raw_config.has_key?("use_git") then raw_config["use_git"] else true end
 	end
 
 	def get_comment(ext)
 		@comment[ext.delete('.')]
+	end
+
+	def complete_config_for_file(file)
+		additional_project_info = {file_name: File.basename(file)}
+		additional_project_info.merge!({
+			year: GitApi.modification_years_of(file)
+		}) if @use_git
+		completed_config = self.clone
+		completed_config.project_info.merge!(additional_project_info)
+		completed_config
 	end
 
 	private def extract_project_info(raw_project_info)
