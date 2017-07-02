@@ -74,13 +74,7 @@ would be :
 
 .. tip::
 
-	You can invert a rule by prefixing it with ``!``. You can create one ``.xoltignore``
-	in each directory of your project. Globing (ie use of the ``*`` wildcard) is supported.
-
-.. note::
-
-	Like in a ``.gitignore`` file, rules are read line by line, from top to bottom; lower rules
-	override higher ones, and rules from a deeper folder override rules from higher folders.
+	More details on ``.xoltignore`` files can be found :doc:`in the dedicated documentation page </xoltignore>`
 
 Checking which files are missing headers
 ----------------------------------------

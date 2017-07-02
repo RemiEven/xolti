@@ -15,41 +15,41 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
-# TODO : handle "folder/file" patterns
+
+require_relative "path_rule"
+
 def parse_xoltignore(path)
-	xoltignorePath = "#{path}/.xoltignore"
-	return [] if !File.file?(xoltignorePath)
-	File.readlines(xoltignorePath).reject {|line| line == "" || line[0] == "#"}.map {|line| line.chomp}
+	xoltignore_path = "#{path}/.xoltignore"
+	return [] if !File.file?(xoltignore_path)
+	File.readlines(xoltignore_path)
+		.reject {|line| line == "" || line[0] == "#"}
+		.map {|line| line.chomp}
+		.map {|line| PathRule.new(path, line)}
 end
 
 module FileFinder
-	def FileFinder.explore_folder(folder=Dir.pwd, ignoreRules=[])
-		fileAcc = []
-		ignoredPaths = [".", "..", ".git", ".xoltignore", "xolti.yml", "LICENSE"]
-		ignoreRules += parse_xoltignore(folder)
+	def FileFinder.explore_folder(folder=Dir.pwd, ignore_rules=[])
+		files = []
+		ignored_paths = [".", "..", ".git", ".xoltignore", "xolti.yml", "LICENSE"]
+		ignore_rules += parse_xoltignore(folder)
 
 		Dir.glob("#{folder}/{*,.*}")
-			.delete_if {|x| ignoredPaths.include?(File.basename(x))}
-			.delete_if do |x|
-				basename = File.basename(x)
-				toIgnore = false
-				ignoreRules.each do |rule|
-					if (rule[0] == "!" && File.fnmatch(rule[1..-1], basename))
-						toIgnore = false
-					elsif (File.fnmatch(rule, basename))
-						toIgnore = true
-					end
-				end
-				toIgnore
-			end
+			.delete_if {|x| ignored_paths.include?(File.basename(x))}
 			.each do |path|
+				# Do NOT ignore by default
+				ignore = :exclude
 				if File.directory?(path)
-					fileAcc += explore_folder(path, ignoreRules)
+					ignore_rules.each do |rule|
+						ignore = rule.effect if rule.folder_match(path)
+					end
+					files += explore_folder(path, ignore_rules) if ignore == :exclude
 				else
-					fileAcc << path
+					ignore_rules.each do |rule|
+						ignore = rule.effect if rule.file_match(path)
+					end
+					files << path if ignore == :exclude
 				end
 			end
-
-		fileAcc
+		files
 	end
 end
