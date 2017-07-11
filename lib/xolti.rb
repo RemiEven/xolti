@@ -79,11 +79,19 @@ class XoltiCLI < Thor
 		PrintUtils.puts(missing_headers.map{|file| file.sub(dir + "/", "")}, 1)
 	end
 
-	desc "delete FILE", "Delete the header in FILE"
+	desc "delete [FILE|FOLDER]", "Delete the header in FILE or to all files in FOLDER"
 	def delete(file)
-		PrintUtils.puts_single "Deleting header in #{file}"
 		config = self.load_config {|e| puts e.message; exit 1 }
-		Core.delete_header(file, config)
+		if File.file?(file)
+			PrintUtils.puts_single "Deleting header in #{file}"
+			Core.delete_header(file, config)
+		else
+			FileFinder.explore_folder(file)
+				.each do |source_file|
+					PrintUtils.puts_single "Deleting header in #{source_file}"
+					Core.delete_header(source_file, config)
+				end
+		end
 	end
 
 	desc "generate-license", "Generate a LICENSE file containing a full license"
