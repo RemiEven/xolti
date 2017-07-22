@@ -1,5 +1,5 @@
 # ts_xolti.rb
-# Copyright (C) Rémi Even 2016
+# Copyright (C) Rémi Even 2016, 2017
 #
 # This file is part of Xolti.
 #
@@ -20,5 +20,6 @@ require "test/unit"
 require_relative "header/tc_template_utils"
 require_relative "header/tc_comment"
 require_relative "header/tc_header_validator"
+require_relative "header/tag/tc_year_tag"
 
 require_relative "core/tc_config"

@@ -1,5 +1,5 @@
 # xolti.rb
-# Copyright (C) Rémi Even 2016
+# Copyright (C) Rémi Even 2016, 2017
 #
 # This file is part of Xolti.
 #
@@ -163,7 +163,7 @@ class XoltiCLI < Thor
 					if diff[:type] && diff[:type] == :no_header_found
 						return ["No header found."]
 					else
-						result << "Line #{diff[:line]}: expected \"#{diff[:expected]}\" but got \"#{diff[:actual]}\"."
+						result << "Line #{diff[:line_number]}: expected \"#{diff[:expected]}\" but got \"#{diff[:actual]}\"."
 					end
 				end
 				return result.join("\n")

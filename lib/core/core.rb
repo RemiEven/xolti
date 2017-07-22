@@ -1,5 +1,5 @@
 # core.rb
-# Copyright (C) Rémi Even 2016
+# Copyright (C) Rémi Even 2016, 2017
 #
 # This file is part of Xolti.
 #
@@ -24,6 +24,7 @@ require_relative "../header/header_validator"
 
 module Core
 	def Core.licensify(path, config)
+		config = config.complete_config_for_file(path, true)
 		header = HeaderGenerator.create_for(path, config)
 		FileModification.insert_lines_with_offset(path, header, config.offset)
 	end
@@ -32,7 +33,7 @@ module Core
 		template = config.template
 		ext = File.extname(path)
 		detected = HeaderDetector.detect(path, template, config.get_comment(ext))
-		FileModification.delete_lines(path, detected[:start], detected[:matches].length) if detected
+		FileModification.delete_lines(path, detected[:start], detected[:matched_lines].length) if detected
 	end
 
 	def Core.has_header(path, config)
@@ -42,10 +43,12 @@ module Core
 	end
 
 	def Core.validate_header(path, config)
+		config = config.complete_config_for_file(path)
 		template = config.template
 		ext = File.extname(path)
 		detected = HeaderDetector.detect(path, template, config.get_comment(ext))
 		return [{type: :no_header_found}] if !detected
-		HeaderValidator.diff(detected, config)
+		expected = HeaderGenerator.create_for(path, config)
+		HeaderValidator.diff(expected, detected)
 	end
 end

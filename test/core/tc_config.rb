@@ -1,5 +1,5 @@
 # tc_config.rb
-# Copyright (C) Rémi Even 2016
+# Copyright (C) Rémi Even 2016, 2017
 #
 # This file is part of Xolti.
 #
@@ -65,7 +65,8 @@ class TestConfig < Test::Unit::TestCase
 	end
 
 	def test_complete_config_use_git
-		GitApi.expects(:modification_years_of).returns(1994)
+		GitApi.expects(:modification_years_of).returns([1994])
+		GitApi.expects(:authors_of).returns(["Rémi Even"])
 
 		sut = XoltiConfig.new({
 			"project_info" => {
@@ -75,11 +76,12 @@ class TestConfig < Test::Unit::TestCase
 			"template" => "Header"
 		}).complete_config_for_file("/some/path/to/the/file.txt")
 		assert_equal("file.txt", sut.project_info[:file_name])
-		assert_equal(1994, sut.project_info[:year])
+		assert_equal([1994], sut.project_info[:year])
 	end
 
 	def test_complete_config_use_git_date_overriden
-		GitApi.expects(:modification_years_of).returns(1994)
+		GitApi.expects(:modification_years_of).returns([1994])
+		GitApi.expects(:authors_of).returns(["Rémi Even"])
 
 		sut = XoltiConfig.new({
 			"project_info" => {
@@ -89,8 +91,8 @@ class TestConfig < Test::Unit::TestCase
 			},
 			"template" => "Header"
 		})
-		assert_not_equal(1994, sut.project_info[:year])
+		assert_not_equal([1994], sut.project_info[:year])
 		sut = sut.complete_config_for_file("/some/path/to/the/file.txt")
-		assert_equal(1994, sut.project_info[:year])
+		assert_equal([1994], sut.project_info[:year])
 	end
 end

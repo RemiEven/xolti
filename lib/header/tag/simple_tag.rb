@@ -1,5 +1,5 @@
-# comment.rb
-# Copyright (C) Rémi Even 2016, 2017
+# simple_tag.rb
+# Copyright (C) Rémi Even 2017
 #
 # This file is part of Xolti.
 #
@@ -15,19 +15,22 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
-def simple_comment(text, comment_token)
-	text.lines.map{|line| "#{comment_token}#{line}".rstrip + "\n"}.join
-end
+class SimpleTag
+	attr :tag_name
 
-def complex_comment(text, comment_tokens)
-	result = "#{comment_tokens[0]}\n"
-	result << simple_comment(text, comment_tokens[1])
-	result << "#{comment_tokens[2]}\n"
-	result
-end
+	def initialize(tag_name)
+		@tag_name = tag_name
+	end
 
-module Comment
-	def Comment.comment(text, comment_tokens)
-		comment_tokens.is_a?(String) ? simple_comment(text, comment_tokens) : complex_comment(text, comment_tokens)
+	def tag_name()
+		@tag_name
+	end
+
+	def detection_regexp()
+		".*"
+	end
+
+	def create_from(project_info)
+		project_info[@tag_name.to_sym]
 	end
 end

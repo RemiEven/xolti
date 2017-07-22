@@ -1,5 +1,5 @@
 # config.rb
-# Copyright (C) Rémi Even 2016
+# Copyright (C) Rémi Even 2016, 2017
 #
 # This file is part of Xolti.
 #
@@ -46,18 +46,20 @@ class XoltiConfig
 		@license = raw_config["license"]
 		@template = extract_template_if_present(raw_config)
 		@offset = raw_config["offset"] || 0
-		@use_git = if raw_config.has_key?("use_git") then raw_config["use_git"] else true end
+		@use_git = !raw_config.has_key?("use_git") || raw_config["use_git"]
 	end
 
 	def get_comment(ext)
 		@comment[ext.delete('.')]
 	end
 
-	def complete_config_for_file(file)
+	def complete_config_for_file(file, include_current_year = false)
 		additional_project_info = {file_name: File.basename(file)}
 		additional_project_info.merge!({
-			year: GitApi.modification_years_of(file)
-		}) if @use_git
+			year: GitApi.modification_years_of(file),
+			author: GitApi.authors_of(file, GitApi.user_name())[0]
+		}) unless !@use_git
+		additional_project_info[:year] = (additional_project_info[:year] << Date.today().year).uniq if include_current_year
 		completed_config = self.clone
 		completed_config.project_info.merge!(additional_project_info)
 		completed_config

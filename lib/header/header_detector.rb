@@ -1,5 +1,5 @@
 # header_detector.rb
-# Copyright (C) Rémi Even 2016
+# Copyright (C) Rémi Even 2016, 2017
 #
 # This file is part of Xolti.
 #
@@ -25,20 +25,20 @@ module HeaderDetector
 			TemplateUtils.create_detection_regexp_for_line(line)
 		end
 		potential_header_start = 0
-		matches = []
+		matched_lines = []
 		File.open(path, "r").each do |line|
-			match = template_regexp_lines[matches.length].match(line)
+			match = template_regexp_lines[matched_lines.length].match(line)
 			if match
-				matches << match
-				if matches.length == template_regexp_lines.length
+				matched_lines << line
+				if matched_lines.length == template_regexp_lines.length
 					return {
 						start: potential_header_start,
-						matches: matches
+						matched_lines: matched_lines
 					}
 				end
 			else
-				potential_header_start += matches.length + 1
-				matches = []
+				potential_header_start += matched_lines.length + 1
+				matched_lines = []
 			end
 		end
 		nil

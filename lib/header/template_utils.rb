@@ -1,5 +1,5 @@
 # template_utils.rb
-# Copyright (C) Rémi Even 2016
+# Copyright (C) Rémi Even 2016, 2017
 #
 # This file is part of Xolti.
 #
@@ -15,6 +15,8 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
+require_relative "tag/template_tags"
+
 module TemplateUtils
 
 	# Return the positions of every (alternating) % and } in template_line
@@ -69,45 +71,7 @@ module TemplateUtils
 		tag[2..-2]
 	end
 
-	def TemplateUtils.create_regexp_for_tag(tag)
-		case extract_tag_type(tag)
-		when "year"
-			"?<year>[[:digit:]]{4}"
-		when "author"
-			"?<author>.*"
-		when "project_name"
-			"?<project_name>.*"
-		when "file_name"
-			"?<file_name>.*"
-		else
-			".*"
-		end
-	end
-
-	def TemplateUtils.find_intervals(numbers)
-		sorted = numbers.sort
-		intervals = []
-		i = 0
-		while (i < sorted.size)
-			j = 1;
-			while (i + j < sorted.size && sorted[i + j] == sorted[i] + j)
-				j += 1
-			end
-			intervals << [sorted[i], sorted[i + j - 1]]
-			i += j
-		end
-		intervals
-	end
-
-	def TemplateUtils.format_year_interval(interval)
-		return interval[0].to_s if interval[1] == interval[0]
-		return "#{interval[0]}, #{interval[1]}" if interval[1] == interval[0] + 1
-		"#{interval[0]}-#{interval[1]}"
-	end
-
-	def TemplateUtils.year_list(years)
-		find_intervals(years)
-			.map { |interval| format_year_interval(interval) }
-			.join(", ")
+	def TemplateUtils.create_regexp_for_tag(tag_name)
+		TemplateTags.get_tag(extract_tag_type(tag_name)).detection_regexp
 	end
 end

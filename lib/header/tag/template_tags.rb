@@ -1,5 +1,5 @@
-# comment.rb
-# Copyright (C) Rémi Even 2016, 2017
+# template_tags.rb
+# Copyright (C) Rémi Even 2017
 #
 # This file is part of Xolti.
 #
@@ -15,19 +15,19 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
-def simple_comment(text, comment_token)
-	text.lines.map{|line| "#{comment_token}#{line}".rstrip + "\n"}.join
-end
+require_relative "year_tag"
+require_relative "simple_tag"
 
-def complex_comment(text, comment_tokens)
-	result = "#{comment_tokens[0]}\n"
-	result << simple_comment(text, comment_tokens[1])
-	result << "#{comment_tokens[2]}\n"
-	result
-end
+class TemplateTags
+	COMPLEX_TAGS = [YearTag]
+		.map{|tag_class| [tag_class::TAG_NAME, tag_class.new]}
+		.to_h
 
-module Comment
-	def Comment.comment(text, comment_tokens)
-		comment_tokens.is_a?(String) ? simple_comment(text, comment_tokens) : complex_comment(text, comment_tokens)
+	def TemplateTags.get_tag(tag_name)
+		if self::COMPLEX_TAGS.has_key?(tag_name) then
+			self::COMPLEX_TAGS[tag_name]
+		else
+			SimpleTag.new(tag_name)
+		end
 	end
 end

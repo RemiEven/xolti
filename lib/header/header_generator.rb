@@ -1,5 +1,5 @@
 # header_generator.rb
-# Copyright (C) Rémi Even 2016
+# Copyright (C) Rémi Even 2016, 2017
 #
 # This file is part of Xolti.
 #
@@ -16,11 +16,12 @@
 # You should have received a copy of the GNU General Public License
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 require_relative "comment"
+require_relative "tag/template_tags"
 
 module HeaderGenerator
 	def HeaderGenerator.create_for(path, config)
-		info = config.project_info.merge({file_name: File.basename(path)})
-		bare_header = config.template % info
+		formatted_info = config.project_info.map { |tag_name, _|  [tag_name, TemplateTags.get_tag(tag_name.to_s).create_from(config.project_info)]}.to_h
+		bare_header = config.template % formatted_info
 		Comment.comment(bare_header, config.get_comment(File.extname(path)))
 	end
 end

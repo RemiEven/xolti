@@ -1,5 +1,5 @@
 # header_validator.rb
-# Copyright (C) Rémi Even 2016
+# Copyright (C) Rémi Even 2016, 2017
 #
 # This file is part of Xolti.
 #
@@ -15,20 +15,17 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
+require_relative "header_generator"
+
 module HeaderValidator
-	def HeaderValidator.diff(detected, info)
-		diff = []
-		detected[:matches].each_with_index do |match, i|
-			line = detected[:start] + i + 1
-			match.names.each do |name|
-				name_sym = name.to_sym
-				diff << {
-					line: line,
-					expected: info[name_sym],
-					actual: match[name_sym]
-				} if info[name_sym] != match[name_sym]
-			end
+	def HeaderValidator.diff(expected, detected)
+		expected.split("\n").map.with_index do |expected_line, i|
+			{
+				line_number: detected[:start] + i + 1,
+				expected: expected_line,
+				actual: detected[:matched_lines][i].chomp("\n")
+			}
 		end
-		diff
+		.reject { |line_diff| line_diff[:expected] == line_diff[:actual] }
 	end
 end

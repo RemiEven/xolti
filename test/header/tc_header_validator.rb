@@ -1,5 +1,5 @@
 # tc_header_validator.rb
-# Copyright (C) Rémi Even 2016
+# Copyright (C) Rémi Even 2016, 2017
 #
 # This file is part of Xolti.
 #
@@ -22,33 +22,24 @@ require_relative "../../lib/header/header_validator"
 class TestHeaderValidator < Test::Unit::TestCase
 
 	def test_diff
-		actual_file_name = "awesme.txt"
-		actual_year = "2017"
-		actual_author = "Remi E"
-		actual_project_name = "Xolti"
 		detected = {
 			start: 2,
-			matches: [
-				"# #{actual_file_name}".match(/^(# )(?<file_name>.*)$/),
-				"# ".match(/^(# )$/),
-				"# (C) #{actual_year} #{actual_author}".match(/^(# \(C\) )(?<year>[[:digit:]]{4})( )(?<author>.*)$/),
-				"# Project #{actual_project_name}".match(/^(# Project )(?<project_name>.*)/)
+			matched_lines: [
+				"# awesme.txt",
+				"# ",
+				"# (C) 207 Rémi E",
+				"# Project Xolti"
 			]
 		}
-		expected_file_name = "awesome.txt"
-		expected_year = "2016"
-		expected_author = "Rémi Even"
-		expected_project_name = actual_project_name
-		info = {
-			file_name: expected_file_name,
-			year: expected_year,
-			author: expected_author,
-			project_name: expected_project_name
-		}
-		diff = HeaderValidator.diff(detected, info)
-		assert_equal(diff.length, 3)
-		assert_equal(diff[0], {line: 3, expected: expected_file_name, actual: actual_file_name})
-		assert_equal(diff[1], {line: 5, expected: expected_year, actual: actual_year})
-		assert_equal(diff[2], {line: 5, expected: expected_author, actual: actual_author})
+		expected = [
+			"# awesome.txt",
+			"# ",
+			"# (C) 2017 Rémi Even",
+			"# Project Xolti"
+		]
+		diff = HeaderValidator.diff(expected.join("\n"), detected)
+		assert_equal(2, diff.length)
+		assert_equal({line_number: 3, expected: expected[0], actual: detected[:matched_lines][0]}, diff[0])
+		assert_equal({line_number: 5, expected: expected[2], actual: detected[:matched_lines][2]}, diff[1])
 	end
 end
