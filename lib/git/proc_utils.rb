@@ -15,26 +15,15 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
-module ProcUtils
-	def ProcUtils.fork_and_close(command, o)
-		res = Kernel.system(command, :out => o, :err => o)
-		o.close
-		res
-	end
+require "open3"
 
+module ProcUtils
 	def ProcUtils.system(command)
-		i, o = IO.pipe
-		begin
-			case fork_and_close(command, o)
-			when true
-				return i.read
-			when false
-				raise i.read
-			else
-				raise "fail"
-			end
-		ensure
-			i.close
+		stdout, stderr, status = Open3.capture3(command)
+		if status == 0 then
+			return stdout
+		else
+			raise stderr
 		end
 	end
 end
