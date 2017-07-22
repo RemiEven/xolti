@@ -15,14 +15,14 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
-require "yaml"
-require "pathname"
-require "date"
+require 'yaml'
+require 'pathname'
+require 'date'
 
-require_relative "default_comment_tokens"
-require_relative "resources"
+require_relative 'default_comment_tokens'
+require_relative 'resources'
 
-require_relative "../git/git_api"
+require_relative '../git/git_api'
 
 class XoltiConfig
 

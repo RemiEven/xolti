@@ -15,7 +15,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
-require_relative "proc_utils"
+require_relative 'proc_utils'
 
 module GitApi
 	def GitApi.ignored_files()

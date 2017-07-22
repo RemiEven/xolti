@@ -16,16 +16,16 @@
 # You should have received a copy of the GNU General Public License
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 
-require "thor"
-require "pathname"
-require "yaml"
+require 'thor'
+require 'pathname'
+require 'yaml'
 
-require_relative "core/core"
-require_relative "core/config"
-require_relative "core/file_finder"
-require_relative "core/resources"
-require_relative "core/version"
-require_relative "core/print_utils"
+require_relative 'core/core'
+require_relative 'core/config'
+require_relative 'core/file_finder'
+require_relative 'core/resources'
+require_relative 'core/version'
+require_relative 'core/print_utils'
 
 Signal.trap("INT") do
 	puts "\nCancelling..."

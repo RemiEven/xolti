@@ -15,8 +15,8 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
-require_relative "year_tag"
-require_relative "simple_tag"
+require_relative 'year_tag'
+require_relative 'simple_tag'
 
 class TemplateTags
 	COMPLEX_TAGS = [YearTag]

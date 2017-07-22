@@ -15,9 +15,9 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
-require "test/unit"
+require 'test/unit'
 
-require_relative "../../lib/header/header_validator"
+require_relative '../../lib/header/header_validator'
 
 class TestHeaderValidator < Test::Unit::TestCase
 

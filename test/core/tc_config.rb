@@ -15,11 +15,11 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
-require "test/unit"
-require "mocha/test_unit"
+require 'test/unit'
+require 'mocha/test_unit'
 
-require_relative "../../lib/core/config"
-require_relative "../../lib/git/git_api"
+require_relative '../../lib/core/config'
+require_relative '../../lib/git/git_api'
 
 class TestConfig < Test::Unit::TestCase
 

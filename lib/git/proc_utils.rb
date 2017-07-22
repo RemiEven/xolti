@@ -15,7 +15,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
-require "open3"
+require 'open3'
 
 module ProcUtils
 	def ProcUtils.system(command)

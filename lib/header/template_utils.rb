@@ -15,7 +15,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
-require_relative "tag/template_tags"
+require_relative 'tag/template_tags'
 
 module TemplateUtils
 
