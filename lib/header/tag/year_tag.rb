@@ -16,17 +16,17 @@
 # You should have received a copy of the GNU General Public License
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 class YearTag
-	TAG_NAME = "year"
+	TAG_NAME = 'year'
 
 	def detection_regexp()
-		"[[:digit:]]{4}(-[[:digit:]]{4})?(, [[:digit:]]{4}(-[[:digit:]]{4})?)*"
+		'[[:digit:]]{4}(-[[:digit:]]{4})?(, [[:digit:]]{4}(-[[:digit:]]{4})?)*'
 	end
 
 	def create_from(project_info)
 		years = project_info[:year]
 		find_intervals(years)
 			.map { |interval| format_year_interval(interval) }
-			.join(", ")
+			.join(', ')
 	end
 
 	private def find_intervals(numbers)

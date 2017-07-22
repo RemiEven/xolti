@@ -22,11 +22,11 @@ module TemplateUtils
 	# Return the positions of every (alternating) % and } in template_line
 	def TemplateUtils.find_template_tokens_indexes(template_line)
 		indexes = []
-		searchedChar = "%"
+		searchedChar = '%'
 		for i in 0..template_line.length - 1
 			if template_line[i].chr == searchedChar
 				indexes.push(i)
-				searchedChar = searchedChar == "%" ? "}" : "%"
+				searchedChar = searchedChar == '%' ? '}' : '%'
 			end
 		end
 		indexes
@@ -38,13 +38,13 @@ module TemplateUtils
 		currentTokenEnd = 0
 		inTag = false
 		while currentTokenEnd < template_line.length do
-			if !inTag && template_line[currentTokenEnd].chr == "%"
+			if !inTag && template_line[currentTokenEnd].chr == '%'
 				if (currentTokenEnd != currentTokenStart)
 					tokens.push(template_line[currentTokenStart..(currentTokenEnd - 1)])
 				end
 				currentTokenStart = currentTokenEnd
 				inTag = true
-			elsif inTag && template_line[currentTokenEnd].chr == "}"
+			elsif inTag && template_line[currentTokenEnd].chr == '}'
 				tokens.push(template_line[currentTokenStart..currentTokenEnd])
 				currentTokenStart = currentTokenEnd + 1
 				inTag = false
@@ -60,11 +60,11 @@ module TemplateUtils
 		regexpTokens = tokens.map do |token|
 			if tag?(token) then create_regexp_for_tag(token) else Regexp.escape(token) end
 		end
-		Regexp.new("(#{regexpTokens.join(")(")})")
+		Regexp.new("(#{regexpTokens.join(')(')})")
 	end
 
 	def TemplateUtils.tag?(token)
-		token[0] == "%"
+		token[0] == '%'
 	end
 
 	def TemplateUtils.extract_tag_type(tag)

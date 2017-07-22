@@ -27,9 +27,9 @@ require_relative '../git/git_api'
 class XoltiConfig
 
 	def self.find_config_file(path = Pathname.getwd)
-		potential_config_file = (path + "xolti.yml")
+		potential_config_file = (path + 'xolti.yml')
 		return potential_config_file.to_s if potential_config_file.file?
-		raise "No xolti.yml found" if path.root?
+		raise 'No xolti.yml found' if path.root?
 		find_config_file(path.parent)
 	end
 
@@ -41,12 +41,12 @@ class XoltiConfig
 	attr_reader :project_info, :template, :offset, :license, :use_git
 
 	def initialize(raw_config)
-		@project_info = extract_project_info(raw_config["project_info"])
-		@comment = DefaultComment::HASH.merge!(raw_config["comment"] || {})
-		@license = raw_config["license"]
+		@project_info = extract_project_info(raw_config['project_info'])
+		@comment = DefaultComment::HASH.merge!(raw_config['comment'] || {})
+		@license = raw_config['license']
 		@template = extract_template_if_present(raw_config)
-		@offset = raw_config["offset"] || 0
-		@use_git = !raw_config.has_key?("use_git") || raw_config["use_git"]
+		@offset = raw_config['offset'] || 0
+		@use_git = !raw_config.has_key?('use_git') || raw_config['use_git']
 	end
 
 	def get_comment(ext)
@@ -67,14 +67,14 @@ class XoltiConfig
 
 	private def extract_project_info(raw_project_info)
 		{
-			author: raw_project_info["author"],
-			project_name: raw_project_info["project_name"],
-			year: raw_project_info["year"] || Date.today().year.to_s
+			author: raw_project_info['author'],
+			project_name: raw_project_info['project_name'],
+			year: raw_project_info['year'] || Date.today().year.to_s
 		}
 	end
 
 	private def extract_template_if_present(raw_config)
-		return raw_config["template"] if raw_config.include?("template")
+		return raw_config['template'] if raw_config.include?('template')
 		default_template_path = Resources.get_template_path(@license)
 		return IO.binread(default_template_path) if File.exists?(default_template_path)
 		nil

@@ -27,7 +27,7 @@ class SimpleTag
 	end
 
 	def detection_regexp()
-		".*"
+		'.*'
 	end
 
 	def create_from(project_info)

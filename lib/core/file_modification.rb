@@ -17,9 +17,9 @@
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 module FileModification
 	def FileModification.insert_lines_with_offset(path, text, offset)
-		file = Tempfile.new("xolti")
+		file = Tempfile.new('xolti')
 		begin
-			File.open(path, "r") do |source_file|
+			File.open(path, 'r') do |source_file|
 				i = 0
 				source_file.each_line do |line|
 					file.write(text) if i == offset
@@ -36,9 +36,9 @@ module FileModification
 	end
 
 	def FileModification.delete_lines(path, start, length)
-		file = Tempfile.new("xolti")
+		file = Tempfile.new('xolti')
 		begin
-			File.open(path, "r").each_with_index do |line, index|
+			File.open(path, 'r').each_with_index do |line, index|
 				file.write(line) if index < start || index >= start + length
 			end
 			file.close()

@@ -25,17 +25,17 @@ class TestHeaderValidator < Test::Unit::TestCase
 		detected = {
 			start: 2,
 			matched_lines: [
-				"# awesme.txt",
-				"# ",
-				"# (C) 207 Rémi E",
-				"# Project Xolti"
+				'# awesme.txt',
+				'# ',
+				'# (C) 207 Rémi E',
+				'# Project Xolti'
 			]
 		}
 		expected = [
-			"# awesome.txt",
-			"# ",
-			"# (C) 2017 Rémi Even",
-			"# Project Xolti"
+			'# awesome.txt',
+			'# ',
+			'# (C) 2017 Rémi Even',
+			'# Project Xolti'
 		]
 		diff = HeaderValidator.diff(expected.join("\n"), detected)
 		assert_equal(2, diff.length)

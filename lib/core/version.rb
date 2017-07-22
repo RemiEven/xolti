@@ -17,6 +17,6 @@
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 module XoltiVersion
 	def XoltiVersion.get()
-		"0.2.0"
+		'0.2.0'
 	end
 end

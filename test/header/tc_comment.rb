@@ -22,16 +22,16 @@ require_relative '../../lib/header/comment'
 class TestComment < Test::Unit::TestCase
 
 	def test_simple_comment
-		assert_equal("", Comment.comment("", "# "))
-		assert_equal("# A\n", Comment.comment("A\n", "# "))
-		assert_equal("# A\n# B\n", Comment.comment("A\nB\n", "# "))
-		assert_equal("#\n", Comment.comment("\n", "# "))
+		assert_equal('', Comment.comment('', '# '))
+		assert_equal("# A\n", Comment.comment("A\n", '# '))
+		assert_equal("# A\n# B\n", Comment.comment("A\nB\n", '# '))
+		assert_equal("#\n", Comment.comment("\n", '# '))
 	end
 
 	def test_complex_comment
-		assert_equal("/*\n */\n", Comment.comment("", ["/*", " * ", " */"]))
-		assert_equal("/*\n * A\n */\n", Comment.comment("A\n", ["/*", " * ", " */"]))
-		assert_equal("/*\n * A\n * B\n */\n", Comment.comment("A\nB\n", ["/*", " * ", " */"]))
-		assert_equal("/*\n * A\n *\n */\n", Comment.comment("A\n\n", ["/*", " * ", " */"]))
+		assert_equal("/*\n */\n", Comment.comment('', ['/*', ' * ', ' */']))
+		assert_equal("/*\n * A\n */\n", Comment.comment("A\n", ['/*', ' * ', ' */']))
+		assert_equal("/*\n * A\n * B\n */\n", Comment.comment("A\nB\n", ['/*', ' * ', ' */']))
+		assert_equal("/*\n * A\n *\n */\n", Comment.comment("A\n\n", ['/*', ' * ', ' */']))
 	end
 end

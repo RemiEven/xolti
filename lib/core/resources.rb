@@ -20,14 +20,14 @@ module Resources
 	# If xolti is not installed as a gem, assume that pwd is the root of the project
 	# Needed to fix travis integration.
 	Resources_dir = Gem::Specification.all_names.select { |name| name.match(/xolti/) }.length >= 1 ?
-		File.join(Gem::Specification.find_by_name("xolti").gem_dir, "resources") :
-		File.join(Dir.pwd, "resources")
+		File.join(Gem::Specification.find_by_name('xolti').gem_dir, 'resources') :
+		File.join(Dir.pwd, 'resources')
 
 	def Resources.get_template_path(license)
-		File.join(Resources_dir, "headers", license)
+		File.join(Resources_dir, 'headers', license)
 	end
 
 	def Resources.get_full_license_path(license)
-		File.join(Resources_dir, "licenses", license)
+		File.join(Resources_dir, 'licenses', license)
 	end
 end

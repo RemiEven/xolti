@@ -22,7 +22,7 @@ def parse_xoltignore(path)
 	xoltignore_path = "#{path}/.xoltignore"
 	return [] if !File.file?(xoltignore_path)
 	File.readlines(xoltignore_path)
-		.reject {|line| line == "" || line[0] == "#"}
+		.reject {|line| line == '' || line[0] == '#'}
 		.map {|line| line.chomp}
 		.map {|line| PathRule.new(path, line)}
 end
@@ -30,7 +30,7 @@ end
 module FileFinder
 	def FileFinder.explore_folder(folder=Dir.pwd, ignore_rules=[])
 		files = []
-		ignored_paths = [".", "..", ".git", ".xoltignore", "xolti.yml", "LICENSE"]
+		ignored_paths = ['.', '..', '.git', '.xoltignore', 'xolti.yml', 'LICENSE']
 		ignore_rules += parse_xoltignore(folder)
 
 		Dir.glob("#{folder}/{*,.*}")

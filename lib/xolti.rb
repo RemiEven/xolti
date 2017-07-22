@@ -27,14 +27,14 @@ require_relative 'core/resources'
 require_relative 'core/version'
 require_relative 'core/print_utils'
 
-Signal.trap("INT") do
-	puts "\nCancelling..."
+Signal.trap('INT') do
+	puts '\nCancelling...'
 	exit 1
 end
 
 class XoltiCLI < Thor
 
-	desc "add [FILE|FOLDER]", "Add a header to FILE or to all files in FOLDER"
+	desc 'add [FILE|FOLDER]', 'Add a header to FILE or to all files in FOLDER'
 	def add(file)
 		config = self.load_config {|e| puts e.message; exit 1 }
 		if File.file?(file)
@@ -50,11 +50,11 @@ class XoltiCLI < Thor
 		end
 	end
 
-	desc "status [FILE|FOLDER]", "Check the header of FILE or to all files in FOLDER; FOLDER default to current one"
-	def status(file = ".")
+	desc 'status [FILE|FOLDER]', 'Check the header of FILE or to all files in FOLDER; FOLDER default to current one'
+	def status(file = '.')
 		config = self.load_config {|e| puts e; exit 1 }
 		if File.file?(file)
-			PrintUtils.puts self.check_file(file, config) || "Correct header"
+			PrintUtils.puts self.check_file(file, config) || 'Correct header'
 		else
 			FileFinder.explore_folder(file)
 				.each do |source_file|
@@ -62,24 +62,24 @@ class XoltiCLI < Thor
 					if (message)
 						PrintUtils.puts_single "#{source_file}"
 						PrintUtils.puts(message, 1)
-						PrintUtils.puts_single ""
+						PrintUtils.puts_single ''
 					end
 				end
 		end
 	end
 
-	desc "list-missing", "Print a list of files missing (proper) header"
+	desc 'list-missing', 'Print a list of files missing (proper) header'
 	def list_missing()
 		dir = Dir.pwd
 		config = self.load_config {|e| puts e.message; exit 1 }
 		missing_headers = FileFinder.explore_folder(dir)
 			.reject{|file| Core.has_header(file, config)}
-		return PrintUtils.puts_single "All files OK" if missing_headers.empty?
-		PrintUtils.puts_single "Files missing (proper) header:"
-		PrintUtils.puts(missing_headers.map{|file| file.sub(dir + "/", "")}, 1)
+		return PrintUtils.puts_single 'All files OK' if missing_headers.empty?
+		PrintUtils.puts_single 'Files missing (proper) header:'
+		PrintUtils.puts(missing_headers.map{|file| file.sub(dir + '/', '')}, 1)
 	end
 
-	desc "delete [FILE|FOLDER]", "Delete the header in FILE or to all files in FOLDER"
+	desc 'delete [FILE|FOLDER]', 'Delete the header in FILE or to all files in FOLDER'
 	def delete(file)
 		config = self.load_config {|e| puts e.message; exit 1 }
 		if File.file?(file)
@@ -94,10 +94,10 @@ class XoltiCLI < Thor
 		end
 	end
 
-	desc "generate-license", "Generate a LICENSE file containing a full license"
+	desc 'generate-license', 'Generate a LICENSE file containing a full license'
 	def generate_license()
 		config = self.load_config {|e| puts e.message; exit 1 }
-		filename = "LICENSE"
+		filename = 'LICENSE'
 		if File.exists?(File.join(Dir.pwd, filename)) then
 			PrintUtils.puts_single "There is already a #{filename} file. Abort generation."
 		else
@@ -107,23 +107,23 @@ class XoltiCLI < Thor
 		end
 	end
 
-	map ["--version", "-v"] => :__print_version
+	map ['--version', '-v'] => :__print_version
 
-	desc "--version, -v", "Print version of xolti"
+	desc '--version, -v', 'Print version of xolti'
 	def __print_version()
 		puts XoltiVersion.get
 	end
 
-	map ["--license", "-l"] => :__print_license
+	map ['--license', '-l'] => :__print_license
 
-	desc "--license, -l", "Print licensing information of xolti"
+	desc '--license, -l', 'Print licensing information of xolti'
 	def __print_license()
 		puts "Xolti version #{XoltiVersion.get}, Copyright (C) 2016 Rémi Even"
-		puts "Xolti comes with ABSOLUTELY NO WARRANTY."
-		puts "This is free software, and you are welcome to redistribute it"
-		puts "under the terms of the GPLv3."
-		puts "The complete license can be found at \"https://www.gnu.org/licenses/gpl.txt\"."
-		puts "The source code of xolti can be found at \"https://github.com/RemiEven/xolti\"."
+		puts 'Xolti comes with ABSOLUTELY NO WARRANTY.'
+		puts 'This is free software, and you are welcome to redistribute it'
+		puts 'under the terms of the GPLv3.'
+		puts 'The complete license can be found at \'https://www.gnu.org/licenses/gpl.txt\'.'
+		puts 'The source code of xolti can be found at \'https://github.com/RemiEven/xolti\'.'
 	end
 
 	no_commands {
@@ -131,20 +131,20 @@ class XoltiCLI < Thor
 			default_name = Pathname.getwd.basename.to_s
 			print "name (#{default_name}): "
 			typed_name = STDIN.gets.chomp
-			config["project_info"]["project_name"] = (typed_name == "") ? default_name : typed_name
+			config['project_info']['project_name'] = (typed_name == '') ? default_name : typed_name
 		end
 
 		def ask_for_author(config)
-			print "author: "
+			print 'author: '
 			typed_author = STDIN.gets.chomp
-			config["project_info"]["author"] = typed_author
+			config['project_info']['author'] = typed_author
 		end
 
 		def ask_for_license(config)
-			default_license = "GPL3.0"
+			default_license = 'GPL3.0'
 			print "license (#{default_license}): "
 			typed_license = STDIN.gets.chomp
-			config["license"] = (typed_license == "") ? default_license : typed_license
+			config['license'] = (typed_license == '') ? default_license : typed_license
 		end
 
 		def load_config()
@@ -161,7 +161,7 @@ class XoltiCLI < Thor
 				result = []
 				diffs.each do |diff|
 					if diff[:type] && diff[:type] == :no_header_found
-						return ["No header found."]
+						return ['No header found.']
 					else
 						result << "Line #{diff[:line_number]}: expected \"#{diff[:expected]}\" but got \"#{diff[:actual]}\"."
 					end
@@ -171,15 +171,15 @@ class XoltiCLI < Thor
 		end
 }
 
-	desc "init", "Create xolti.yml"
+	desc 'init', 'Create xolti.yml'
 	def init()
 		config = self.load_config
-		return PrintUtils.puts_single "Xolti is already initialiazed" if config != nil
-		PrintUtils.puts_single "Initializing xolti project"
-		config = {"project_info" => {}}
+		return PrintUtils.puts_single 'Xolti is already initialiazed' if config != nil
+		PrintUtils.puts_single 'Initializing xolti project'
+		config = {'project_info' => {}}
 		self.ask_for_name(config)
 		self.ask_for_author(config)
 		self.ask_for_license(config)
-		File.write("xolti.yml", config.to_yaml)
+		File.write('xolti.yml', config.to_yaml)
 	end
 end

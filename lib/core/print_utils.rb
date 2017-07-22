@@ -21,11 +21,11 @@ module PrintUtils
 		if (message.is_a? String)
 			return PrintUtils.puts_single(message, indentation)
 		end
-		offset = "\t" * indentation
+		offset = '\t' * indentation
 		message.each { |line| Kernel.puts offset + line}
 	end
 
 	def PrintUtils.puts_single(message, indentation = 0)
-		Kernel.puts ("\t" * indentation) + message
+		Kernel.puts ('\t' * indentation) + message
 	end
 end

@@ -26,7 +26,7 @@ module HeaderDetector
 		end
 		potential_header_start = 0
 		matched_lines = []
-		File.open(path, "r").each do |line|
+		File.open(path, 'r').each do |line|
 			match = template_regexp_lines[matched_lines.length].match(line)
 			if match
 				matched_lines << line

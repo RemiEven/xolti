@@ -20,7 +20,7 @@ class PathRule
 	attr_reader :effect
 
 	def initialize(path, pattern)
-		if pattern.start_with?("!") then
+		if pattern.start_with?('!') then
 			@effect = :exclude
 			pattern = pattern[1..-1]
 		else
@@ -44,7 +44,7 @@ class PathRule
 	end
 
 	private def pattern_to_folder_regexp(path, pattern)
-		pattern = pattern.chomp("/")
+		pattern = pattern.chomp('/')
 		prefix_detector_regexp = glob_to_regexp(pattern)
 			.reverse()
 			.reduce do |acc, s|
@@ -54,16 +54,16 @@ class PathRule
 	end
 
 	private def concern_only_folders(pattern)
-		pattern.end_with?("/") || pattern.end_with?("**")
+		pattern.end_with?('/') || pattern.end_with?('**')
 	end
 
 	private def glob_to_regexp(pattern)
-		pattern.split("/")
+		pattern.split('/')
 			.map do |e|
-				if e == "**" then
-					"(/.*)?"
+				if e == '**' then
+					'(/.*)?'
 				else
-					Regexp.escape("/" + e).gsub("\\*", "[^/]*")
+					Regexp.escape('/' + e).gsub('\\*', '[^/]*')
 				end
 			end
 	end
