@@ -67,6 +67,7 @@ class TestConfig < Test::Unit::TestCase
 	def test_complete_config_use_git
 		GitApi.expects(:modification_years_of).returns([1994])
 		GitApi.expects(:authors_of).returns(["Rémi Even"])
+		GitApi.expects(:user_name).returns(["Rémi Even"])
 
 		sut = XoltiConfig.new({
 			"project_info" => {
@@ -82,6 +83,7 @@ class TestConfig < Test::Unit::TestCase
 	def test_complete_config_use_git_date_overriden
 		GitApi.expects(:modification_years_of).returns([1994])
 		GitApi.expects(:authors_of).returns(["Rémi Even"])
+		GitApi.expects(:user_name).returns(["Rémi Even"])
 
 		sut = XoltiConfig.new({
 			"project_info" => {
