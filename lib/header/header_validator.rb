@@ -18,7 +18,7 @@
 require_relative 'header_generator'
 
 module HeaderValidator
-	def HeaderValidator.diff(expected, detected)
+	def self.diff(expected, detected)
 		expected.split("\n").map.with_index do |expected_line, i|
 			{
 				line_number: detected[:start] + i + 1,

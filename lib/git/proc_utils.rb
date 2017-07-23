@@ -18,12 +18,9 @@
 require 'open3'
 
 module ProcUtils
-	def ProcUtils.system(command)
+	def self.system(command)
 		stdout, stderr, status = Open3.capture3(command)
-		if status == 0 then
-			return stdout
-		else
-			raise stderr
-		end
+		return stdout if status == 0
+		raise stderr
 	end
 end

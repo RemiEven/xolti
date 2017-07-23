@@ -16,11 +16,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 class PathRule
-
 	attr_reader :effect
 
 	def initialize(path, pattern)
-		if pattern.start_with?('!') then
+		if pattern.start_with?('!')
 			@effect = :exclude
 			pattern = pattern[1..-1]
 		else
@@ -40,13 +39,13 @@ class PathRule
 
 	private def pattern_to_file_regexp(path, pattern)
 		return nil if concern_only_folders(pattern)
-		Regexp.new(glob_to_regexp(pattern).unshift(Regexp.escape(path)).join())
+		Regexp.new(glob_to_regexp(pattern).unshift(Regexp.escape(path)).join)
 	end
 
 	private def pattern_to_folder_regexp(path, pattern)
 		pattern = pattern.chomp('/')
 		prefix_detector_regexp = glob_to_regexp(pattern)
-			.reverse()
+			.reverse
 			.reduce do |acc, s|
 				"#{s}(#{acc})?"
 			end
@@ -54,13 +53,13 @@ class PathRule
 	end
 
 	private def concern_only_folders(pattern)
-		pattern.end_with?('/') || pattern.end_with?('**')
+		pattern.end_with?('/', '**')
 	end
 
 	private def glob_to_regexp(pattern)
 		pattern.split('/')
 			.map do |e|
-				if e == '**' then
+				if e == '**'
 					'(/.*)?'
 				else
 					Regexp.escape('/' + e).gsub('\\*', '[^/]*')

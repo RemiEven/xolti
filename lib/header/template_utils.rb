@@ -18,60 +18,59 @@
 require_relative 'tag/template_tags'
 
 module TemplateUtils
-
 	# Return the positions of every (alternating) % and } in template_line
-	def TemplateUtils.find_template_tokens_indexes(template_line)
+	def self.find_template_tokens_indexes(template_line)
 		indexes = []
-		searchedChar = '%'
-		for i in 0..template_line.length - 1
-			if template_line[i].chr == searchedChar
+		searched_char = '%'
+		(0..template_line.length - 1).each do |i|
+			if template_line[i].chr == searched_char
 				indexes.push(i)
-				searchedChar = searchedChar == '%' ? '}' : '%'
+				searched_char = searched_char == '%' ? '}' : '%'
 			end
 		end
 		indexes
 	end
 
-	def TemplateUtils.split_template_tokens_from_line(template_line)
+	def self.split_template_tokens_from_line(template_line)
 		tokens = []
-		currentTokenStart = 0
-		currentTokenEnd = 0
-		inTag = false
-		while currentTokenEnd < template_line.length do
-			if !inTag && template_line[currentTokenEnd].chr == '%'
-				if (currentTokenEnd != currentTokenStart)
-					tokens.push(template_line[currentTokenStart..(currentTokenEnd - 1)])
+		current_token_start = 0
+		current_token_end = 0
+		in_tag = false
+		while current_token_end < template_line.length
+			if !in_tag && template_line[current_token_end].chr == '%'
+				if current_token_end != current_token_start
+					tokens.push(template_line[current_token_start..(current_token_end - 1)])
 				end
-				currentTokenStart = currentTokenEnd
-				inTag = true
-			elsif inTag && template_line[currentTokenEnd].chr == '}'
-				tokens.push(template_line[currentTokenStart..currentTokenEnd])
-				currentTokenStart = currentTokenEnd + 1
-				inTag = false
+				current_token_start = current_token_end
+				in_tag = true
+			elsif in_tag && template_line[current_token_end].chr == '}'
+				tokens.push(template_line[current_token_start..current_token_end])
+				current_token_start = current_token_end + 1
+				in_tag = false
 			end
-			currentTokenEnd += 1
+			current_token_end += 1
 		end
-		tokens.push(template_line[currentTokenStart..-1]) unless currentTokenStart == template_line.length
+		tokens.push(template_line[current_token_start..-1]) unless current_token_start == template_line.length
 		tokens
 	end
 
-	def TemplateUtils.create_detection_regexp_for_line(template_line)
+	def self.create_detection_regexp_for_line(template_line)
 		tokens = split_template_tokens_from_line(template_line)
-		regexpTokens = tokens.map do |token|
+		regexp_tokens = tokens.map do |token|
 			if tag?(token) then create_regexp_for_tag(token) else Regexp.escape(token) end
 		end
-		Regexp.new("(#{regexpTokens.join(')(')})")
+		Regexp.new("(#{regexp_tokens.join(')(')})")
 	end
 
-	def TemplateUtils.tag?(token)
+	def self.tag?(token)
 		token[0] == '%'
 	end
 
-	def TemplateUtils.extract_tag_type(tag)
+	def self.extract_tag_type(tag)
 		tag[2..-2]
 	end
 
-	def TemplateUtils.create_regexp_for_tag(tag_name)
+	def self.create_regexp_for_tag(tag_name)
 		TemplateTags.get_tag(extract_tag_type(tag_name)).detection_regexp
 	end
 end

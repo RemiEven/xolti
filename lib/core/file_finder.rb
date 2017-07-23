@@ -20,21 +20,21 @@ require_relative 'path_rule'
 
 def parse_xoltignore(path)
 	xoltignore_path = "#{path}/.xoltignore"
-	return [] if !File.file?(xoltignore_path)
+	return [] unless File.file?(xoltignore_path)
 	File.readlines(xoltignore_path)
-		.reject {|line| line == '' || line[0] == '#'}
-		.map {|line| line.chomp}
-		.map {|line| PathRule.new(path, line)}
+		.reject { |line| line == '' || line[0] == '#' }
+		.map(&:chomp)
+		.map { |line| PathRule.new(path, line) }
 end
 
 module FileFinder
-	def FileFinder.explore_folder(folder=Dir.pwd, ignore_rules=[])
+	def self.explore_folder(folder = Dir.pwd, ignore_rules = [])
 		files = []
 		ignored_paths = ['.', '..', '.git', '.xoltignore', 'xolti.yml', 'LICENSE']
 		ignore_rules += parse_xoltignore(folder)
 
 		Dir.glob("#{folder}/{*,.*}")
-			.delete_if {|x| ignored_paths.include?(File.basename(x))}
+			.delete_if { |x| ignored_paths.include?(File.basename(x)) }
 			.each do |path|
 				# Do NOT ignore by default
 				ignore = :exclude

@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 module FileModification
-	def FileModification.insert_lines_with_offset(path, text, offset)
+	def self.insert_lines_with_offset(path, text, offset)
 		file = Tempfile.new('xolti')
 		begin
 			File.open(path, 'r') do |source_file|
@@ -27,25 +27,25 @@ module FileModification
 					file.write(line)
 				end
 			end
-			file.close()
+			file.close
 			FileUtils.cp(file, path)
 		ensure
-			file.close()
-			file.unlink()
+			file.close
+			file.unlink
 		end
 	end
 
-	def FileModification.delete_lines(path, start, length)
+	def self.delete_lines(path, start, length)
 		file = Tempfile.new('xolti')
 		begin
 			File.open(path, 'r').each_with_index do |line, index|
 				file.write(line) if index < start || index >= start + length
 			end
-			file.close()
+			file.close
 			FileUtils.cp(file, path)
 		ensure
-			file.close()
-			file.unlink()
+			file.close
+			file.unlink
 		end
 	end
 end

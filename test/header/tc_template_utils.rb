@@ -20,7 +20,6 @@ require 'test/unit'
 require_relative '../../lib/header/template_utils'
 
 class TestTemplateUtils < Test::Unit::TestCase
-
 	def test_find_template_tokens_indexes
 		assert_equal([], TemplateUtils.find_template_tokens_indexes(''))
 		assert_equal([], TemplateUtils.find_template_tokens_indexes('ee'))

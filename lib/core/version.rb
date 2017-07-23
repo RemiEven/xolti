@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 module XoltiVersion
-	def XoltiVersion.get()
+	def self.get
 		'0.2.0'
 	end
 end

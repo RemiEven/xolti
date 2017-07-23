@@ -25,7 +25,6 @@ require_relative 'resources'
 require_relative '../git/git_api'
 
 class XoltiConfig
-
 	def self.find_config_file(path = Pathname.getwd)
 		potential_config_file = (path + 'xolti.yml')
 		return potential_config_file.to_s if potential_config_file.file?
@@ -33,8 +32,8 @@ class XoltiConfig
 		find_config_file(path.parent)
 	end
 
-	def self.load_config()
-		raw_config = YAML.load(IO.binread(find_config_file()))
+	def self.load_config
+		raw_config = YAML.safe_load(IO.binread(find_config_file))
 		XoltiConfig.new(raw_config)
 	end
 
@@ -46,7 +45,7 @@ class XoltiConfig
 		@license = raw_config['license']
 		@template = extract_template_if_present(raw_config)
 		@offset = raw_config['offset'] || 0
-		@use_git = !raw_config.has_key?('use_git') || raw_config['use_git']
+		@use_git = !raw_config.key?('use_git') || raw_config['use_git']
 	end
 
 	def get_comment(ext)
@@ -54,13 +53,15 @@ class XoltiConfig
 	end
 
 	def complete_config_for_file(file, include_current_year = false)
-		additional_project_info = {file_name: File.basename(file)}
-		additional_project_info.merge!({
-			year: GitApi.modification_years_of(file),
-			author: GitApi.authors_of(file, GitApi.user_name())[0]
-		}) unless !@use_git
-		additional_project_info[:year] = (additional_project_info[:year] << Date.today().year).uniq if include_current_year
-		completed_config = self.clone
+		additional_project_info = { file_name: File.basename(file) }
+		if @use_git
+			additional_project_info.merge!(
+				year: GitApi.modification_years_of(file),
+				author: GitApi.authors_of(file, GitApi.user_name)[0]
+			)
+		end
+		additional_project_info[:year] = (additional_project_info[:year] << Date.today.year).uniq if include_current_year
+		completed_config = clone
 		completed_config.project_info.merge!(additional_project_info)
 		completed_config
 	end
@@ -69,14 +70,14 @@ class XoltiConfig
 		{
 			author: raw_project_info['author'],
 			project_name: raw_project_info['project_name'],
-			year: raw_project_info['year'] || Date.today().year.to_s
+			year: raw_project_info['year'] || Date.today.year.to_s
 		}
 	end
 
 	private def extract_template_if_present(raw_config)
 		return raw_config['template'] if raw_config.include?('template')
 		default_template_path = Resources.get_template_path(@license)
-		return IO.binread(default_template_path) if File.exists?(default_template_path)
+		return IO.binread(default_template_path) if File.exist?(default_template_path)
 		nil
 	end
 end

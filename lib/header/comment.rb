@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 def simple_comment(text, comment_token)
-	text.lines.map{|line| "#{comment_token}#{line}".rstrip + "\n"}.join
+	text.lines.map{ |line| "#{comment_token}#{line}".rstrip + "\n" }.join
 end
 
 def complex_comment(text, comment_tokens)
@@ -27,7 +27,7 @@ def complex_comment(text, comment_tokens)
 end
 
 module Comment
-	def Comment.comment(text, comment_tokens)
+	def self.comment(text, comment_tokens)
 		comment_tokens.is_a?(String) ? simple_comment(text, comment_tokens) : complex_comment(text, comment_tokens)
 	end
 end

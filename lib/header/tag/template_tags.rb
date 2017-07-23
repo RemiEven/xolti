@@ -20,11 +20,11 @@ require_relative 'simple_tag'
 
 class TemplateTags
 	COMPLEX_TAGS = [YearTag]
-		.map{|tag_class| [tag_class::TAG_NAME, tag_class.new]}
+		.map { |tag_class| [tag_class::TAG_NAME, tag_class.new] }
 		.to_h
 
-	def TemplateTags.get_tag(tag_name)
-		if self::COMPLEX_TAGS.has_key?(tag_name) then
+	def self.get_tag(tag_name)
+		if self::COMPLEX_TAGS.key?(tag_name)
 			self::COMPLEX_TAGS[tag_name]
 		else
 			SimpleTag.new(tag_name)

@@ -22,9 +22,8 @@ require_relative '../../lib/core/config'
 require_relative '../../lib/git/git_api'
 
 class TestConfig < Test::Unit::TestCase
-
 	def test_default_comment
-		sut = XoltiConfig.new({
+		sut = XoltiConfig.new(
 			'project_info' => {
 				'project_name' => 'Xolti',
 				'author' => 'Rémi Even'
@@ -33,7 +32,7 @@ class TestConfig < Test::Unit::TestCase
 			'comment' => {
 				'tex' => '% '
 			}
-		})
+		)
 		assert_equal(sut.get_comment('someUnknownExtension'), ['/*', ' * ', ' */'])
 		assert_equal(sut.get_comment('rb'), '# ')
 		assert_equal(sut.get_comment('tex'), '% ')
@@ -41,25 +40,25 @@ class TestConfig < Test::Unit::TestCase
 	end
 
 	def test_use_git_true_by_default
-		sut = XoltiConfig.new({
+		sut = XoltiConfig.new(
 			'project_info' => {
 				'project_name' => 'Xolti',
 				'author' => 'Rémi Even'
 			},
 			'template' => 'Header'
-		})
+		)
 		assert(sut.use_git)
 	end
 
 	def test_complete_config_no_git
-		sut = XoltiConfig.new({
+		sut = XoltiConfig.new(
 			'project_info' => {
 				'project_name' => 'Xolti',
 				'author' => 'Rémi Even'
 			},
 			'template' => 'Header',
 			'use_git' => false
-		}).complete_config_for_file('/some/path/to/the/file.txt')
+		).complete_config_for_file('/some/path/to/the/file.txt')
 		refute(sut.use_git)
 		assert_equal('file.txt', sut.project_info[:file_name])
 	end
@@ -69,13 +68,13 @@ class TestConfig < Test::Unit::TestCase
 		GitApi.expects(:authors_of).returns(['Rémi Even'])
 		GitApi.expects(:user_name).returns(['Rémi Even'])
 
-		sut = XoltiConfig.new({
+		sut = XoltiConfig.new(
 			'project_info' => {
 				'project_name' => 'Xolti',
 				'author' => 'Rémi Even'
 			},
 			'template' => 'Header'
-		}).complete_config_for_file('/some/path/to/the/file.txt')
+		).complete_config_for_file('/some/path/to/the/file.txt')
 		assert_equal('file.txt', sut.project_info[:file_name])
 		assert_equal([1994], sut.project_info[:year])
 	end
@@ -85,14 +84,14 @@ class TestConfig < Test::Unit::TestCase
 		GitApi.expects(:authors_of).returns(['Rémi Even'])
 		GitApi.expects(:user_name).returns(['Rémi Even'])
 
-		sut = XoltiConfig.new({
+		sut = XoltiConfig.new(
 			'project_info' => {
 				'project_name' => 'Xolti',
 				'author' => 'Rémi Even',
 				'year' => '2077'
 			},
 			'template' => 'Header'
-		})
+		)
 		assert_not_equal([1994], sut.project_info[:year])
 		sut = sut.complete_config_for_file('/some/path/to/the/file.txt')
 		assert_equal([1994], sut.project_info[:year])

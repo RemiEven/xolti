@@ -1,4 +1,4 @@
-# tc_template_utils.rb
+# tc_year_tag.rb
 # Copyright (C) Rémi Even 2017
 #
 # This file is part of Xolti.
@@ -20,8 +20,7 @@ require 'test/unit'
 require_relative '../../../lib/header/tag/year_tag'
 
 class TestYearTag < Test::Unit::TestCase
-
-	def test_detection_regexp()
+	def test_detection_regexp
 		detection_regexp = YearTag.new.detection_regexp
 		assert_not_nil('2017'.match(detection_regexp))
 		assert_not_nil('2017, 2077'.match(detection_regexp))
@@ -29,11 +28,11 @@ class TestYearTag < Test::Unit::TestCase
 		assert_not_nil('1994, 1999-2002, 2017'.match(detection_regexp))
 	end
 
-	def test_create_from()
+	def test_create_from
 		tag = YearTag.new
-		assert_equal('2017', tag.create_from({year: [2017]}))
-		assert_equal('2017, 2077', tag.create_from({year: [2017, 2077]}))
-		assert_equal('2017-2019', tag.create_from({year: [2017, 2018, 2019]}))
-		assert_equal('1994-1996, 1998, 2000', tag.create_from({year: [1994, 1995, 1996, 1998, 2000]}))
+		assert_equal('2017', tag.create_from(year: [2017]))
+		assert_equal('2017, 2077', tag.create_from(year: [2017, 2077]))
+		assert_equal('2017-2019', tag.create_from(year: [2017, 2018, 2019]))
+		assert_equal('1994-1996, 1998, 2000', tag.create_from(year: [1994, 1995, 1996, 1998, 2000]))
 	end
 end

@@ -1,2 +1,21 @@
 Layout/Tab:
   Enabled: false
+
+Layout/IndentationWidth:
+  Width: 1
+
+Metrics/LineLength:
+  Max: 120
+
+Metrics/MethodLength:
+  Max: 20
+
+Style/AsciiComments:
+  Enabled: false
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Style/FormatStringToken:
+  Exclude:
+    - 'test/header/tc_template_utils.rb'

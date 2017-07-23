@@ -19,8 +19,8 @@ require_relative 'comment'
 require_relative 'tag/template_tags'
 
 module HeaderGenerator
-	def HeaderGenerator.create_for(path, config)
-		formatted_info = config.project_info.map { |tag_name, _|  [tag_name, TemplateTags.get_tag(tag_name.to_s).create_from(config.project_info)]}.to_h
+	def self.create_for(path, config)
+		formatted_info = config.project_info.map { |tag_name, _|  [tag_name, TemplateTags.get_tag(tag_name.to_s).create_from(config.project_info)] }.to_h
 		bare_header = config.template % formatted_info
 		Comment.comment(bare_header, config.get_comment(File.extname(path)))
 	end

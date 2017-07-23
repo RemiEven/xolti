@@ -16,17 +16,13 @@
 # You should have received a copy of the GNU General Public License
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 class SimpleTag
-	attr :tag_name
+	attr_reader :tag_name
 
 	def initialize(tag_name)
 		@tag_name = tag_name
 	end
 
-	def tag_name()
-		@tag_name
-	end
-
-	def detection_regexp()
+	def detection_regexp
 		'.*'
 	end
 

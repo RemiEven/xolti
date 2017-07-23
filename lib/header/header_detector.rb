@@ -19,7 +19,7 @@ require_relative 'comment'
 require_relative 'template_utils'
 
 module HeaderDetector
-	def HeaderDetector.detect(path, template, comment_tokens)
+	def self.detect(path, template, comment_tokens)
 		template_lines = Comment.comment(template, comment_tokens).lines("\n")
 		template_regexp_lines = template_lines.map do |line|
 			TemplateUtils.create_detection_regexp_for_line(line)

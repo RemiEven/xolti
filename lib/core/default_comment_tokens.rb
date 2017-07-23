@@ -17,7 +17,7 @@
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 
 class DefaultComment
-	HASH = Hash.new(['/*', ' * ', ' */']).merge!({
+	HASH = Hash.new(['/*', ' * ', ' */']).merge!(
 		'adb' => ['--', '-- ', '--'],
 		'ads' => ['--', '-- ', '--'],
 		'apt' => '~~ ',
@@ -68,5 +68,5 @@ class DefaultComment
 		'xsl' => ['<!--', ' ', '-->'],
 		'yaml' => '# ',
 		'yml' => '# '
-	})
+	)
 end

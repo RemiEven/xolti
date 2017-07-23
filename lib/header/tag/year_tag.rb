@@ -18,7 +18,7 @@
 class YearTag
 	TAG_NAME = 'year'
 
-	def detection_regexp()
+	def detection_regexp
 		'[[:digit:]]{4}(-[[:digit:]]{4})?(, [[:digit:]]{4}(-[[:digit:]]{4})?)*'
 	end
 
@@ -33,11 +33,9 @@ class YearTag
 		sorted = numbers.sort
 		intervals = []
 		i = 0
-		while (i < sorted.size)
-			j = 1;
-			while (i + j < sorted.size && sorted[i + j] == sorted[i] + j)
-				j += 1
-			end
+		while i < sorted.size
+			j = 1
+			j += 1 while i + j < sorted.size && sorted[i + j] == sorted[i] + j
 			intervals << [sorted[i], sorted[i + j - 1]]
 			i += j
 		end

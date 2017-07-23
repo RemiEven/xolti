@@ -18,39 +18,39 @@
 require_relative 'proc_utils'
 
 module GitApi
-	def GitApi.ignored_files()
+	def self.ignored_files
 		ProcUtils.system('git status --porcelain --ignored -z')
 			.split('\u0000')
 			.select { |line| line[0..1] == '!!' }
 			.map { |line| line[3..-1] }
 	end
 
-	def GitApi.modified_files()
+	def self.modified_files
 		ProcUtils.system('git status --porcelain -z')
 			.split('\u0000')
 			.select { |line| line[0..1] == '!!' }
 			.map { |line| line[3..-1] }
 	end
 
-	def GitApi.user_name()
+	def self.user_name
 		ProcUtils.system('git config user.name').chomp
 	end
 
-	def GitApi.user_email()
+	def self.user_email
 		ProcUtils.system('git config user.email').chomp
 	end
 
-	def GitApi.authors_of(file, default_author = nil)
+	def self.authors_of(file, default_author = nil)
 		ProcUtils.system("git blame #{file} -p")
 			.split("\n")
 			.select { |line| line.start_with? 'author ' }
 			.map { |line| line[7..-1] }
 			.map { |author| author == 'Not Committed Yet' ? default_author : author }
-			.reject { |author| author == nil }
+			.reject(&:nil?)
 			.uniq
 	end
 
-	def GitApi.modification_years_of(file)
+	def self.modification_years_of(file)
 		ProcUtils.system("git blame #{file} -p")
 			.split("\n")
 			.select { |line| line.start_with? 'author-time' }

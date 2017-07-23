@@ -20,7 +20,6 @@ require 'test/unit'
 require_relative '../../lib/header/comment'
 
 class TestComment < Test::Unit::TestCase
-
 	def test_simple_comment
 		assert_equal('', Comment.comment('', '# '))
 		assert_equal("# A\n", Comment.comment("A\n", '# '))

@@ -17,15 +17,13 @@
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 
 module PrintUtils
-	def PrintUtils.puts(message, indentation = 0)
-		if (message.is_a? String)
-			return PrintUtils.puts_single(message, indentation)
-		end
+	def self.puts(message, indentation = 0)
+		return PrintUtils.puts_single(message, indentation) if message.is_a? String
 		offset = '\t' * indentation
-		message.each { |line| Kernel.puts offset + line}
+		message.each { |line| Kernel.puts offset + line }
 	end
 
-	def PrintUtils.puts_single(message, indentation = 0)
-		Kernel.puts ('\t' * indentation) + message
+	def self.puts_single(message, indentation = 0)
+		Kernel.puts '\t' * indentation + message
 	end
 end
