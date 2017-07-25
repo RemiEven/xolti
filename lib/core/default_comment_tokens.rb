@@ -16,7 +16,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 
+# Default comment tokens indexed by file extension
 class DefaultComment
+	# Hash of the comment tokens indexed by file extension
 	HASH = Hash.new(['/*', ' * ', ' */']).merge!(
 		'adb' => ['--', '-- ', '--'],
 		'ads' => ['--', '-- ', '--'],

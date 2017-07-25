@@ -15,7 +15,12 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
+
+# Module to centralize Xolti version
 module XoltiVersion
+	# Return the current Xolti version
+	#
+	# @return [String] the current Xolti version
 	def self.get
 		'0.2.0'
 	end

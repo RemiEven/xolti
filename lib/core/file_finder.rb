@@ -18,6 +18,10 @@
 
 require_relative 'path_rule'
 
+# Create an array of pathrules from a .xoltignore file if it exists
+#
+# @param [Pathname] path the folder where to search for the .xoltignore
+# @return [Array<PathRule>] an array of PathRule created from the .xoltignore
 def parse_xoltignore(path)
 	xoltignore_path = "#{path}/.xoltignore"
 	return [] unless File.file?(xoltignore_path)
@@ -27,7 +31,13 @@ def parse_xoltignore(path)
 		.map { |line| PathRule.new(path, line) }
 end
 
+# Module providing a method to recursively explore files and folders, taking into account the encountered .xoltignore files
 module FileFinder
+	# Recursively explore a folder, taking into account .xoltignore files
+	#
+	# @param [String] folder the folder to explore
+	# @param [Array<PathRule>] ignore_rules an array of PathRule describing which files/folders must be ignored
+	# @return [Array<String>] an array with paths to all files not excluded by the .xoltignore
 	def self.explore_folder(folder = Dir.pwd, ignore_rules = [])
 		files = []
 		ignored_paths = ['.', '..', '.git', '.xoltignore', 'xolti.yml', 'LICENSE']

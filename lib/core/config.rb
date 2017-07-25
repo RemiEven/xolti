@@ -24,7 +24,19 @@ require_relative 'resources'
 
 require_relative '../git/git_api'
 
+# Class providing configuration data to other classes/modules
+#
+# @attr_reader [Hash] project_info information used to complete a header template
+# @attr_reader [String] template optional custom header template
+# @attr_reader [Integer] offset optional offset of lines between file start and header start
+# @attr_reader [String] license optional license name
+# @attr_reader [String] use_git whether to use git as a datasource. Defaults to true
 class XoltiConfig
+
+	# Search for a xolti.yml file
+	#
+	# @param [Pathname] path the path where to start the search
+	# @return [String] path of the xolti.yml file
 	def self.find_config_file(path = Pathname.getwd)
 		potential_config_file = (path + 'xolti.yml')
 		return potential_config_file.to_s if potential_config_file.file?
@@ -32,6 +44,9 @@ class XoltiConfig
 		find_config_file(path.parent)
 	end
 
+	# Create a configuration from the current workding directory
+	#
+	# @return [XoltiConfig] the created configuration
 	def self.load_config
 		raw_config = YAML.safe_load(IO.binread(find_config_file))
 		XoltiConfig.new(raw_config)
@@ -39,6 +54,9 @@ class XoltiConfig
 
 	attr_reader :project_info, :template, :offset, :license, :use_git
 
+	# Initialize a XoltiConfig from a raw config
+	#
+	# @param [Hash] raw_config the raw config
 	def initialize(raw_config)
 		@project_info = extract_project_info(raw_config['project_info'])
 		@comment = DefaultComment::HASH.merge!(raw_config['comment'] || {})
@@ -48,10 +66,19 @@ class XoltiConfig
 		@use_git = !raw_config.key?('use_git') || raw_config['use_git']
 	end
 
+	# Return the comment tokens applying to files with the given extension
+	#
+	# @param [String] ext the extension of the file
+	# @return [Array<String>, String] an array of tokens if comment is complex, a single string otherwise
 	def get_comment(ext)
 		@comment[ext.delete('.')]
 	end
 
+	# Create a new configuration with file-specific information added
+	#
+	# @param [String] file the path to the file used to complete the configuration
+	# @param [Type] include_current_year whether to include the current year in the added information
+	# @return [XoltiConfig] the completed new configuration
 	def complete_config_for_file(file, include_current_year = false)
 		additional_project_info = { file_name: File.basename(file) }
 		if @use_git
@@ -66,6 +93,10 @@ class XoltiConfig
 		completed_config
 	end
 
+	# Extract the project information from raw information
+	#
+	# @param [Hash] raw_project_info the project information to extract
+	# @return [Hash] the extracted project information
 	private def extract_project_info(raw_project_info)
 		{
 			author: raw_project_info['author'],
@@ -74,6 +105,10 @@ class XoltiConfig
 		}
 	end
 
+	# Extract the template from the raw configuration if there is one, else get the template associated with the configured license
+	#
+	# @param [Type] raw_config describe raw_config
+	# @return [Type] description of returned object
 	private def extract_template_if_present(raw_config)
 		return raw_config['template'] if raw_config.include?('template')
 		default_template_path = Resources.get_template_path(@license)
