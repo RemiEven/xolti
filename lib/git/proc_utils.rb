@@ -26,7 +26,7 @@ module ProcUtils
 	# @return [String] what the created process has written in its stdout
 	def self.system(command)
 		stdout, stderr, status = Open3.capture3(command)
-		return stdout if status == 0
-		raise stderr
+		raise SystemCallError.new(stderr, status.exitstatus) unless status.success?
+		stdout
 	end
 end
