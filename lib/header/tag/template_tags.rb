@@ -18,11 +18,17 @@
 require_relative 'year_tag'
 require_relative 'simple_tag'
 
+# Access point to all template tags
 class TemplateTags
+	# All tags that are not simple
 	COMPLEX_TAGS = [YearTag]
 		.map { |tag_class| [tag_class::TAG_NAME, tag_class.new] }
 		.to_h
 
+	# Find a tag by its name
+	#
+	# @param [String] tag_name the name of the tag
+	# @return [#detection_regexp, #create_from] description of returned object
 	def self.get_tag(tag_name)
 		if self::COMPLEX_TAGS.key?(tag_name)
 			self::COMPLEX_TAGS[tag_name]

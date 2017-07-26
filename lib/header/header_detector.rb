@@ -18,7 +18,14 @@
 require_relative 'comment'
 require_relative 'template_utils'
 
+# Module providing a method to detect a header in a file
 module HeaderDetector
+	# Detect whether a file contains a header, return what was matched
+	#
+	# @param [String] path the path of the file to test
+	# @param [String] template the template of the header to detect
+	# @param [String, Array(String, String, String)] comment_tokens tokens to use to comment text
+	# @return [Hash{start: Integer, matched_lines: Array<String>}] what was matched if a header was detected
 	def self.detect(path, template, comment_tokens)
 		template_lines = Comment.comment(template, comment_tokens).lines("\n")
 		template_regexp_lines = template_lines.map do |line|

@@ -18,7 +18,13 @@
 require_relative 'comment'
 require_relative 'tag/template_tags'
 
+# Module with a method to generate a header for a file
 module HeaderGenerator
+	# Create a header for a file
+	#
+	# @param [String] path the path to the file
+	# @param [XoltiConfig] config the config to use to render the template
+	# @return [String] the generated (commented) header
 	def self.create_for(path, config)
 		formatted_info = config.project_info.map { |tag_name, _|  [tag_name, TemplateTags.get_tag(tag_name.to_s).create_from(config.project_info)] }.to_h
 		bare_header = config.template % formatted_info

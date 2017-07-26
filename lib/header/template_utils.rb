@@ -17,8 +17,12 @@
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 require_relative 'tag/template_tags'
 
+# Module with methods used to parse and render a template
 module TemplateUtils
 	# Return the positions of every (alternating) % and } in template_line
+	#
+	# @param [String] template_line the line to parse
+	# @return [Array<Integer>] the positions of every alternating % and } in template_line
 	def self.find_template_tokens_indexes(template_line)
 		indexes = []
 		searched_char = '%'
@@ -31,6 +35,10 @@ module TemplateUtils
 		indexes
 	end
 
+	# Split a template line to separate tags from raw text
+	#
+	# @param [String] template_line the line to parse
+	# @return [Array<String>] the split tokens
 	def self.split_template_tokens_from_line(template_line)
 		tokens = []
 		current_token_start = 0
@@ -54,6 +62,10 @@ module TemplateUtils
 		tokens
 	end
 
+	# Create a Regexp matching String compliant with the template line
+	#
+	# @param [String] template_line the line to parse
+	# @return [Regexp] a regexp matching String compliant with the template line
 	def self.create_detection_regexp_for_line(template_line)
 		tokens = split_template_tokens_from_line(template_line)
 		regexp_tokens = tokens.map do |token|
@@ -62,14 +74,28 @@ module TemplateUtils
 		Regexp.new("(#{regexp_tokens.join(')(')})")
 	end
 
+	# Check whether a token is a tag
+	#
+	# @param [String] token the token to test
+	# @return [Boolean] whether the token is a tag
 	def self.tag?(token)
 		token[0] == '%'
 	end
 
+	# Extract the tag type from a tag
+	# @example
+	#   extract_tag_type("%{year}") #=> "year"
+	#
+	# @param [String] tag the tag we want to extract the type from
+	# @return [String] the extracted tag name
 	def self.extract_tag_type(tag)
 		tag[2..-2]
 	end
 
+	# Create a regexp from a tag name
+	#
+	# @param [String] tag_name the name of the tag
+	# @return [Regexp] the detection_regexp associated with the tag
 	def self.create_regexp_for_tag(tag_name)
 		TemplateTags.get_tag(extract_tag_type(tag_name)).detection_regexp
 	end

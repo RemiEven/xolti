@@ -17,7 +17,13 @@
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 require_relative 'header_generator'
 
+# Module with a method to detect differences between an actual and an expected header
 module HeaderValidator
+	# Detectt differences between an actual and an expected header
+	#
+	# @param [String] expected the epxected header
+	# @param [Hash{start: Integer, matched_lines: Array<String>}] detected the header detected by HeaderDetector
+	# @return [Array<Hash{line_number: Integer, expected: String, actual: String}>] the detected differences
 	def self.diff(expected, detected)
 		expected.split("\n").map.with_index do |expected_line, i|
 			{
