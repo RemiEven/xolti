@@ -32,8 +32,12 @@ Signal.trap('INT') do
 	exit 1
 end
 
+# Command line client
 class XoltiCLI < Thor
 	desc 'add [FILE|FOLDER]', 'Add a header to FILE or to all files in FOLDER'
+	# Add a header to a set of files
+	#
+	# @param [String] file the path to the file or the folder containing the files where to add headers
 	def add(file)
 		config = load_config { |e| puts e.message; exit 1 }
 		if File.file?(file)
@@ -49,7 +53,10 @@ class XoltiCLI < Thor
 		end
 	end
 
-	desc 'status [FILE|FOLDER]', 'Check the header of FILE or to all files in FOLDER; FOLDER default to current one'
+	desc 'status [FILE|FOLDER]', 'Check the header of FILE or to all files in FOLDER; FOLDER defaults to current one'
+	# Check the header of a set to file
+	#
+	# @param [String] file the path to the file or the folder containing the files where to check for headers
 	def status(file = '.')
 		config = load_config { |e| puts e; exit 1 }
 		if File.file?(file)
@@ -67,6 +74,7 @@ class XoltiCLI < Thor
 	end
 
 	desc 'list-missing', 'Print a list of files missing (proper) header'
+	# List all files without header in the current directory
 	def list_missing
 		dir = Dir.pwd
 		config = load_config { |e| puts e.message; exit 1 }
@@ -78,6 +86,9 @@ class XoltiCLI < Thor
 	end
 
 	desc 'delete [FILE|FOLDER]', 'Delete the header in FILE or to all files in FOLDER'
+	# Delete headers in a set of files
+	#
+	# @param [String] file the path to the file or the folder containing the files where to delete headers
 	def delete(file)
 		config = load_config { |e| puts e.message; exit 1 }
 		if File.file?(file)
@@ -93,6 +104,7 @@ class XoltiCLI < Thor
 	end
 
 	desc 'generate-license', 'Generate a LICENSE file containing a full license'
+	# Generate a LICENSE file containing a full license
 	def generate_license
 		config = load_config { |e| puts e.message; exit 1 }
 		filename = 'LICENSE'
@@ -108,6 +120,7 @@ class XoltiCLI < Thor
 	map ['--version', '-v'] => :__print_version
 
 	desc '--version, -v', 'Print version of xolti'
+	# Print the current version of xolti
 	def __print_version
 		puts XoltiVersion.get
 	end
@@ -115,8 +128,9 @@ class XoltiCLI < Thor
 	map ['--license', '-l'] => :__print_license
 
 	desc '--license, -l', 'Print licensing information of xolti'
+	# Print licensing information of xolti
 	def __print_license
-		puts "Xolti version #{XoltiVersion.get}, Copyright (C) 2016 Rémi Even"
+		puts "Xolti version #{XoltiVersion.get}, Copyright (C) 2016, 2017 Rémi Even"
 		puts 'Xolti comes with ABSOLUTELY NO WARRANTY.'
 		puts 'This is free software, and you are welcome to redistribute it'
 		puts 'under the terms of the GPLv3.'
@@ -165,6 +179,7 @@ class XoltiCLI < Thor
 	end
 
 	desc 'init', 'Create xolti.yml'
+	# Init a xolti project by creating a xolti.yml file
 	def init
 		config = load_config
 		return PrintUtils.puts_single 'Xolti is already initialiazed' unless config.nil?
