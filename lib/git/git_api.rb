@@ -17,7 +17,11 @@
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 require_relative 'proc_utils'
 
+# This module provides methods used to access information stored by git, such as the authors of a file or the years it has been modified
 module GitApi
+	# Find files currently ignored by git
+	#
+	# @return [Array<String>] an Array containing paths of files currently ignored by git
 	def self.ignored_files
 		ProcUtils.system('git status --porcelain --ignored -z')
 			.split('\u0000')
@@ -25,6 +29,9 @@ module GitApi
 			.map { |line| line[3..-1] }
 	end
 
+	# Find files that has been modified since the last commit
+	#
+	# @return [Array<String>] an Array containing paths of files modified since the last commit
 	def self.modified_files
 		ProcUtils.system('git status --porcelain -z')
 			.split('\u0000')
@@ -32,14 +39,25 @@ module GitApi
 			.map { |line| line[3..-1] }
 	end
 
+	# Return the current git user name
+	#
+	# @return [String] the current git user name
 	def self.user_name
 		ProcUtils.system('git config user.name').chomp
 	end
 
+	# Return the current git user email
+	#
+	# @return [String] the current git user email
 	def self.user_email
 		ProcUtils.system('git config user.email').chomp
 	end
 
+	# Return every author of a file
+	#
+	# @param [String] file path to the file
+	# @param [String] default_author optional default author if none is found
+	# @return [Array<String>] an array with all authors of a file
 	def self.authors_of(file, default_author = nil)
 		ProcUtils.system("git blame #{file} -p")
 			.split("\n")
@@ -50,6 +68,10 @@ module GitApi
 			.uniq
 	end
 
+	# Return every year a file has been modified
+	#
+	# @param [String] file path to the file
+	# @return [Array<Integer>] an array with all years a file has been modified
 	def self.modification_years_of(file)
 		ProcUtils.system("git blame #{file} -p")
 			.split("\n")

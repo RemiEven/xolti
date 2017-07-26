@@ -17,7 +17,13 @@
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 require 'open3'
 
+# Module providing a method to spawn an external process and capture its output
 module ProcUtils
+	# Create an external process
+	#
+	# @param [String] command the command used to launch the process
+	# @raise [SystemCallError] if the created process did not exited with success
+	# @return [String] what the created process has written in its stdout
 	def self.system(command)
 		stdout, stderr, status = Open3.capture3(command)
 		return stdout if status == 0
