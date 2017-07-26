@@ -25,13 +25,13 @@ module HeaderValidator
 	# @param [Hash{start: Integer, matched_lines: Array<String>}] detected the header detected by HeaderDetector
 	# @return [Array<Hash{line_number: Integer, expected: String, actual: String}>] the detected differences
 	def self.diff(expected, detected)
-		expected.split("\n").map.with_index do |expected_line, i|
+		diffs = expected.split("\n").map.with_index do |expected_line, i|
 			{
 				line_number: detected[:start] + i + 1,
 				expected: expected_line,
 				actual: detected[:matched_lines][i].chomp("\n")
 			}
 		end
-		.reject { |line_diff| line_diff[:expected] == line_diff[:actual] }
+		diffs.reject { |line_diff| line_diff[:expected] == line_diff[:actual] }
 	end
 end

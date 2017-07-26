@@ -17,7 +17,8 @@
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 require_relative 'proc_utils'
 
-# This module provides methods used to access information stored by git, such as the authors of a file or the years it has been modified
+# This module provides methods used to access information stored by git,
+# such as the authors of a file or the years it has been modified
 module GitApi
 	# Find files currently ignored by git
 	#

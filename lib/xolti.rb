@@ -39,7 +39,7 @@ class XoltiCLI < Thor
 	#
 	# @param [String] file the path to the file or the folder containing the files where to add headers
 	def add(file)
-		config = load_config { |e| puts e.message; exit 1 }
+		config = load_config_or_exit
 		if File.file?(file)
 			PrintUtils.puts_single "Adding header to #{file}"
 			Core.licensify(file, config) unless Core.header?(file, config)
@@ -58,7 +58,7 @@ class XoltiCLI < Thor
 	#
 	# @param [String] file the path to the file or the folder containing the files where to check for headers
 	def status(file = '.')
-		config = load_config { |e| puts e; exit 1 }
+		config = load_config_or_exit
 		if File.file?(file)
 			PrintUtils.puts check_file(file, config) || 'Correct header'
 		else
@@ -77,7 +77,7 @@ class XoltiCLI < Thor
 	# List all files without header in the current directory
 	def list_missing
 		dir = Dir.pwd
-		config = load_config { |e| puts e.message; exit 1 }
+		config = load_config_or_exit
 		missing_headers = FileFinder.explore_folder(dir)
 			.reject { |file| Core.header?(file, config) }
 		return PrintUtils.puts_single 'All files OK' if missing_headers.empty?
@@ -90,7 +90,7 @@ class XoltiCLI < Thor
 	#
 	# @param [String] file the path to the file or the folder containing the files where to delete headers
 	def delete(file)
-		config = load_config { |e| puts e.message; exit 1 }
+		config = load_config_or_exit
 		if File.file?(file)
 			PrintUtils.puts_single "Deleting header in #{file}"
 			Core.delete_header(file, config)
@@ -106,7 +106,7 @@ class XoltiCLI < Thor
 	desc 'generate-license', 'Generate a LICENSE file containing a full license'
 	# Generate a LICENSE file containing a full license
 	def generate_license
-		config = load_config { |e| puts e.message; exit 1 }
+		config = load_config_or_exit
 		filename = 'LICENSE'
 		if File.exist?(File.join(Dir.pwd, filename))
 			PrintUtils.puts_single "There is already a #{filename} file. Abort generation."
@@ -165,16 +165,21 @@ class XoltiCLI < Thor
 			yield e if block_given?
 		end
 
+		def load_config_or_exit
+			load_config do |e|
+				puts e.message
+				exit 1
+			end
+		end
+
 		def check_file(file, config)
 			diffs = Core.validate_header(file, config)
-			unless diffs.empty?
-				result = []
-				diffs.each do |diff|
-					return ['No header found.'] if diff[:type] && diff[:type] == :no_header_found
-					result << "Line #{diff[:line_number]}: expected \"#{diff[:expected]}\" but got \"#{diff[:actual]}\"."
-				end
-				return result.join("\n")
+			result = []
+			diffs.each do |diff|
+				return ['No header found.'] if diff[:type] && diff[:type] == :no_header_found
+				result << "Line #{diff[:line_number]}: expected \"#{diff[:expected]}\" but got \"#{diff[:actual]}\"."
 			end
+			return result.join("\n") unless diffs.empty?
 		end
 	end
 
@@ -182,7 +187,7 @@ class XoltiCLI < Thor
 	# Init a xolti project by creating a xolti.yml file
 	def init
 		config = load_config
-		return PrintUtils.puts_single 'Xolti is already initialiazed' unless config.nil?
+		return PrintUtils.puts_single 'Xolti is already initialized' unless config.nil?
 		PrintUtils.puts_single 'Initializing xolti project'
 		config = { 'project_info' => {} }
 		ask_for_name(config)

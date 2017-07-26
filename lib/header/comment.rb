@@ -22,7 +22,7 @@
 # @param [String] comment_token the simple comment token
 # @return [String] the commented text
 def simple_comment(text, comment_token)
-	text.lines.map{ |line| "#{comment_token}#{line}".rstrip + "\n" }.join
+	text.lines.map { |line| "#{comment_token}#{line}".rstrip + "\n" }.join
 end
 
 # Comment a text using complex comment tokens

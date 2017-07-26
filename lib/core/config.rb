@@ -32,7 +32,6 @@ require_relative '../git/git_api'
 # @attr_reader [String] license optional license name
 # @attr_reader [String] use_git whether to use git as a datasource. Defaults to true
 class XoltiConfig
-
 	# Search for a xolti.yml file
 	#
 	# @param [Pathname] path the path where to start the search
@@ -81,16 +80,20 @@ class XoltiConfig
 	# @return [XoltiConfig] the completed new configuration
 	def complete_config_for_file(file, include_current_year = false)
 		additional_project_info = { file_name: File.basename(file) }
-		if @use_git
-			additional_project_info.merge!(
-				year: GitApi.modification_years_of(file),
-				author: GitApi.authors_of(file, GitApi.user_name)[0]
-			)
-		end
+		complete_with_git(additional_project_info, file) if @use_git
 		additional_project_info[:year] = (additional_project_info[:year] << Date.today.year).uniq if include_current_year
 		completed_config = clone
 		completed_config.project_info.merge!(additional_project_info)
 		completed_config
+	end
+
+	# Complete project information with data from git
+	#
+	# @param [Hash] project_info the project info
+	# @param [String] file the path to the file used to complete the project information
+	private def complete_with_git(project_info, file)
+		project_info[:year] = GitApi.modification_years_of(file)
+		project_info[:author] = GitApi.authors_of(file, GitApi.user_name)[0]
 	end
 
 	# Extract the project information from raw information
@@ -105,7 +108,8 @@ class XoltiConfig
 		}
 	end
 
-	# Extract the template from the raw configuration if there is one, else get the template associated with the configured license
+	# Extract the template from the raw configuration if there is one,
+	# else get the template associated with the configured license
 	#
 	# @param [Type] raw_config describe raw_config
 	# @return [Type] description of returned object

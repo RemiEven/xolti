@@ -31,7 +31,8 @@ def parse_xoltignore(path)
 		.map { |line| PathRule.new(path, line) }
 end
 
-# Module providing a method to recursively explore files and folders, taking into account the encountered .xoltignore files
+# Module providing a method to recursively explore files and folders.
+# Takes into account the encountered .xoltignore files
 module FileFinder
 	# Recursively explore a folder, taking into account .xoltignore files
 	#

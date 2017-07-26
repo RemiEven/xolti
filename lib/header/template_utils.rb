@@ -69,7 +69,7 @@ module TemplateUtils
 	def self.create_detection_regexp_for_line(template_line)
 		tokens = split_template_tokens_from_line(template_line)
 		regexp_tokens = tokens.map do |token|
-			if tag?(token) then create_regexp_for_tag(token) else Regexp.escape(token) end
+			tag?(token) ? create_regexp_for_tag(token) : Regexp.escape(token)
 		end
 		Regexp.new("(#{regexp_tokens.join(')(')})")
 	end

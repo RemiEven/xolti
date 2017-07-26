@@ -32,7 +32,10 @@ class TestTemplateUtils < Test::Unit::TestCase
 		assert_equal(['ee', '%{coucou}'], TemplateUtils.split_template_tokens_from_line('ee%{coucou}'))
 		assert_equal(['%{coucou}'], TemplateUtils.split_template_tokens_from_line('%{coucou}'))
 		assert_equal(['ee', '%{coucou}', 'ee'], TemplateUtils.split_template_tokens_from_line('ee%{coucou}ee'))
-		assert_equal(['ee', '%{coucou}', 'ee', '%{coucou}'], TemplateUtils.split_template_tokens_from_line('ee%{coucou}ee%{coucou}'))
+		assert_equal(
+			['ee', '%{coucou}', 'ee', '%{coucou}'],
+			TemplateUtils.split_template_tokens_from_line('ee%{coucou}ee%{coucou}')
+		)
 		assert_equal(['ee', '%{coucou}', '%{coucou}'], TemplateUtils.split_template_tokens_from_line('ee%{coucou}%{coucou}'))
 	end
 

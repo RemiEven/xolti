@@ -24,7 +24,7 @@ module PrintUtils
 	# @param [Integer] indentation optional indentation for the message
 	def self.puts(message, indentation = 0)
 		return PrintUtils.puts_single(message, indentation) if message.is_a? String
-		offset = '\t' * indentation
+		offset = "\t" * indentation
 		message.each { |line| Kernel.puts offset + line }
 	end
 
@@ -33,6 +33,6 @@ module PrintUtils
 	# @param [String] message the message to put
 	# @param [Integer] indentation optional indentation for the message
 	def self.puts_single(message, indentation = 0)
-		Kernel.puts '\t' * indentation + message
+		Kernel.puts "\t" * indentation + message
 	end
 end

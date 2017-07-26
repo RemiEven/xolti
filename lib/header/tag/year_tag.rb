@@ -19,7 +19,7 @@
 # A tag for the year(s) a file has been modified
 class YearTag
 	# The tag name
-	TAG_NAME = 'year'
+	TAG_NAME = 'year'.freeze
 
 	# Reteurn a regexp matching the content of the tag
 	#
