@@ -4,7 +4,7 @@
 
 [![Build Status](https://secure.travis-ci.org/RemiEven/xolti.svg?branch=master)](http://travis-ci.org/RemiEven/xolti)
 [![Gem Version](https://badge.fury.io/rb/xolti.svg)](https://badge.fury.io/rb/xolti)
-[![Documentation Status](http://readthedocs.org/projects/xolti/badge/?version=latest)](http://xolti.readthedocs.io/en/latest/?badge=latest)
+[![Documentation Status](http://readthedocs.org/projects/xolti/badge/?version=latest)](http://xolti.readthedocs.io/en/latest/)
 [![License](https://img.shields.io/badge/license-GPL3-19c6ff.svg)](http://www.gnu.org/licenses/gpl-3.0.en.html)
 
 ## Purpose
@@ -54,7 +54,7 @@ xolti delete awesome.txt
 ###### I want to get a list of all files missing correct headers :
 
 ```
-xolti add list_missing
+xolti list_missing
 ```
 
 ###### I want to init a `xolti.yml` file :
@@ -64,6 +64,39 @@ xolti init
 ```
 
 `xolti.yml` files are used by Xolti to get the information it needs (such as the license you picked or the project's name) in order to work.
+
+## User documentation
+
+Documentation is available [here](http://xolti.readthedocs.io/en/latest/).
+
+## Development
+
+#### Initialization
+
+- Check that Ruby is installed, then :
+
+```bash
+gem install bundle # make sure bundle is installed
+git clone https://github.com/RemiEven/xolti.git
+cd xolti
+bundle install # install the dependencies
+```
+
+#### Running the tests
+
+`rake test`
+
+#### Lint
+
+`rubocop`
+
+#### Compiling documentation
+
+`yard server`
+
+#### Building the gem
+
+`gem build xolti.gemspec`
 
 ## License
 
