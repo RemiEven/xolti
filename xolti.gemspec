@@ -15,7 +15,7 @@ Gem::Specification.new do |spec|
 	spec.add_runtime_dependency('thor', ['~>0.19.1', '>=0.19.1'])
 
 	spec.add_development_dependency('mocha', ['~>1.2.1', '>= 1.2.1'])
-	spec.add_development_dependency('rake', ['~12.0.0', '>=12.0.0'])
+	spec.add_development_dependency('rake', ['~>12.0.0', '>=12.0.0'])
 	spec.add_development_dependency('test-unit', ['~>3.2.5', '>=3.2.5'])
 	spec.add_development_dependency('yard', ['~>0.9.9', '>=0.9.9'])
 	spec.add_development_dependency('rubocop', ['~>0.49.1', '>=0.49.1'])
