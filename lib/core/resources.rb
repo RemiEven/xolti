@@ -16,22 +16,28 @@
 # You should have received a copy of the GNU General Public License
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 
+# Find directory containing the common resources.
+# If xolti is not installed as a gem, assume that pwd is the root of the project
+# Needed to fix travis integration.
+#
+# @return [String] the directory where xolti stores its common resources
+def resource_dir
+	if Gem::Specification.all_names.select { |name| name.match(/xolti/) }.length >= 1
+		File.join(Gem::Specification.find_by_name('xolti').gem_dir, 'resources')
+	else
+		File.join(Dir.pwd, 'resources')
+	end
+end
+
 # A module to get the path of common resources such as header and full license templates
 module Resources
-	# The directory containing the common resources.
-	# If xolti is not installed as a gem, assume that pwd is the root of the project
-	# Needed to fix travis integration.
-	RESOURCES_DIR = Gem::Specification.all_names.select { |name| name.match(/xolti/) }.length >= 1 ?
-		File.join(Gem::Specification.find_by_name('xolti').gem_dir, 'resources') :
-		File.join(Dir.pwd, 'resources')
-
 	# Create the path of the file containing the header for the given license.
 	# Do not check whether the file actually exists.
 	#
 	# @param [String] license the wanted header license (eg "GPL3.0")
 	# @return [String] the path of the file containing the header for the given license
 	def self.get_template_path(license)
-		File.join(RESOURCES_DIR, 'headers', license)
+		File.join(resource_dir, 'headers', license)
 	end
 
 	# Create the path of the file containing the full template for the given license.
@@ -40,6 +46,6 @@ module Resources
 	# @param [String] license the wanted full template license (eg "GPL3.0")
 	# @return [String] the path of the file containing the full template for the given license
 	def self.get_full_license_path(license)
-		File.join(RESOURCES_DIR, 'licenses', license)
+		File.join(resource_dir, 'licenses', license)
 	end
 end
