@@ -32,19 +32,4 @@ You can then install it with :
 
 where [VERSION] must be replaced by the current version of Xolti.
 
-Running the tests
-~~~~~~~~~~~~~~~~~
-
-Running the tests requires the gem ``test-unit``, and can be achieved with the command :
-
-.. code-block:: bash
-
-    ruby test/ts_suite.rb
-
-Alternatively, if you have installed ``rake`` in addition to ``test-unit``, you can use the command :
-
-.. code-block:: bash
-
-	rake test
-
 .. _`RubyGems.org`:     https://rubygems.org/gems/xolti

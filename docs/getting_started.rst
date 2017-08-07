@@ -108,7 +108,7 @@ Looks like ``app.js`` is missing a header... Xolti can create and insert one for
 
 .. tip::
 
-	We could have also used ``.`` instead of specifying ``app.js``; xolti would have add a
+	We could have also used ``.`` instead of specifying ``app.js``; xolti would have added a
 	header in each file (recursively) from the current folder.
 
 .. note::
@@ -142,10 +142,10 @@ When we ask xolti once again about the status of the ``app.js`` file, it warns u
 .. code-block:: bash
 
 	remi ~/myAwesomeProject]$ xolti status app.js
-	Line 5: expected "myFantasticProject" but got "myAwesomeProject".
-	Line 7: expected "myFantasticProject" but got "myAwesomeProject".
-	Line 12: expected "myFantasticProject" but got "myAwesomeProject".
-	Line 18: expected "myFantasticProject" but got "myAwesomeProject".
+	Line 5: expected " * This file is part of myFantasticProject." but got " * This file is part of myAwesomeProject.".
+	Line 7: expected " * myFantasticProject is free software: you can redistribute it and/or modify" but got " * myAwesomeProject is free software: you can redistribute it and/or modify".
+	Line 12: expected " * myFantasticProject is distributed in the hope that it will be useful," but got " * myAwesomeProject is distributed in the hope that it will be useful,".
+	Line 18: expected " * along with myFantasticProject. If not, see <http://www.gnu.org/licenses/>." but got " * along with myAwesomeProject. If not, see <http://www.gnu.org/licenses/>.".
 
 You can then manually correct this outdated header.
 

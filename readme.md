@@ -31,7 +31,7 @@ Xolti requires Ruby to be installed in order to properly work. It has been teste
 
 ## Usage
 
-Xolti provides a set of commands, such as :
+Xolti provides a set of commands, including :
 
 ###### I want to add a header to a file named `awesome.txt` :
 
@@ -45,25 +45,11 @@ xolti add awesome.txt
 xolti status awesome.txt
 ```
 
-###### I want to delete the header of `awesome.txt` :
-
-```
-xolti delete awesome.txt
-```
-
 ###### I want to get a list of all files missing correct headers :
 
 ```
 xolti list_missing
 ```
-
-###### I want to init a `xolti.yml` file :
-
-```
-xolti init
-```
-
-`xolti.yml` files are used by Xolti to get the information it needs (such as the license you picked or the project's name) in order to work.
 
 ## User documentation
 
@@ -71,7 +57,7 @@ Documentation is available [here](http://xolti.readthedocs.io/en/latest/).
 
 ## Development
 
-#### Initialization
+#### Setup
 
 - Check that Ruby is installed, then :
 
