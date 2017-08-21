@@ -10,4 +10,5 @@ Contents:
     installation
     getting_started
     commands
+    xolti_yml
     xoltignore
