@@ -12,3 +12,4 @@ Contents:
     commands
     xolti_yml
     xoltignore
+    git_integration
