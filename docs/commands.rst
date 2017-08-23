@@ -48,8 +48,8 @@ init
 
 Interactively create a ``xolti.yml`` file.
 
-list
-----
+list-missing
+------------
 
 .. code-block:: bash
 

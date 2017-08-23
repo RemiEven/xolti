@@ -9,8 +9,8 @@ Complete example
 .. code-block:: yaml
 
   ---
-  project_info:
-    project_name: Xolti
+  project:
+    name: Xolti
     author: "Rémi Even"
     year: 2017
   license: GPL3.0
@@ -76,15 +76,15 @@ offset
 
 With the above piece of configuration, headers will be added at the third line of a file.
 
-project_info
-------------
+project
+-------
 
 YAML object containing data used to complete license header template.
 
 .. code-block:: yaml
 
-  project_info:
-    project_name: Xolti
+  project:
+    name: Xolti
     author: "Rémi Even"
     year: 2017
 
@@ -93,15 +93,22 @@ author
 
 The author of your project.
 
-project_name
-^^^^^^^^^^^^
+name
+^^^^
 
 The name of your project.
 
 year
 ^^^^
 
-*Optional* The year your project has been written.
+*Optional* The year your project has been written. This can be a single number or an array of numbers :
+
+.. code-block:: yaml
+
+  project_info:
+    year:
+      - 2016
+      - 2017
 
 template
 --------
