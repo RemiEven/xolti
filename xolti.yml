@@ -1,5 +1,4 @@
 ---
-project_info:
-  project_name: Xolti
-  author: "Rémi Even"
+project:
+  name: Xolti
 license: GPL3.0

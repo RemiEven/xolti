@@ -21,8 +21,7 @@ require 'date'
 
 require_relative 'default_comment_tokens'
 require_relative 'resources'
-
-require_relative '../git/git_api'
+require_relative 'config_value_retriever'
 
 # Class providing configuration data to other classes/modules
 #
@@ -57,12 +56,19 @@ class XoltiConfig
 	#
 	# @param [Hash] raw_config the raw config
 	def initialize(raw_config)
-		@project_info = extract_project_info(raw_config['project_info'])
+		@project_info = raw_config['project']
 		@comment = DefaultComment::HASH.merge!(raw_config['comment'] || {})
 		@license = raw_config['license']
-		@template = extract_template_if_present(raw_config)
-		@offset = raw_config['offset'] || 0
-		@use_git = !raw_config.key?('use_git') || raw_config['use_git']
+		@template = ConfigValueRetriever.new { raw_config['template'] }
+			.or_try do
+				default_template_path = Resources.get_template_path(@license)
+				IO.binread(default_template_path) if File.exist?(default_template_path)
+			end
+			.get
+		@offset = ConfigValueRetriever.new { raw_config['offset'] }
+			.default(0)
+		@use_git = ConfigValueRetriever.new { raw_config['use_git'] }
+			.default(true)
 	end
 
 	# Return the comment tokens applying to files with the given extension
@@ -71,52 +77,5 @@ class XoltiConfig
 	# @return [Array<String>, String] an array of tokens if comment is complex, a single string otherwise
 	def get_comment(ext)
 		@comment[ext.delete('.')]
-	end
-
-	# Create a new configuration with file-specific information added
-	#
-	# @param [String] file the path to the file used to complete the configuration
-	# @param [Type] include_current_year whether to include the current year in the added information
-	# @return [XoltiConfig] the completed new configuration
-	def complete_config_for_file(file, include_current_year = false)
-		additional_project_info = { file_name: File.basename(file) }
-		complete_with_git(additional_project_info, file) if @use_git
-		additional_project_info[:year] = (additional_project_info[:year] << Date.today.year).uniq if include_current_year
-		completed_config = clone
-		completed_config.project_info.merge!(additional_project_info)
-		completed_config
-	end
-
-	# Complete project information with data from git
-	#
-	# @param [Hash] project_info the project info
-	# @param [String] file the path to the file used to complete the project information
-	private def complete_with_git(project_info, file)
-		project_info[:year] = GitApi.modification_years_of(file)
-		project_info[:author] = GitApi.authors_of(file, GitApi.user_name)[0]
-	end
-
-	# Extract the project information from raw information
-	#
-	# @param [Hash] raw_project_info the project information to extract
-	# @return [Hash] the extracted project information
-	private def extract_project_info(raw_project_info)
-		{
-			author: raw_project_info['author'],
-			project_name: raw_project_info['project_name'],
-			year: raw_project_info['year'] || Date.today.year.to_s
-		}
-	end
-
-	# Extract the template from the raw configuration if there is one,
-	# else get the template associated with the configured license
-	#
-	# @param [Type] raw_config describe raw_config
-	# @return [Type] description of returned object
-	private def extract_template_if_present(raw_config)
-		return raw_config['template'] if raw_config.include?('template')
-		default_template_path = Resources.get_template_path(@license)
-		return IO.binread(default_template_path) if File.exist?(default_template_path)
-		nil
 	end
 end

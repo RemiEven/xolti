@@ -18,6 +18,7 @@
 require 'tempfile'
 
 require_relative 'file_modification'
+require_relative 'header_data_retriever'
 require_relative '../header/header_detector'
 require_relative '../header/header_generator'
 require_relative '../header/header_validator'
@@ -29,8 +30,8 @@ module Core
 	# @param [Pathname] path the path of the file where to add the header
 	# @param [XoltiConfig] config the configuration to use to create the header
 	def self.licensify(path, config)
-		config = config.complete_config_for_file(path, true)
-		header = HeaderGenerator.create_for(path, config)
+		header_data = HeaderDataRetriever.get_header_data_for(path, config, true)
+		header = HeaderGenerator.create_for(path, config, header_data)
 		FileModification.insert_lines_with_offset(path, header, config.offset)
 	end
 
@@ -62,12 +63,12 @@ module Core
 	# @param [XoltiConfig] config the configuration to use
 	# @return [Array<Hash>] a potentially empty array of differences between expected and actual header in the file
 	def self.validate_header(path, config)
-		config = config.complete_config_for_file(path)
+		header_data = HeaderDataRetriever.get_header_data_for(path, config)
 		template = config.template
 		ext = File.extname(path)
 		detected = HeaderDetector.detect(path, template, config.get_comment(ext))
 		return [{ type: :no_header_found }] unless detected
-		expected = HeaderGenerator.create_for(path, config)
+		expected = HeaderGenerator.create_for(path, config, header_data)
 		HeaderValidator.diff(expected, detected)
 	end
 end

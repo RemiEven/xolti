@@ -23,3 +23,4 @@ require_relative 'header/tc_header_validator'
 require_relative 'header/tag/tc_year_tag'
 
 require_relative 'core/tc_config'
+require_relative 'core/tc_config_value_retriever'

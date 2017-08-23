@@ -57,14 +57,13 @@ module GitApi
 	# Return every author of a file
 	#
 	# @param [String] file path to the file
-	# @param [String] default_author optional default author if none is found
 	# @return [Array<String>] an array with all authors of a file
-	def self.authors_of(file, default_author = nil)
+	def self.authors_of(file)
 		ProcUtils.system("git blame #{file} -p")
 			.split("\n")
 			.select { |line| line.start_with? 'author ' }
 			.map { |line| line[7..-1] }
-			.map { |author| author == 'Not Committed Yet' ? default_author : author }
+			.reject { |author| author == 'Not Committed Yet' }
 			.reject(&:nil?)
 			.uniq
 	end
