@@ -68,7 +68,7 @@ The license of your project. Mandatory if no custom ``template`` attribute is fo
 offset
 ------
 
-*Optional* Allow you to define an offset of lines jump over when adding a header.
+*Optional* Allow you to define an offset of lines to jump over when adding a header. This can be useful to preserve shebang lines.
 
 .. code-block:: yaml
 
