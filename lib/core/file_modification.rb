@@ -27,10 +27,8 @@ module FileModification
 		file = Tempfile.new('xolti')
 		begin
 			File.open(path, 'r') do |source_file|
-				i = 0
-				source_file.each_line do |line|
-					file.write(text) if i == offset
-					i += 1
+				source_file.each_line.map.with_index do |line, index|
+					file.write(text) if index == offset
 					file.write(line)
 				end
 			end
