@@ -20,12 +20,12 @@ require 'thor'
 require 'pathname'
 require 'yaml'
 
-require_relative 'core/core'
-require_relative 'core/config'
-require_relative 'core/file_finder'
-require_relative 'core/resources'
-require_relative 'core/version'
-require_relative 'core/print_utils'
+require 'core/core'
+require 'core/config'
+require 'core/file_finder'
+require 'core/resources'
+require 'core/version'
+require 'core/print_utils'
 
 Signal.trap('INT') do
 	puts '\nCancelling...'

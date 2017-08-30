@@ -18,8 +18,8 @@
 require 'test/unit'
 require 'mocha/test_unit'
 
-require_relative '../../lib/core/config'
-require_relative '../../lib/git/git_api'
+require 'core/config'
+require 'git/git_api'
 
 class TestConfig < Test::Unit::TestCase
 	def test_default_comment

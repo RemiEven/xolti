@@ -19,9 +19,9 @@ require 'yaml'
 require 'pathname'
 require 'date'
 
-require_relative 'default_comment_tokens'
-require_relative 'resources'
-require_relative 'config_value_retriever'
+require 'core/default_comment_tokens'
+require 'core/resources'
+require 'core/config_value_retriever'
 
 # Class providing configuration data to other classes/modules
 #

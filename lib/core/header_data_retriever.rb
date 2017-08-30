@@ -19,10 +19,10 @@ require 'yaml'
 require 'pathname'
 require 'date'
 
-require_relative 'config'
-require_relative 'config_value_retriever'
+require 'core/config'
+require 'core/config_value_retriever'
 
-require_relative '../git/git_api'
+require 'git/git_api'
 
 # Module with a method to create header data
 module HeaderDataRetriever

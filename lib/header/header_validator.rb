@@ -15,7 +15,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
-require_relative 'header_generator'
+require 'header/header_generator'
 
 # Module with a method to detect differences between an actual and an expected header
 module HeaderValidator

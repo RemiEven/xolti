@@ -15,8 +15,8 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
-require_relative 'comment'
-require_relative 'template_utils'
+require 'header/comment'
+require 'header/template_utils'
 
 # Module providing a method to detect a header in a file
 module HeaderDetector

@@ -17,7 +17,7 @@
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 require 'test/unit'
 
-require_relative '../../../lib/header/tag/author_tag'
+require 'header/tag/author_tag'
 
 class TestAuthorTag < Test::Unit::TestCase
 	def test_detection_regexp
