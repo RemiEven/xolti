@@ -21,7 +21,7 @@ class YearTag
 	# The tag name
 	TAG_NAME = 'year'.freeze
 
-	# Reteurn a regexp matching the content of the tag
+	# Return a regexp matching the content of the tag
 	#
 	# @return [String] a regexp matching the content of the tag
 	def detection_regexp

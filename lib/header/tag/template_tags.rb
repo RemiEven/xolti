@@ -16,12 +16,13 @@
 # You should have received a copy of the GNU General Public License
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 require_relative 'year_tag'
+require_relative 'author_tag'
 require_relative 'simple_tag'
 
 # Access point to all template tags
 class TemplateTags
 	# All tags that are not simple
-	COMPLEX_TAGS = [YearTag]
+	COMPLEX_TAGS = [YearTag, AuthorTag]
 		.map { |tag_class| [tag_class::TAG_NAME, tag_class.new] }
 		.to_h
 

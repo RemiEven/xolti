@@ -37,14 +37,13 @@ module HeaderDataRetriever
 			.default([Date.today.year])
 		year = (year << Date.today.year).uniq if include_current_year
 
-		author = ConfigValueRetriever.new { config.project_info['author'] }
-			.or_try { GitApi.authors_of(file)[0] if config.use_git }
-			.or_try { GitApi.user_name if config.use_git }
+		author = ConfigValueRetriever.new { Array(config.project_info['author']) if config.project_info['author'] }
+			.or_try { GitApi.authors_of(file) if config.use_git }
+			.or_try { Array(GitApi.user_name) if config.use_git }
 			.get
 
 		project_name = ConfigValueRetriever.new { config.project_info['name'] }
 			.get
-
 		{
 			file_name: File.basename(file),
 			year: year,
