@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 
-require 'core/path_rule'
+require 'xolti/core/path_rule'
 
 # Create an array of pathrules from a .xoltignore file if it exists
 #

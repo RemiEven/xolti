@@ -1,5 +1,9 @@
-task(default: [:test])
+require 'rake/testtask'
 
-task :test do
-	ruby 'test/ts_xolti.rb'
+Rake::TestTask.new do |task|
+	task.libs << 'test'
+	task.test_files = FileList['test/**/tc*.rb']
 end
+
+desc 'Run tests'
+task(default: [:test])

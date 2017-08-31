@@ -15,9 +15,9 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
-require 'header/tag/year_tag'
-require 'header/tag/author_tag'
-require 'header/tag/simple_tag'
+require 'xolti/header/tag/year_tag'
+require 'xolti/header/tag/author_tag'
+require 'xolti/header/tag/simple_tag'
 
 # Access point to all template tags
 class TemplateTags

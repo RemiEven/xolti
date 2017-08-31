@@ -1,4 +1,4 @@
-# ts_xolti.rb
+# tc_comment.rb
 # Copyright (C) Rémi Even 2016, 2017
 #
 # This file is part of Xolti.
@@ -17,11 +17,20 @@
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 require 'test/unit'
 
-require_relative 'header/tc_template_utils'
-require_relative 'header/tc_comment'
-require_relative 'header/tc_header_validator'
-require_relative 'header/tag/tc_year_tag'
-require_relative 'header/tag/tc_author_tag'
+require 'xolti/header/comment'
 
-require_relative 'core/tc_config'
-require_relative 'core/tc_config_value_retriever'
+class TestComment < Test::Unit::TestCase
+	def test_simple_comment
+		assert_equal('', Comment.comment('', '# '))
+		assert_equal("# A\n", Comment.comment("A\n", '# '))
+		assert_equal("# A\n# B\n", Comment.comment("A\nB\n", '# '))
+		assert_equal("#\n", Comment.comment("\n", '# '))
+	end
+
+	def test_complex_comment
+		assert_equal("/*\n */\n", Comment.comment('', ['/*', ' * ', ' */']))
+		assert_equal("/*\n * A\n */\n", Comment.comment("A\n", ['/*', ' * ', ' */']))
+		assert_equal("/*\n * A\n * B\n */\n", Comment.comment("A\nB\n", ['/*', ' * ', ' */']))
+		assert_equal("/*\n * A\n *\n */\n", Comment.comment("A\n\n", ['/*', ' * ', ' */']))
+	end
+end

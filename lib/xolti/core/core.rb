@@ -17,11 +17,11 @@
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 require 'tempfile'
 
-require 'core/file_modification'
-require 'core/header_data_retriever'
-require 'header/header_detector'
-require 'header/header_generator'
-require 'header/header_validator'
+require 'xolti/core/file_modification'
+require 'xolti/core/header_data_retriever'
+require 'xolti/header/header_detector'
+require 'xolti/header/header_generator'
+require 'xolti/header/header_validator'
 
 # Core module containing methods to add, validate or remove a header in a file
 module Core

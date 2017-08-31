@@ -17,7 +17,7 @@
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 require 'test/unit'
 
-require 'core/config_value_retriever'
+require 'xolti/core/config_value_retriever'
 
 class TestConfig < Test::Unit::TestCase
 	def test_nominal_case

@@ -19,9 +19,9 @@ require 'yaml'
 require 'pathname'
 require 'date'
 
-require 'core/default_comment_tokens'
-require 'core/resources'
-require 'core/config_value_retriever'
+require 'xolti/core/default_comment_tokens'
+require 'xolti/core/resources'
+require 'xolti/core/config_value_retriever'
 
 # Class providing configuration data to other classes/modules
 #

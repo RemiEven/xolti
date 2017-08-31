@@ -15,7 +15,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
-require 'header/tag/template_tags'
+require 'xolti/header/tag/template_tags'
 
 # Module with methods used to parse and render a template
 module TemplateUtils

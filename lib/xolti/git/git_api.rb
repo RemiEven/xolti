@@ -15,7 +15,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
-require 'git/proc_utils'
+require 'xolti/git/proc_utils'
 
 # This module provides methods used to access information stored by git,
 # such as the authors of a file or the years it has been modified

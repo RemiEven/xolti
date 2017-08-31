@@ -20,12 +20,12 @@ require 'thor'
 require 'pathname'
 require 'yaml'
 
-require 'core/core'
-require 'core/config'
-require 'core/file_finder'
-require 'core/resources'
-require 'core/version'
-require 'core/print_utils'
+require 'xolti/core/core'
+require 'xolti/core/config'
+require 'xolti/core/file_finder'
+require 'xolti/core/resources'
+require 'xolti/core/version'
+require 'xolti/core/print_utils'
 
 Signal.trap('INT') do
 	puts '\nCancelling...'

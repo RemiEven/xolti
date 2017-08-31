@@ -15,8 +15,8 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
-require 'header/comment'
-require 'header/tag/template_tags'
+require 'xolti/header/comment'
+require 'xolti/header/tag/template_tags'
 
 # Module with a method to generate a header for a file
 module HeaderGenerator

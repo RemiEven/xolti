@@ -19,10 +19,10 @@ require 'yaml'
 require 'pathname'
 require 'date'
 
-require 'core/config'
-require 'core/config_value_retriever'
+require 'xolti/core/config'
+require 'xolti/core/config_value_retriever'
 
-require 'git/git_api'
+require 'xolti/git/git_api'
 
 # Module with a method to create header data
 module HeaderDataRetriever
