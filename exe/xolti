@@ -18,6 +18,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 
-require 'xolti'
+require 'xolti/xolti'
 
-XoltiCLI.start(ARGV)
+Xolti::CLI.start(ARGV)

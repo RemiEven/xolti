@@ -21,40 +21,43 @@ require 'xolti/header/template_utils'
 
 class TestTemplateUtils < Test::Unit::TestCase
 	def test_find_template_tokens_indexes
-		assert_equal([], TemplateUtils.find_template_tokens_indexes(''))
-		assert_equal([], TemplateUtils.find_template_tokens_indexes('ee'))
-		assert_equal([2, 5], TemplateUtils.find_template_tokens_indexes('ee%{r}'))
-		assert_equal([2, 5, 7, 12], TemplateUtils.find_template_tokens_indexes('ee%{r} %{abc}fe'))
+		assert_equal([], Xolti::TemplateUtils.find_template_tokens_indexes(''))
+		assert_equal([], Xolti::TemplateUtils.find_template_tokens_indexes('ee'))
+		assert_equal([2, 5], Xolti::TemplateUtils.find_template_tokens_indexes('ee%{r}'))
+		assert_equal([2, 5, 7, 12], Xolti::TemplateUtils.find_template_tokens_indexes('ee%{r} %{abc}fe'))
 	end
 
 	def test_split_template_tokens_from_line
-		assert_equal(['ee'], TemplateUtils.split_template_tokens_from_line('ee'))
-		assert_equal(['ee', '%{coucou}'], TemplateUtils.split_template_tokens_from_line('ee%{coucou}'))
-		assert_equal(['%{coucou}'], TemplateUtils.split_template_tokens_from_line('%{coucou}'))
-		assert_equal(['ee', '%{coucou}', 'ee'], TemplateUtils.split_template_tokens_from_line('ee%{coucou}ee'))
+		assert_equal(['ee'], Xolti::TemplateUtils.split_template_tokens_from_line('ee'))
+		assert_equal(['ee', '%{coucou}'], Xolti::TemplateUtils.split_template_tokens_from_line('ee%{coucou}'))
+		assert_equal(['%{coucou}'], Xolti::TemplateUtils.split_template_tokens_from_line('%{coucou}'))
+		assert_equal(['ee', '%{coucou}', 'ee'], Xolti::TemplateUtils.split_template_tokens_from_line('ee%{coucou}ee'))
 		assert_equal(
 			['ee', '%{coucou}', 'ee', '%{coucou}'],
-			TemplateUtils.split_template_tokens_from_line('ee%{coucou}ee%{coucou}')
+			Xolti::TemplateUtils.split_template_tokens_from_line('ee%{coucou}ee%{coucou}')
 		)
-		assert_equal(['ee', '%{coucou}', '%{coucou}'], TemplateUtils.split_template_tokens_from_line('ee%{coucou}%{coucou}'))
+		assert_equal(
+			['ee', '%{coucou}', '%{coucou}'],
+			Xolti::TemplateUtils.split_template_tokens_from_line('ee%{coucou}%{coucou}')
+		)
 	end
 
 	def test_create_detection_regexp_for_line
-		assert_match(TemplateUtils.create_detection_regexp_for_line('e'), 'e')
-		assert_match(TemplateUtils.create_detection_regexp_for_line('.'), '.')
-		assert_no_match(TemplateUtils.create_detection_regexp_for_line('.'), 'a')
-		assert_match(TemplateUtils.create_detection_regexp_for_line('%{r}'), 'azer')
-		assert_match(TemplateUtils.create_detection_regexp_for_line(''), '')
-		assert_match(TemplateUtils.create_detection_regexp_for_line('a%{r}r'), 'azer')
-		assert_no_match(TemplateUtils.create_detection_regexp_for_line('z%{r}f'), 'azer')
+		assert_match(Xolti::TemplateUtils.create_detection_regexp_for_line('e'), 'e')
+		assert_match(Xolti::TemplateUtils.create_detection_regexp_for_line('.'), '.')
+		assert_no_match(Xolti::TemplateUtils.create_detection_regexp_for_line('.'), 'a')
+		assert_match(Xolti::TemplateUtils.create_detection_regexp_for_line('%{r}'), 'azer')
+		assert_match(Xolti::TemplateUtils.create_detection_regexp_for_line(''), '')
+		assert_match(Xolti::TemplateUtils.create_detection_regexp_for_line('a%{r}r'), 'azer')
+		assert_no_match(Xolti::TemplateUtils.create_detection_regexp_for_line('z%{r}f'), 'azer')
 	end
 
 	def test_extract_tag_type
-		assert_equal(TemplateUtils.extract_tag_type('%{coucou}'), 'coucou')
+		assert_equal(Xolti::TemplateUtils.extract_tag_type('%{coucou}'), 'coucou')
 	end
 
 	def test_tag?
-		assert(TemplateUtils.tag?('%{coucou}'))
-		refute(TemplateUtils.tag?('blabla'))
+		assert(Xolti::TemplateUtils.tag?('%{coucou}'))
+		refute(Xolti::TemplateUtils.tag?('blabla'))
 	end
 end

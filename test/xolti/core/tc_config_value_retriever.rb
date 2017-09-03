@@ -21,7 +21,7 @@ require 'xolti/core/config_value_retriever'
 
 class TestConfig < Test::Unit::TestCase
 	def test_nominal_case
-		value = ConfigValueRetriever.new { nil }
+		value = Xolti::ConfigValueRetriever.new { nil }
 			.or_try { nil }
 			.or_try { 2 }
 			.get
@@ -29,7 +29,7 @@ class TestConfig < Test::Unit::TestCase
 	end
 
 	def test_use_first_successful_value
-		value = ConfigValueRetriever.new { nil }
+		value = Xolti::ConfigValueRetriever.new { nil }
 			.or_try { nil }
 			.or_try { 2 }
 			.or_try { 3 }
@@ -38,7 +38,7 @@ class TestConfig < Test::Unit::TestCase
 	end
 
 	def test_no_block_in_initialize
-		value = ConfigValueRetriever.new
+		value = Xolti::ConfigValueRetriever.new
 			.or_try { nil }
 			.or_try { 2 }
 			.get
@@ -46,7 +46,7 @@ class TestConfig < Test::Unit::TestCase
 	end
 
 	def test_default_value
-		value = ConfigValueRetriever.new
+		value = Xolti::ConfigValueRetriever.new
 			.or_try { nil }
 			.default(2)
 		assert_equal(2, value)

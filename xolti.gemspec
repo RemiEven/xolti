@@ -4,7 +4,7 @@ require 'xolti/core/version'
 
 Gem::Specification.new do |spec|
 	spec.name = 'xolti'
-	spec.version = XoltiVersion.get
+	spec.version = Xolti::Version.get
 	spec.summary = 'A gem to manage license headers'
 	spec.description = 'A gem to manage license headers, providing a simple CLI.'
 	spec.authors = ['Rémi Even']

@@ -16,46 +16,49 @@
 # You should have received a copy of the GNU General Public License
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 
-# Module with methods to insert/delete lines from a text file
-module FileModification
-	# Insert a text in a text file
-	#
-	# @param [String] path the path to file to modify
-	# @param [String] text the text to insert
-	# @param [Integer] offset the offset between the start of the file and the place where to insert the test
-	def self.insert_lines_with_offset(path, text, offset)
-		file = Tempfile.new('xolti')
-		begin
-			File.open(path, 'r') do |source_file|
-				source_file.each_line.map.with_index do |line, index|
-					file.write(text) if index == offset
-					file.write(line)
-				end
-			end
-			file.close
-			FileUtils.cp(file, path)
-		ensure
-			file.close
-			file.unlink
-		end
-	end
 
-	# Delete lines from a text file
-	#
-	# @param [String] path path to the file to modify
-	# @param [Integer] start the number of the first line to delete
-	# @param [Integer] length the number of lines to delete
-	def self.delete_lines(path, start, length)
-		file = Tempfile.new('xolti')
-		begin
-			File.open(path, 'r').each_with_index do |line, index|
-				file.write(line) if index < start || index >= start + length
+module Xolti
+	# Module with methods to insert/delete lines from a text file
+	module FileModification
+		# Insert a text in a text file
+		#
+		# @param [String] path the path to file to modify
+		# @param [String] text the text to insert
+		# @param [Integer] offset the offset between the start of the file and the place where to insert the test
+		def self.insert_lines_with_offset(path, text, offset)
+			file = Tempfile.new('xolti')
+			begin
+				File.open(path, 'r') do |source_file|
+					source_file.each_line.map.with_index do |line, index|
+						file.write(text) if index == offset
+						file.write(line)
+					end
+				end
+				file.close
+				FileUtils.cp(file, path)
+			ensure
+				file.close
+				file.unlink
 			end
-			file.close
-			FileUtils.cp(file, path)
-		ensure
-			file.close
-			file.unlink
+		end
+
+		# Delete lines from a text file
+		#
+		# @param [String] path path to the file to modify
+		# @param [Integer] start the number of the first line to delete
+		# @param [Integer] length the number of lines to delete
+		def self.delete_lines(path, start, length)
+			file = Tempfile.new('xolti')
+			begin
+				File.open(path, 'r').each_with_index do |line, index|
+					file.write(line) if index < start || index >= start + length
+				end
+				file.close
+				FileUtils.cp(file, path)
+			ensure
+				file.close
+				file.unlink
+			end
 		end
 	end
 end

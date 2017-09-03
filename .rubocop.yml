@@ -19,3 +19,8 @@ Layout/MultilineMethodCallIndentation:
 Style/FormatStringToken:
   Exclude:
     - 'test/xolti/header/tc_template_utils.rb'
+
+# Necessary to allow 2 blank lines below license headers, in order to prevent Yard
+# to recognize them as documentation
+Style/EmptyLines:
+  Enabled: false

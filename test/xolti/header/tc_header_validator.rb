@@ -36,7 +36,7 @@ class TestHeaderValidator < Test::Unit::TestCase
 			'# (C) 2017 Rémi Even',
 			'# Project Xolti'
 		]
-		diff = HeaderValidator.diff(expected.join("\n"), detected)
+		diff = Xolti::HeaderValidator.diff(expected.join("\n"), detected)
 		assert_equal(2, diff.length)
 		assert_equal({ line_number: 3, expected: expected[0], actual: detected[:matched_lines][0] }, diff[0])
 		assert_equal({ line_number: 5, expected: expected[2], actual: detected[:matched_lines][2] }, diff[1])

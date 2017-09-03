@@ -29,23 +29,26 @@ def resource_dir
 	end
 end
 
-# A module to get the path of common resources such as header and full license templates
-module Resources
-	# Create the path of the file containing the header for the given license.
-	# Do not check whether the file actually exists.
-	#
-	# @param [String] license the wanted header license (eg "GPL3.0")
-	# @return [String] the path of the file containing the header for the given license
-	def self.get_template_path(license)
-		File.join(resource_dir, 'headers', license)
-	end
 
-	# Create the path of the file containing the full template for the given license.
-	# Do not check whether the file actually exists.
-	#
-	# @param [String] license the wanted full template license (eg "GPL3.0")
-	# @return [String] the path of the file containing the full template for the given license
-	def self.get_full_license_path(license)
-		File.join(resource_dir, 'licenses', license)
+module Xolti
+	# A module to get the path of common resources such as header and full license templates
+	module Resources
+		# Create the path of the file containing the header for the given license.
+		# Do not check whether the file actually exists.
+		#
+		# @param [String] license the wanted header license (eg "GPL3.0")
+		# @return [String] the path of the file containing the header for the given license
+		def self.get_template_path(license)
+			File.join(resource_dir, 'headers', license)
+		end
+
+		# Create the path of the file containing the full template for the given license.
+		# Do not check whether the file actually exists.
+		#
+		# @param [String] license the wanted full template license (eg "GPL3.0")
+		# @return [String] the path of the file containing the full template for the given license
+		def self.get_full_license_path(license)
+			File.join(resource_dir, 'licenses', license)
+		end
 	end
 end

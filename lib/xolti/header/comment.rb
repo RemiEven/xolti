@@ -37,14 +37,17 @@ def complex_comment(text, comment_tokens)
 	result
 end
 
-# Module providing methods to comment texts
-module Comment
-	# Comment a text using simple or complex comment tokens
-	#
-	# @param [String] text the text to comment
-	# @param [String, Array(String, String, String)] comment_tokens token to use to comment
-	# @return [String] the commented text
-	def self.comment(text, comment_tokens)
-		comment_tokens.is_a?(String) ? simple_comment(text, comment_tokens) : complex_comment(text, comment_tokens)
+
+module Xolti
+	# Module providing methods to comment texts
+	module Comment
+		# Comment a text using simple or complex comment tokens
+		#
+		# @param [String] text the text to comment
+		# @param [String, Array(String, String, String)] comment_tokens token to use to comment
+		# @return [String] the commented text
+		def self.comment(text, comment_tokens)
+			comment_tokens.is_a?(String) ? simple_comment(text, comment_tokens) : complex_comment(text, comment_tokens)
+		end
 	end
 end

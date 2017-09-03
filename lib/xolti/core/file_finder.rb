@@ -28,39 +28,42 @@ def parse_xoltignore(path)
 	File.readlines(xoltignore_path)
 		.reject { |line| line == '' || line[0] == '#' }
 		.map(&:chomp)
-		.map { |line| PathRule.new(path, line) }
+		.map { |line| Xolti::PathRule.new(path, line) }
 end
 
-# Module providing a method to recursively explore files and folders.
-# Takes into account the encountered .xoltignore files
-module FileFinder
-	# Recursively explore a folder, taking into account .xoltignore files
-	#
-	# @param [String] folder the folder to explore
-	# @param [Array<PathRule>] ignore_rules an array of PathRule describing which files/folders must be ignored
-	# @return [Array<String>] an array with paths to all files not excluded by the .xoltignore
-	def self.explore_folder(folder = Dir.pwd, ignore_rules = [])
-		files = []
-		ignored_paths = ['.', '..', '.git', '.xoltignore', 'xolti.yml', 'LICENSE']
-		ignore_rules += parse_xoltignore(folder)
 
-		Dir.glob("#{folder}/{*,.*}")
-			.delete_if { |x| ignored_paths.include?(File.basename(x)) }
-			.each do |path|
-				# Do NOT ignore by default
-				ignore = :exclude
-				if File.directory?(path)
-					ignore_rules.each do |rule|
-						ignore = rule.effect if rule.folder_match(path)
+module Xolti
+	# Module providing a method to recursively explore files and folders.
+	# Takes into account the encountered .xoltignore files
+	module FileFinder
+		# Recursively explore a folder, taking into account .xoltignore files
+		#
+		# @param [String] folder the folder to explore
+		# @param [Array<PathRule>] ignore_rules an array of PathRule describing which files/folders must be ignored
+		# @return [Array<String>] an array with paths to all files not excluded by the .xoltignore
+		def self.explore_folder(folder = Dir.pwd, ignore_rules = [])
+			files = []
+			ignored_paths = ['.', '..', '.git', '.xoltignore', 'xolti.yml', 'LICENSE']
+			ignore_rules += parse_xoltignore(folder)
+
+			Dir.glob("#{folder}/{*,.*}")
+				.delete_if { |x| ignored_paths.include?(File.basename(x)) }
+				.each do |path|
+					# Do NOT ignore by default
+					ignore = :exclude
+					if File.directory?(path)
+						ignore_rules.each do |rule|
+							ignore = rule.effect if rule.folder_match(path)
+						end
+						files += explore_folder(path, ignore_rules) if ignore == :exclude
+					else
+						ignore_rules.each do |rule|
+							ignore = rule.effect if rule.file_match(path)
+						end
+						files << path if ignore == :exclude
 					end
-					files += explore_folder(path, ignore_rules) if ignore == :exclude
-				else
-					ignore_rules.each do |rule|
-						ignore = rule.effect if rule.file_match(path)
-					end
-					files << path if ignore == :exclude
 				end
-			end
-		files
+			files
+		end
 	end
 end

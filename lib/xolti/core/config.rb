@@ -23,59 +23,62 @@ require 'xolti/core/default_comment_tokens'
 require 'xolti/core/resources'
 require 'xolti/core/config_value_retriever'
 
-# Class providing configuration data to other classes/modules
-#
-# @attr_reader [Hash] project_info information used to complete a header template
-# @attr_reader [String] template optional custom header template
-# @attr_reader [Integer] offset optional offset of lines between file start and header start
-# @attr_reader [String] license optional license name
-# @attr_reader [String] use_git whether to use git as a datasource. Defaults to true
-class XoltiConfig
-	# Search for a xolti.yml file
-	#
-	# @param [Pathname] path the path where to start the search
-	# @return [String] path of the xolti.yml file
-	def self.find_config_file(path = Pathname.getwd)
-		potential_config_file = (path + 'xolti.yml')
-		return potential_config_file.to_s if potential_config_file.file?
-		raise 'No xolti.yml found' if path.root?
-		find_config_file(path.parent)
-	end
 
-	# Create a configuration from the current workding directory
+module Xolti
+	# Class providing configuration data to other classes/modules
 	#
-	# @return [XoltiConfig] the created configuration
-	def self.load_config
-		raw_config = YAML.safe_load(IO.binread(find_config_file))
-		XoltiConfig.new(raw_config)
-	end
+	# @attr_reader [Hash] project_info information used to complete a header template
+	# @attr_reader [String] template optional custom header template
+	# @attr_reader [Integer] offset optional offset of lines between file start and header start
+	# @attr_reader [String] license optional license name
+	# @attr_reader [String] use_git whether to use git as a datasource. Defaults to true
+	class Config
+		# Search for a xolti.yml file
+		#
+		# @param [Pathname] path the path where to start the search
+		# @return [String] path of the xolti.yml file
+		def self.find_config_file(path = Pathname.getwd)
+			potential_config_file = (path + 'xolti.yml')
+			return potential_config_file.to_s if potential_config_file.file?
+			raise 'No xolti.yml found' if path.root?
+			find_config_file(path.parent)
+		end
 
-	attr_reader :project_info, :template, :offset, :license, :use_git
+		# Create a configuration from the current workding directory
+		#
+		# @return [Xolti::Config] the created configuration
+		def self.load_config
+			raw_config = YAML.safe_load(IO.binread(find_config_file))
+			Xolti::Config.new(raw_config)
+		end
 
-	# Initialize a XoltiConfig from a raw config
-	#
-	# @param [Hash] raw_config the raw config
-	def initialize(raw_config)
-		@project_info = raw_config['project']
-		@comment = DefaultComment::HASH.merge!(raw_config['comment'] || {})
-		@license = raw_config['license']
-		@template = ConfigValueRetriever.new { raw_config['template'] }
-			.or_try do
-				default_template_path = Resources.get_template_path(@license)
-				IO.binread(default_template_path) if File.exist?(default_template_path)
-			end
-			.get
-		@offset = ConfigValueRetriever.new { raw_config['offset'] }
-			.default(0)
-		@use_git = ConfigValueRetriever.new { raw_config['use_git'] }
-			.default(true)
-	end
+		attr_reader :project_info, :template, :offset, :license, :use_git
 
-	# Return the comment tokens applying to files with the given extension
-	#
-	# @param [String] ext the extension of the file
-	# @return [Array<String>, String] an array of tokens if comment is complex, a single string otherwise
-	def get_comment(ext)
-		@comment[ext.delete('.')]
+		# Initialize a Xolti Config from a raw config
+		#
+		# @param [Hash] raw_config the raw config
+		def initialize(raw_config)
+			@project_info = raw_config['project']
+			@comment = Xolti::DefaultComment::HASH.merge!(raw_config['comment'] || {})
+			@license = raw_config['license']
+			@template = Xolti::ConfigValueRetriever.new { raw_config['template'] }
+				.or_try do
+					default_template_path = Xolti::Resources.get_template_path(@license)
+					IO.binread(default_template_path) if File.exist?(default_template_path)
+				end
+				.get
+			@offset = Xolti::ConfigValueRetriever.new { raw_config['offset'] }
+				.default(0)
+			@use_git = Xolti::ConfigValueRetriever.new { raw_config['use_git'] }
+				.default(true)
+		end
+
+		# Return the comment tokens applying to files with the given extension
+		#
+		# @param [String] ext the extension of the file
+		# @return [Array<String>, String] an array of tokens if comment is complex, a single string otherwise
+		def get_comment(ext)
+			@comment[ext.delete('.')]
+		end
 	end
 end

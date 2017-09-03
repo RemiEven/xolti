@@ -17,67 +17,70 @@
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 require 'xolti/git/proc_utils'
 
-# This module provides methods used to access information stored by git,
-# such as the authors of a file or the years it has been modified
-module GitApi
-	# Find files currently ignored by git
-	#
-	# @return [Array<String>] an Array containing paths of files currently ignored by git
-	def self.ignored_files
-		ProcUtils.system('git status --porcelain --ignored -z')
-			.split('\u0000')
-			.select { |line| line[0..1] == '!!' }
-			.map { |line| line[3..-1] }
-	end
 
-	# Find files that has been modified since the last commit
-	#
-	# @return [Array<String>] an Array containing paths of files modified since the last commit
-	def self.modified_files
-		ProcUtils.system('git status --porcelain -z')
-			.split('\u0000')
-			.select { |line| line[0..1] == '!!' }
-			.map { |line| line[3..-1] }
-	end
+module Xolti
+	# This module provides methods used to access information stored by git,
+	# such as the authors of a file or the years it has been modified
+	module GitApi
+		# Find files currently ignored by git
+		#
+		# @return [Array<String>] an Array containing paths of files currently ignored by git
+		def self.ignored_files
+			Xolti::ProcUtils.system('git status --porcelain --ignored -z')
+				.split('\u0000')
+				.select { |line| line[0..1] == '!!' }
+				.map { |line| line[3..-1] }
+		end
 
-	# Return the current git user name
-	#
-	# @return [String] the current git user name
-	def self.user_name
-		ProcUtils.system('git config user.name').chomp
-	end
+		# Find files that has been modified since the last commit
+		#
+		# @return [Array<String>] an Array containing paths of files modified since the last commit
+		def self.modified_files
+			Xolti::ProcUtils.system('git status --porcelain -z')
+				.split('\u0000')
+				.select { |line| line[0..1] == '!!' }
+				.map { |line| line[3..-1] }
+		end
 
-	# Return the current git user email
-	#
-	# @return [String] the current git user email
-	def self.user_email
-		ProcUtils.system('git config user.email').chomp
-	end
+		# Return the current git user name
+		#
+		# @return [String] the current git user name
+		def self.user_name
+			Xolti::ProcUtils.system('git config user.name').chomp
+		end
 
-	# Return every author of a file
-	#
-	# @param [String] file path to the file
-	# @return [Array<String>] an array with all authors of a file
-	def self.authors_of(file)
-		ProcUtils.system("git blame #{file} -p")
-			.split("\n")
-			.select { |line| line.start_with? 'author ' }
-			.map { |line| line[7..-1] }
-			.reject { |author| author == 'Not Committed Yet' }
-			.reject(&:nil?)
-			.uniq
-	end
+		# Return the current git user email
+		#
+		# @return [String] the current git user email
+		def self.user_email
+			Xolti::ProcUtils.system('git config user.email').chomp
+		end
 
-	# Return every year a file has been modified
-	#
-	# @param [String] file path to the file
-	# @return [Array<Integer>] an array with all years a file has been modified
-	def self.modification_years_of(file)
-		ProcUtils.system("git blame #{file} -p")
-			.split("\n")
-			.select { |line| line.start_with? 'author-time' }
-			.map { |line| line[11..-1] }
-			.map { |epoch| Time.at(epoch.to_i).year }
-			.uniq
+		# Return every author of a file
+		#
+		# @param [String] file path to the file
+		# @return [Array<String>] an array with all authors of a file
+		def self.authors_of(file)
+			Xolti::ProcUtils.system("git blame #{file} -p")
+				.split("\n")
+				.select { |line| line.start_with? 'author ' }
+				.map { |line| line[7..-1] }
+				.reject { |author| author == 'Not Committed Yet' }
+				.reject(&:nil?)
+				.uniq
+		end
+
+		# Return every year a file has been modified
+		#
+		# @param [String] file path to the file
+		# @return [Array<Integer>] an array with all years a file has been modified
+		def self.modification_years_of(file)
+			Xolti::ProcUtils.system("git blame #{file} -p")
+				.split("\n")
+				.select { |line| line.start_with? 'author-time' }
+				.map { |line| line[11..-1] }
+				.map { |epoch| Time.at(epoch.to_i).year }
+				.uniq
+		end
 	end
 end

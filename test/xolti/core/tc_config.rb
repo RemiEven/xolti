@@ -23,7 +23,7 @@ require 'xolti/git/git_api'
 
 class TestConfig < Test::Unit::TestCase
 	def test_default_comment
-		sut = XoltiConfig.new(
+		sut = Xolti::Config.new(
 			'project' => {
 				'name' => 'Xolti',
 				'author' => 'Rémi Even'
@@ -40,7 +40,7 @@ class TestConfig < Test::Unit::TestCase
 	end
 
 	def test_use_git_true_by_default
-		sut = XoltiConfig.new(
+		sut = Xolti::Config.new(
 			'project' => {
 				'name' => 'Xolti',
 				'author' => 'Rémi Even'

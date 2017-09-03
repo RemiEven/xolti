@@ -21,14 +21,14 @@ require 'xolti/header/tag/author_tag'
 
 class TestAuthorTag < Test::Unit::TestCase
 	def test_detection_regexp
-		detection_regexp = AuthorTag.new.detection_regexp
+		detection_regexp = Xolti::AuthorTag.new.detection_regexp
 		assert_not_nil('Rémi Even'.match(detection_regexp))
 		assert_not_nil('Rémi, Even'.match(detection_regexp))
 		assert_nil(''.match(detection_regexp))
 	end
 
 	def test_create_from
-		tag = AuthorTag.new
+		tag = Xolti::AuthorTag.new
 		assert_equal('Rémi Even', tag.create_from(author: ['Rémi Even']))
 		assert_equal('Rémi, Even', tag.create_from(author: %w[Rémi Even]))
 	end

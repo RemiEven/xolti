@@ -24,31 +24,34 @@ require 'xolti/core/config_value_retriever'
 
 require 'xolti/git/git_api'
 
-# Module with a method to create header data
-module HeaderDataRetriever
-	# Retrieve a Hash with data necessary to complete a header template
-	#
-	# @param [String] file the file we want to create a header for
-	# @param [XoltiConfig] config the config to use
-	# @param [Boolean] include_current_year whether to include the current year
-	def self.get_header_data_for(file, config, include_current_year = false)
-		year = ConfigValueRetriever.new { Array(config.project_info['year']) if config.project_info['year'] }
-			.or_try { GitApi.modification_years_of(file) if config.use_git }
-			.default([Date.today.year])
-		year = (year << Date.today.year).uniq if include_current_year
 
-		author = ConfigValueRetriever.new { Array(config.project_info['author']) if config.project_info['author'] }
-			.or_try { GitApi.authors_of(file) if config.use_git }
-			.or_try { Array(GitApi.user_name) if config.use_git }
-			.get
+module Xolti
+	# Module with a method to create header data
+	module HeaderDataRetriever
+		# Retrieve a Hash with data necessary to complete a header template
+		#
+		# @param [String] file the file we want to create a header for
+		# @param [Xolti::Config] config the config to use
+		# @param [Boolean] include_current_year whether to include the current year
+		def self.get_header_data_for(file, config, include_current_year = false)
+			year = Xolti::ConfigValueRetriever.new { Array(config.project_info['year']) if config.project_info['year'] }
+				.or_try { Xolti::GitApi.modification_years_of(file) if config.use_git }
+				.default([Date.today.year])
+			year = (year << Date.today.year).uniq if include_current_year
 
-		project_name = ConfigValueRetriever.new { config.project_info['name'] }
-			.get
-		{
-			file_name: File.basename(file),
-			year: year,
-			author: author,
-			project_name: project_name
-		}
+			author = Xolti::ConfigValueRetriever.new { Array(config.project_info['author']) if config.project_info['author'] }
+				.or_try { Xolti::GitApi.authors_of(file) if config.use_git }
+				.or_try { Array(Xolti::GitApi.user_name) if config.use_git }
+				.get
+
+			project_name = Xolti::ConfigValueRetriever.new { config.project_info['name'] }
+				.get
+			{
+				file_name: File.basename(file),
+				year: year,
+				author: author,
+				project_name: project_name
+			}
+		end
 	end
 end
