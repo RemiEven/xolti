@@ -22,5 +22,5 @@ Style/FormatStringToken:
 
 # Necessary to allow 2 blank lines below license headers, in order to prevent Yard
 # to recognize them as documentation
-Style/EmptyLines:
+Layout/EmptyLines:
   Enabled: false

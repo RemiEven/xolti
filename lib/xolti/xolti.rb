@@ -41,6 +41,7 @@ module Xolti
 		#
 		# @param [String] file the path to the file or the folder containing the files where to add headers
 		def add(file)
+			exit_if_file_missing(file)
 			config = load_config_or_exit
 			if File.file?(file)
 				Xolti::PrintUtils.puts "Adding header to #{file}"
@@ -60,6 +61,7 @@ module Xolti
 		#
 		# @param [String] file the path to the file or the folder containing the files where to check for headers
 		def status(file = '.')
+			exit_if_file_missing(file)
 			config = load_config_or_exit
 			if File.file?(file)
 				Xolti::PrintUtils.puts check_file(file, config) || 'Correct header'
@@ -92,6 +94,7 @@ module Xolti
 		#
 		# @param [String] file the path to the file or the folder containing the files where to delete headers
 		def delete(file)
+			exit_if_file_missing(file)
 			config = load_config_or_exit
 			if File.file?(file)
 				Xolti::PrintUtils.puts "Deleting header in #{file}"
@@ -169,8 +172,7 @@ module Xolti
 
 			def load_config_or_exit
 				load_config do |e|
-					puts e.message
-					exit 1
+					exit_with_message e.message
 				end
 			end
 
@@ -182,6 +184,15 @@ module Xolti
 					result << "Line #{diff[:line_number]}: expected \"#{diff[:expected]}\" but got \"#{diff[:actual]}\"."
 				end
 				return result unless diffs.empty?
+			end
+
+			def exit_if_file_missing(file)
+				exit_with_message "File not found: '#{file}'" unless File.exist?(file)
+			end
+
+			def exit_with_message(message)
+				Xolti::PrintUtils.puts message
+				exit 1
 			end
 		end
 
