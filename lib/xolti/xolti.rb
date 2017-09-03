@@ -145,13 +145,13 @@ module Xolti
 				default_name = Pathname.getwd.basename.to_s
 				print "name (#{default_name}): "
 				typed_name = STDIN.gets.chomp
-				config['project_info']['project_name'] = typed_name == '' ? default_name : typed_name
+				config['project']['name'] = typed_name == '' ? default_name : typed_name
 			end
 
 			def ask_for_author(config)
 				print 'author: '
 				typed_author = STDIN.gets.chomp
-				config['project_info']['author'] = typed_author
+				config['project']['author'] = typed_author
 			end
 
 			def ask_for_license(config)
@@ -191,7 +191,7 @@ module Xolti
 			config = load_config
 			return Xolti::PrintUtils.puts 'Xolti is already initialized' unless config.nil?
 			Xolti::PrintUtils.puts 'Initializing xolti project'
-			config = { 'project_info' => {} }
+			config = { 'project' => {} }
 			ask_for_name(config)
 			ask_for_author(config)
 			ask_for_license(config)
