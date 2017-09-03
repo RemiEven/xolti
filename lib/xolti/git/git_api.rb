@@ -22,24 +22,17 @@ module Xolti
 	# This module provides methods used to access information stored by git,
 	# such as the authors of a file or the years it has been modified
 	module GitApi
-		# Find files currently ignored by git
+		# Check whether git blame can be called on a file
 		#
-		# @return [Array<String>] an Array containing paths of files currently ignored by git
-		def self.ignored_files
+		# @param [String] file the file to check
+		# @return [Boolean] whether git blame can be called on a file
+		def self.blameable?(file)
 			Xolti::ProcUtils.system('git status --porcelain --ignored -z')
-				.split('\u0000')
-				.select { |line| line[0..1] == '!!' }
+				.split("\u0000")
+				.reject { |line| ['!!', '??', 'A '].index(line[0..1]).nil? }
 				.map { |line| line[3..-1] }
-		end
-
-		# Find files that has been modified since the last commit
-		#
-		# @return [Array<String>] an Array containing paths of files modified since the last commit
-		def self.modified_files
-			Xolti::ProcUtils.system('git status --porcelain -z')
-				.split('\u0000')
-				.select { |line| line[0..1] == '!!' }
-				.map { |line| line[3..-1] }
+				.select { |path| file.start_with?(path) }
+				.empty?
 		end
 
 		# Return the current git user name
@@ -47,13 +40,6 @@ module Xolti
 		# @return [String] the current git user name
 		def self.user_name
 			Xolti::ProcUtils.system('git config user.name').chomp
-		end
-
-		# Return the current git user email
-		#
-		# @return [String] the current git user email
-		def self.user_email
-			Xolti::ProcUtils.system('git config user.email').chomp
 		end
 
 		# Return every author of a file

@@ -35,12 +35,12 @@ module Xolti
 		# @param [Boolean] include_current_year whether to include the current year
 		def self.get_header_data_for(file, config, include_current_year = false)
 			year = Xolti::ConfigValueRetriever.new { Array(config.project_info['year']) if config.project_info['year'] }
-				.or_try { Xolti::GitApi.modification_years_of(file) if config.use_git }
+				.or_try { Xolti::GitApi.modification_years_of(file) if config.use_git && Xolti::GitApi.blameable?(file) }
 				.default([Date.today.year])
 			year = (year << Date.today.year).uniq if include_current_year
 
 			author = Xolti::ConfigValueRetriever.new { Array(config.project_info['author']) if config.project_info['author'] }
-				.or_try { Xolti::GitApi.authors_of(file) if config.use_git }
+				.or_try { Xolti::GitApi.authors_of(file) if config.use_git && Xolti::GitApi.blameable?(file) }
 				.or_try { Array(Xolti::GitApi.user_name) if config.use_git }
 				.get
 
