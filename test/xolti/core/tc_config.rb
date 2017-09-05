@@ -19,7 +19,6 @@ require 'test/unit'
 require 'mocha/test_unit'
 
 require 'xolti/core/config'
-require 'xolti/git/git_api'
 
 class TestConfig < Test::Unit::TestCase
 	def test_default_comment

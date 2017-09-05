@@ -27,10 +27,11 @@ module Xolti
 		# @param [String] file the file to check
 		# @return [Boolean] whether git blame can be called on a file
 		def self.blameable?(file)
-			Xolti::ProcUtils.system('git status --porcelain --ignored -z')
+			@blameable_files ||= Xolti::ProcUtils.system('git status --porcelain --ignored -z')
 				.split("\u0000")
 				.reject { |line| ['!!', '??', 'A '].index(line[0..1]).nil? }
 				.map { |line| line[3..-1] }
+			@blameable_files
 				.select { |path| file.start_with?(path) }
 				.empty?
 		end
