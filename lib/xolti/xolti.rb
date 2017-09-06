@@ -44,15 +44,11 @@ module Xolti
 			exit_if_file_missing(file)
 			config = load_config_or_exit
 			if File.file?(file)
-				Xolti::PrintUtils.puts "Adding header to #{file}"
-				Xolti::Core.licensify(file, config) unless Xolti::Core.header?(file, config)
+				add_header_if_missing(file, config)
 			else
-				Xolti::FileFinder.explore_folder(file)
-					.reject { |source_file| Core.header?(source_file, config) }
-					.each do |source_file|
-						Xolti::PrintUtils.puts "Adding header to #{source_file}"
-						Xolti::Core.licensify(source_file, config)
-					end
+				Xolti::FileFinder.explore_folder(file).each do |source_file|
+					add_header_if_missing(source_file, config)
+				end
 			end
 		end
 
@@ -97,14 +93,11 @@ module Xolti
 			exit_if_file_missing(file)
 			config = load_config_or_exit
 			if File.file?(file)
-				Xolti::PrintUtils.puts "Deleting header in #{file}"
-				Xolti::Core.delete_header(file, config)
+				delete_header_if_present(file, config)
 			else
-				Xolti::FileFinder.explore_folder(file)
-					.each do |source_file|
-						Xolti::PrintUtils.puts "Deleting header in #{source_file}"
-						Xolti::Core.delete_header(source_file, config)
-					end
+				Xolti::FileFinder.explore_folder(file).each do |source_file|
+					delete_header_if_present(source_file, config)
+				end
 			end
 		end
 
@@ -144,6 +137,24 @@ module Xolti
 		end
 
 		no_commands do
+			def add_header_if_missing(file, config)
+				if Xolti::Core.header?(file, config)
+					Xolti::PrintUtils.puts "#{file} already has a header"
+				else
+					Xolti::PrintUtils.puts "Adding header to #{file}"
+					Xolti::Core.licensify(file, config)
+				end
+			end
+
+			def delete_header_if_present(file, config)
+				if Xolti::Core.header?(file, config)
+					Xolti::PrintUtils.puts "Deleting header in #{file}"
+					Xolti::Core.delete_header(file, config)
+				else
+					Xolti::PrintUtils.puts "No header found in #{file}"
+				end
+			end
+
 			def ask_for_name(config)
 				default_name = Pathname.getwd.basename.to_s
 				print "name (#{default_name}): "
