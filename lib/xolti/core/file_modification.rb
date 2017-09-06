@@ -28,12 +28,17 @@ module Xolti
 		def self.insert_lines_with_offset(path, text, offset)
 			file = Tempfile.new('xolti')
 			begin
+				inserted = false
 				File.open(path, 'r') do |source_file|
 					source_file.each_line.map.with_index do |line, index|
-						file.write(text) if index == offset
+						if index == offset
+							file.write(text)
+							inserted = true
+						end
 						file.write(line)
 					end
 				end
+				file.write(text) unless inserted
 				file.close
 				FileUtils.cp(file, path)
 			ensure
