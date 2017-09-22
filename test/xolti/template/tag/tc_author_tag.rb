@@ -1,4 +1,4 @@
-# tc_year_tag.rb
+# tc_author_tag.rb
 # Copyright (C) Rémi Even 2017
 #
 # This file is part of Xolti.
@@ -17,22 +17,19 @@
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 require 'test/unit'
 
-require 'xolti/header/tag/year_tag'
+require 'xolti/template/tag/author_tag'
 
-class TestYearTag < Test::Unit::TestCase
+class TestAuthorTag < Test::Unit::TestCase
 	def test_detection_regexp
-		detection_regexp = Xolti::YearTag.new.detection_regexp
-		assert_not_nil('2017'.match(detection_regexp))
-		assert_not_nil('2017, 2077'.match(detection_regexp))
-		assert_not_nil('2017-2077'.match(detection_regexp))
-		assert_not_nil('1994, 1999-2002, 2017'.match(detection_regexp))
+		detection_regexp = Xolti::AuthorTag.new.detection_regexp
+		assert_not_nil('Rémi Even'.match(detection_regexp))
+		assert_not_nil('Rémi, Even'.match(detection_regexp))
+		assert_nil(''.match(detection_regexp))
 	end
 
 	def test_create_from
-		tag = Xolti::YearTag.new
-		assert_equal('2017', tag.create_from(year: [2017]))
-		assert_equal('2017, 2077', tag.create_from(year: [2017, 2077]))
-		assert_equal('2017-2019', tag.create_from(year: [2017, 2018, 2019]))
-		assert_equal('1994-1996, 1998, 2000', tag.create_from(year: [1994, 1995, 1996, 1998, 2000]))
+		tag = Xolti::AuthorTag.new
+		assert_equal('Rémi Even', tag.create_from(author: ['Rémi Even']))
+		assert_equal('Rémi, Even', tag.create_from(author: %w[Rémi Even]))
 	end
 end

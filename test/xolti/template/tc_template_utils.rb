@@ -17,7 +17,7 @@
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 require 'test/unit'
 
-require 'xolti/header/template_utils'
+require 'xolti/template/template_utils'
 
 class TestTemplateUtils < Test::Unit::TestCase
 	def test_find_template_tokens_indexes

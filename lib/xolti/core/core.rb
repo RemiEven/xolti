@@ -18,10 +18,10 @@
 require 'tempfile'
 
 require 'xolti/core/file_modification'
-require 'xolti/core/header_data_retriever'
-require 'xolti/header/header_detector'
-require 'xolti/header/header_generator'
-require 'xolti/header/header_validator'
+require 'xolti/core/template_data_retriever'
+require 'xolti/template/header_detector'
+require 'xolti/template/template_generator'
+require 'xolti/template/header_validator'
 
 
 module Xolti
@@ -32,9 +32,19 @@ module Xolti
 		# @param [Pathname] path the path of the file where to add the header
 		# @param [Xolti::Config] config the configuration to use to create the header
 		def self.licensify(path, config)
-			header_data = Xolti::HeaderDataRetriever.get_header_data_for(path, config, true)
-			header = Xolti::HeaderGenerator.create_for(path, config, header_data)
+			header_data = Xolti::TemplateDataRetriever.get_header_data_for(path, config, true)
+			header = Xolti::TemplateGenerator.create_header_for(path, config, header_data)
 			Xolti::FileModification.insert_lines_with_offset(path, header, config.offset)
+		end
+
+		# Create a full license file to the given path
+		#
+		# @param [Pathname] path the path of the file where to write the license
+		# @param [Xolti::Config] config the configuration to use to create the license
+		def self.write_full_license(path, config)
+			license_data = Xolti::TemplateDataRetriever.get_license_data(config)
+			full_license = Xolti::TemplateGenerator.create_full_license(config, license_data)
+			Xolti::FileModification.write_file(path, full_license)
 		end
 
 		# Delete the header in a file if one can be detected
@@ -65,12 +75,12 @@ module Xolti
 		# @param [Xolti::Config] config the configuration to use
 		# @return [Array<Hash>] a potentially empty array of differences between expected and actual header in the file
 		def self.validate_header(path, config)
-			header_data = Xolti::HeaderDataRetriever.get_header_data_for(path, config)
+			header_data = Xolti::TemplateDataRetriever.get_header_data_for(path, config)
 			template = config.template
 			ext = File.extname(path)
 			detected = Xolti::HeaderDetector.detect(path, template, config.get_comment(ext))
 			return [{ type: :no_header_found }] unless detected
-			expected = Xolti::HeaderGenerator.create_for(path, config, header_data)
+			expected = Xolti::TemplateGenerator.create_header_for(path, config, header_data)
 			Xolti::	HeaderValidator.diff(expected, detected)
 		end
 	end

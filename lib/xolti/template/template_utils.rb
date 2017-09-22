@@ -15,7 +15,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
-require 'xolti/header/tag/template_tags'
+require 'xolti/template/tag/template_tags'
 
 
 module Xolti

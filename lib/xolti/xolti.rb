@@ -109,8 +109,7 @@ module Xolti
 			if File.exist?(File.join(Dir.pwd, filename))
 				Xolti::PrintUtils.puts "There is already a #{filename} file. Abort generation."
 			else
-				full_license = IO.binread(Xolti::Resources.get_full_license_path(config.license))
-				File.write(filename, full_license % config.project_info)
+				Xolti::Core.write_full_license(filename, config)
 				Xolti::PrintUtils.puts "Created the #{filename} file (#{config.license})"
 			end
 		end

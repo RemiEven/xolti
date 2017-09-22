@@ -15,9 +15,9 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
-require 'xolti/header/tag/year_tag'
-require 'xolti/header/tag/author_tag'
-require 'xolti/header/tag/simple_tag'
+require 'xolti/template/tag/year_tag'
+require 'xolti/template/tag/author_tag'
+require 'xolti/template/tag/simple_tag'
 
 
 module Xolti

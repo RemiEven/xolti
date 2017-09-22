@@ -65,5 +65,13 @@ module Xolti
 				file.unlink
 			end
 		end
+
+		# Write the given content in a file
+		#
+		# @param [Pathname] path the path where to write
+		# @param [String] content the content to write
+		def self.write_file(path, content)
+			File.write(path, content)
+		end
 	end
 end

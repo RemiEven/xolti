@@ -17,7 +17,7 @@
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 require 'test/unit'
 
-require 'xolti/header/comment'
+require 'xolti/template/comment'
 
 class TestComment < Test::Unit::TestCase
 	def test_simple_comment

@@ -17,7 +17,7 @@
 # along with Xolti. If not, see <http://www.gnu.org/licenses/>.
 require 'test/unit'
 
-require 'xolti/header/header_validator'
+require 'xolti/template/header_validator'
 
 class TestHeaderValidator < Test::Unit::TestCase
 	def test_diff
