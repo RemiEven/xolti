@@ -43,6 +43,7 @@ module Xolti
 		def add(file)
 			exit_if_file_missing(file)
 			config = load_config_or_exit
+			exit_if_no_header(config)
 			file = to_absolute_path(file)
 			if File.file?(file)
 				add_header_if_missing(file, config)
@@ -60,6 +61,7 @@ module Xolti
 		def status(file = '.')
 			exit_if_file_missing(file)
 			config = load_config_or_exit
+			exit_if_no_header(config)
 			file = to_absolute_path(file)
 			if File.file?(file)
 				Xolti::PrintUtils.puts check_file(file, config) || 'Correct header'
@@ -80,6 +82,7 @@ module Xolti
 		def list_missing
 			dir = Dir.pwd
 			config = load_config_or_exit
+			exit_if_no_header(config)
 			missing_headers = Xolti::FileFinder.explore_folder(dir)
 				.reject { |file| Xolti::Core.header?(file, config) }
 			return Xolti::PrintUtils.puts 'All files OK' if missing_headers.empty?
@@ -94,6 +97,7 @@ module Xolti
 		def delete(file)
 			exit_if_file_missing(file)
 			config = load_config_or_exit
+			exit_if_no_header(config)
 			file = to_absolute_path(file)
 			if File.file?(file)
 				delete_header_if_present(file, config)
@@ -202,6 +206,10 @@ module Xolti
 
 			def exit_if_file_missing(file)
 				exit_with_message "File not found: '#{file}'" unless File.exist?(file)
+			end
+
+			def exit_if_no_header(config)
+				exit_with_message 'No defined header template' if config.template.nil?
 			end
 
 			def exit_with_message(message)
