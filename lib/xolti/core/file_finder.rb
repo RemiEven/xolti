@@ -23,7 +23,7 @@ require 'xolti/core/path_rule'
 # @param [Pathname] path the folder where to search for the .xoltignore
 # @return [Array<PathRule>] an array of PathRule created from the .xoltignore
 def parse_xoltignore(path)
-	xoltignore_path = "#{path}/.xoltignore"
+	xoltignore_path = File.join(path, '.xoltignore')
 	return [] unless File.file?(xoltignore_path)
 	File.readlines(xoltignore_path)
 		.reject { |line| line == '' || line[0] == '#' }
@@ -46,7 +46,7 @@ module Xolti
 			ignored_paths = ['.', '..', '.git', '.xoltignore', 'xolti.yml', 'LICENSE']
 			ignore_rules += parse_xoltignore(folder)
 
-			Dir.glob("#{folder}/{*,.*}")
+			Dir.glob("#{folder.chomp('/')}/{*,.*}")
 				.delete_if { |x| ignored_paths.include?(File.basename(x)) }
 				.each do |path|
 					# Do NOT ignore by default

@@ -29,7 +29,7 @@ module Xolti
 	module Core
 		# Add a header to a file according to a configuration
 		#
-		# @param [Pathname] path the path of the file where to add the header
+		# @param [Pathname] path the absolute path of the file where to add the header
 		# @param [Xolti::Config] config the configuration to use to create the header
 		def self.licensify(path, config)
 			header_data = Xolti::TemplateDataRetriever.get_header_data_for(path, config, true)
@@ -39,7 +39,7 @@ module Xolti
 
 		# Create a full license file to the given path
 		#
-		# @param [Pathname] path the path of the file where to write the license
+		# @param [Pathname] path the absolute path of the file where to write the license
 		# @param [Xolti::Config] config the configuration to use to create the license
 		def self.write_full_license(path, config)
 			license_data = Xolti::TemplateDataRetriever.get_license_data(config)
@@ -49,7 +49,7 @@ module Xolti
 
 		# Delete the header in a file if one can be detected
 		#
-		# @param [Pathname] path the path of the file where to delete the header
+		# @param [Pathname] path the absolute path of the file where to delete the header
 		# @param [Xolti::Config] config the configuration to use
 		def self.delete_header(path, config)
 			template = config.template
@@ -60,7 +60,7 @@ module Xolti
 
 		# Detect whether a file contains a header
 		#
-		# @param [Pathname] path the path of the file where to detect the header
+		# @param [Pathname] path the absolute path of the file where to detect the header
 		# @param [Xolti::Config] config the configuration to use
 		# @return [Hash] information about the detected header, or nil if none was found
 		def self.header?(path, config)
@@ -71,7 +71,7 @@ module Xolti
 
 		# Check that a file contains a header and that it is correct
 		#
-		# @param [Pathname] path the path of the file where to check the header
+		# @param [Pathname] path the absolute path of the file where to check the header
 		# @param [Xolti::Config] config the configuration to use
 		# @return [Array<Hash>] a potentially empty array of differences between expected and actual header in the file
 		def self.validate_header(path, config)

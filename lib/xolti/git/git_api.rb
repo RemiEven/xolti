@@ -24,16 +24,24 @@ module Xolti
 	module GitApi
 		# Check whether git blame can be called on a file
 		#
-		# @param [String] file the file to check
+		# @param [String] file the absolute path to the file to check
 		# @return [Boolean] whether git blame can be called on a file
 		def self.blameable?(file)
-			@blameable_files ||= Xolti::ProcUtils.system('git status --porcelain --ignored -z')
-				.split("\u0000")
-				.reject { |line| ['!!', '??', 'A '].index(line[0..1]).nil? }
-				.map { |line| line[3..-1] }
-			@blameable_files
+			@not_blameable_files ||= compute_not_blameable_files
+			@not_blameable_files
 				.select { |path| file.start_with?(path) }
 				.empty?
+		end
+
+		# Get the files and folders upon which "git blame" cannot be used
+		#
+		# @return [Array<String>] the files and folders upon which "git blame" cannot be used
+		def self.compute_not_blameable_files
+			toplevel = Xolti::ProcUtils.system('git rev-parse --show-toplevel').chomp
+			Xolti::ProcUtils.system('git status --porcelain --ignored -z')
+				.split("\u0000")
+				.reject { |line| ['!!', '??', 'A '].index(line[0..1]).nil? }
+				.map { |line| File.join(toplevel, line[3..-1]) }
 		end
 
 		# Return the current git user name
@@ -45,7 +53,7 @@ module Xolti
 
 		# Return every author of a file
 		#
-		# @param [String] file path to the file
+		# @param [String] file absolute path to the file
 		# @return [Array<String>] an array with all authors of a file
 		def self.authors_of(file)
 			Xolti::ProcUtils.system("git blame #{file} -p")
@@ -59,7 +67,7 @@ module Xolti
 
 		# Return every year a file has been modified
 		#
-		# @param [String] file path to the file
+		# @param [String] file absolute path to the file
 		# @return [Array<Integer>] an array with all years a file has been modified
 		def self.modification_years_of(file)
 			Xolti::ProcUtils.system("git blame #{file} -p")

@@ -43,6 +43,7 @@ module Xolti
 		def add(file)
 			exit_if_file_missing(file)
 			config = load_config_or_exit
+			file = to_absolute_path(file)
 			if File.file?(file)
 				add_header_if_missing(file, config)
 			else
@@ -59,6 +60,7 @@ module Xolti
 		def status(file = '.')
 			exit_if_file_missing(file)
 			config = load_config_or_exit
+			file = to_absolute_path(file)
 			if File.file?(file)
 				Xolti::PrintUtils.puts check_file(file, config) || 'Correct header'
 			else
@@ -92,6 +94,7 @@ module Xolti
 		def delete(file)
 			exit_if_file_missing(file)
 			config = load_config_or_exit
+			file = to_absolute_path(file)
 			if File.file?(file)
 				delete_header_if_present(file, config)
 			else
@@ -106,7 +109,8 @@ module Xolti
 		def generate_license
 			config = load_config_or_exit
 			filename = 'LICENSE'
-			if File.exist?(File.join(Dir.pwd, filename))
+			absolute_path = to_absolute_path(filename)
+			if File.exist?(absolute_path)
 				Xolti::PrintUtils.puts "There is already a #{filename} file. Abort generation."
 			else
 				Xolti::Core.write_full_license(filename, config)
@@ -203,6 +207,12 @@ module Xolti
 			def exit_with_message(message)
 				Xolti::PrintUtils.puts message
 				exit 1
+			end
+
+			def to_absolute_path(file)
+				return file if file.start_with?('/')
+				file = file[1..-1] if file.start_with?('.')
+				File.join(Dir.pwd, file)
 			end
 		end
 
