@@ -35,8 +35,8 @@ module Xolti
 			else
 				@effect = :include
 			end
-			@file_regexp = pattern_to_file_regexp(path, pattern)
-			@folder_regexp = pattern_to_folder_regexp(path, pattern)
+			@concern_only_folders = concern_only_folders(pattern)
+			@regexp = pattern_to_regexp(path.chomp('/'), pattern.chomp('/'))
 		end
 
 		# Check if a file path matches the rule
@@ -44,7 +44,7 @@ module Xolti
 		# @param [String] path the path of the file
 		# @return [MatchData] a MatchData if the file matches the rule, else nil
 		def file_match(path)
-			@file_regexp =~ path
+			@regexp =~ path unless @concern_only_folders
 		end
 
 		# Check if a folder path matches the rule.
@@ -53,32 +53,17 @@ module Xolti
 		# @param [String] path the path of the folder
 		# @return [MatchData] a MatchData if the folder matches the rule, else nil
 		def folder_match(path)
-			@folder_regexp =~ path
+			@regexp =~ path
 		end
 
-		# Create a regexp matching file paths complying to the rule
+		# Create a regexp matching paths complying to the rule
 		#
-		# @param [String] path the path of the rule root folder
+		# @param [String] path the absolute path of the rule root folder
 		# @param [String] pattern the pattern of the rule
 		# @return [Regexp] a regexp matching file paths complying to the rule
-		private def pattern_to_file_regexp(path, pattern)
-			return nil if concern_only_folders(pattern)
-			Regexp.new(glob_to_regexp(pattern).unshift(Regexp.escape(path)).join)
-		end
-
-		# Create a regexp matching folder paths complying to the rule
-		#
-		# @param [String] path the path of the rule root folder
-		# @param [String] pattern the pattern of the rule
-		# @return [Regexp] a regexp matching folder paths complying to the rule
-		private def pattern_to_folder_regexp(path, pattern)
-			pattern = pattern.chomp('/')
-			prefix_detector_regexp = glob_to_regexp(pattern)
-				.reverse
-				.reduce do |acc, s|
-					"#{s}(#{acc})?"
-				end
-			Regexp.new(path + prefix_detector_regexp)
+		private def pattern_to_regexp(path, pattern)
+			regexp = glob_to_regexp(pattern).join
+			Regexp.new("^#{Regexp.escape(path)}#{'(\/.*)?' unless pattern['/']}#{regexp}$")
 		end
 
 		# Check whether a pattern matches only folders
@@ -97,9 +82,9 @@ module Xolti
 			pattern.split('/')
 				.map do |e|
 					if e == '**'
-						'(/.*)?'
+						'(\/.*)?'
 					else
-						Regexp.escape('/' + e).gsub('\\*', '[^/]*')
+						Regexp.escape("/#{e}").gsub('\\*', '[^/]*')
 					end
 				end
 		end

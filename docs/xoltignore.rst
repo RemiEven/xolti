@@ -62,4 +62,5 @@ Possible ``.xoltignore`` :
 	# Ignore all files but pom.xml and java sources
 	*
 	!pom.xml
+	!**/
 	!src/**/*.java
