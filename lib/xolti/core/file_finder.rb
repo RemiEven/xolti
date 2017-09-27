@@ -31,6 +31,16 @@ def parse_xoltignore(path)
 		.map { |line| Xolti::PathRule.new(path, line) }
 end
 
+# Create an array of default ignored path rules
+#
+# @param [Pathname] path the folder where to init the pathRules
+# @return [Array<PathRule>] an array of PathRules
+def init_ignore_rules(path)
+	default_ignored_extensions = %w[jpg jpeg png]
+	default_ignored_extensions
+		.map { |extension| "*.#{extension}" }
+		.map { |line| Xolti::PathRule.new(path, line) }
+end
 
 module Xolti
 	# Module providing a method to recursively explore files and folders.
@@ -41,7 +51,7 @@ module Xolti
 		# @param [String] folder the folder to explore
 		# @param [Array<PathRule>] ignore_rules an array of PathRule describing which files/folders must be ignored
 		# @return [Array<String>] an array with paths to all files not excluded by the .xoltignore
-		def self.explore_folder(folder = Dir.pwd, ignore_rules = [])
+		def self.explore_folder(folder = Dir.pwd, ignore_rules = init_ignore_rules(folder))
 			files = []
 			ignored_paths = ['.', '..', '.git', '.xoltignore', 'xolti.yml', 'LICENSE']
 			ignore_rules += parse_xoltignore(folder)
