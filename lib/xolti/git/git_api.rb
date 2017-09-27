@@ -40,7 +40,7 @@ module Xolti
 			toplevel = Xolti::ProcUtils.system('git rev-parse --show-toplevel').chomp
 			Xolti::ProcUtils.system('git status --porcelain --ignored -z')
 				.split("\u0000")
-				.reject { |line| ['!!', '??', 'A '].index(line[0..1]).nil? }
+				.reject { |line| ['!!', '??', 'A ', 'AM'].index(line[0..1]).nil? }
 				.map { |line| File.join(toplevel, line[3..-1]) }
 		end
 
