@@ -30,6 +30,15 @@ class TestPathRule < Test::Unit::TestCase
 		assert(path_rule.folder_match('/root/dir/e'))
 	end
 
+	def test_simple_name_root_include
+		path_rule = Xolti::PathRule.new('/root', '/e')
+		assert_equal(:include, path_rule.effect)
+		assert(path_rule.file_match('/root/e'))
+		assert_nil(path_rule.file_match('/root/dir/e'))
+		assert(path_rule.folder_match('/root/e'))
+		assert_nil(path_rule.folder_match('/root/dir/e'))
+	end
+
 	def test_simple_name_exclude
 		path_rule = Xolti::PathRule.new('/root', '!e')
 		assert_equal(:exclude, path_rule.effect)

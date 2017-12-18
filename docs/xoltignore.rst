@@ -16,6 +16,7 @@ Syntax
 - A pattern can be inverted by prefixing it with ``!``
 - Pattern are read line by line, from top to bottom; lower rules override higher ones, and rules from a deeper folder override rules from higher folders
 - A pattern ending with ``/`` matches only directories
+- A pattern starting with ``/`` is only applied to the directory containing the ``.xoltignore``
 
 Example : js project
 --------------------
@@ -61,6 +62,6 @@ Possible ``.xoltignore`` :
 
 	# Ignore all files but pom.xml and java sources
 	*
-	!pom.xml
+	!/pom.xml
 	!**/
 	!src/**/*.java

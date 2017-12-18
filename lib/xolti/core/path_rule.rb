@@ -63,7 +63,7 @@ module Xolti
 		# @return [Regexp] a regexp matching file paths complying to the rule
 		private def pattern_to_regexp(path, pattern)
 			regexp = glob_to_regexp(pattern).join
-			Regexp.new("^#{Regexp.escape(path)}#{'(\/.*)?' unless pattern['/']}#{regexp}$")
+			Regexp.new("^#{Regexp.escape(path)}#{'(\/.*)?' unless pattern['/']}#{regexp}$".gsub('//', '/'))
 		end
 
 		# Check whether a pattern matches only folders
