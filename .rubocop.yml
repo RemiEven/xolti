@@ -13,6 +13,9 @@ Metrics/MethodLength:
 Style/AsciiComments:
   Enabled: false
 
+Style/IndentHash:
+  Enabled: false
+
 Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented
 

@@ -1,5 +1,5 @@
 # tc_config.rb
-# Copyright (C) Rémi Even 2016, 2017
+# Copyright (C) Rémi Even 2016-2018
 #
 # This file is part of Xolti.
 #
@@ -22,7 +22,7 @@ require 'xolti/core/config'
 
 class TestConfig < Test::Unit::TestCase
 	def test_default_comment
-		sut = Xolti::Config.new(
+		sut = Xolti::Config.new({
 			'project' => {
 				'name' => 'Xolti',
 				'author' => 'Rémi Even'
@@ -31,7 +31,7 @@ class TestConfig < Test::Unit::TestCase
 			'comment' => {
 				'tex' => '% '
 			}
-		)
+		}, '/home/remi/xolti/')
 		assert_equal(sut.get_comment('someUnknownExtension'), ['/*', ' * ', ' */'])
 		assert_equal(sut.get_comment('rb'), '# ')
 		assert_equal(sut.get_comment('tex'), '% ')
@@ -39,13 +39,13 @@ class TestConfig < Test::Unit::TestCase
 	end
 
 	def test_use_git_true_by_default
-		sut = Xolti::Config.new(
+		sut = Xolti::Config.new({
 			'project' => {
 				'name' => 'Xolti',
 				'author' => 'Rémi Even'
 			},
 			'template' => 'Header'
-		)
+		}, '/home/remi/xolti')
 		assert(sut.use_git)
 	end
 end

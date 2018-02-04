@@ -1,5 +1,5 @@
 # config.rb
-# Copyright (C) Rémi Even 2016, 2017
+# Copyright (C) Rémi Even 2016-2018
 #
 # This file is part of Xolti.
 #
@@ -31,15 +31,16 @@ module Xolti
 	# @attr_reader [String] template optional custom header template
 	# @attr_reader [Integer] offset optional offset of lines between file start and header start
 	# @attr_reader [String] license optional license name
-	# @attr_reader [String] use_git whether to use git as a datasource. Defaults to true
+	# @attr_reader [Boolean] use_git whether to use git as a datasource. Defaults to true
+	# @attr_reader [Pathname] project_root the root path of the project
 	class Config
 		# Search for a xolti.yml file
 		#
 		# @param [Pathname] path the path where to start the search
-		# @return [String] path of the xolti.yml file
+		# @return [Pathname] path of the xolti.yml file
 		def self.find_config_file(path = Pathname.getwd)
 			potential_config_file = (path + 'xolti.yml')
-			return potential_config_file.to_s if potential_config_file.file?
+			return potential_config_file if potential_config_file.file?
 			raise 'No xolti.yml found' if path.root?
 			find_config_file(path.parent)
 		end
@@ -48,16 +49,18 @@ module Xolti
 		#
 		# @return [Xolti::Config] the created configuration
 		def self.load_config
-			raw_config = YAML.safe_load(IO.binread(find_config_file))
-			Xolti::Config.new(raw_config)
+			config_file_path = find_config_file
+			raw_config = YAML.safe_load(IO.binread(config_file_path.to_s))
+			Xolti::Config.new(raw_config, config_file_path.dirname)
 		end
 
-		attr_reader :project_info, :template, :offset, :license, :use_git
+		attr_reader :project_info, :template, :offset, :license, :use_git, :project_root
 
 		# Initialize a Xolti Config from a raw config
 		#
 		# @param [Hash] raw_config the raw config
-		def initialize(raw_config)
+		# @param [String] project_root the root path of the project
+		def initialize(raw_config, project_root)
 			@project_info = raw_config['project']
 			@comment = Xolti::DefaultComment::HASH.merge!(raw_config['comment'] || {})
 			@license = raw_config['license']
@@ -71,6 +74,7 @@ module Xolti
 				.default(0)
 			@use_git = Xolti::ConfigValueRetriever.new { raw_config['use_git'] }
 				.default(true)
+			@project_root = project_root
 		end
 
 		# Return the comment tokens applying to files with the given extension

@@ -1,5 +1,5 @@
 # xolti.rb
-# Copyright (C) Rémi Even 2016, 2017
+# Copyright (C) Rémi Even 2016-2018
 #
 # This file is part of Xolti.
 #
@@ -28,7 +28,7 @@ require 'xolti/core/version'
 require 'xolti/core/print_utils'
 
 Signal.trap('INT') do
-	puts '\nCancelling...'
+	puts "\nCancelling..."
 	exit 1
 end
 
@@ -48,7 +48,7 @@ module Xolti
 			if File.file?(file)
 				add_header_if_missing(file, config)
 			else
-				Xolti::FileFinder.explore_folder(file).each do |source_file|
+				Xolti::FileFinder.explore_folder(config.project_root, Pathname.new(file)).each do |source_file|
 					add_header_if_missing(source_file, config)
 				end
 			end
@@ -66,7 +66,7 @@ module Xolti
 			if File.file?(file)
 				Xolti::PrintUtils.puts check_file(file, config) || 'Correct header'
 			else
-				Xolti::FileFinder.explore_folder(file)
+				Xolti::FileFinder.explore_folder(config.project_root, Pathname.new(file))
 					.each do |source_file|
 						message = check_file(source_file, config)
 						next unless message
@@ -83,7 +83,7 @@ module Xolti
 			dir = Dir.pwd
 			config = load_config_or_exit
 			exit_if_no_header(config)
-			missing_headers = Xolti::FileFinder.explore_folder(dir)
+			missing_headers = Xolti::FileFinder.explore_folder(config.project_root, Pathname.new(dir))
 				.reject { |file| Xolti::Core.header?(file, config) }
 			return Xolti::PrintUtils.puts 'All files OK' if missing_headers.empty?
 			Xolti::PrintUtils.puts 'Files missing (proper) header:'
@@ -102,7 +102,7 @@ module Xolti
 			if File.file?(file)
 				delete_header_if_present(file, config)
 			else
-				Xolti::FileFinder.explore_folder(file).each do |source_file|
+				Xolti::FileFinder.explore_folder(config.project_root, Pathname.new(file)).each do |source_file|
 					delete_header_if_present(source_file, config)
 				end
 			end
